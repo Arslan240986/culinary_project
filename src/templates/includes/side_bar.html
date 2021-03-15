@@ -18,7 +18,7 @@
             </div>
             <div class="item"><a class="font-oswald" href="#">Все пользователи</a></div>
             <div class="item"><a class="p-2 text-dark font-oswald" href="#">Отпарвить запрос на дружбу </a></div>
-            <div class="item"><a class="p-2 text-dark font-oswald" href="#">Ваша страница <span class="ui teal left pointing label">{{ user.profile.get_total_user_meal }}</span></a></div>
+            <div class="item"><a class="p-2 text-dark font-oswald" href="{% url 'contact:user_profile' %}">Ваша страница <span class="ui teal left pointing label">{{ user.profile.get_total_user_meal }}</span></a></div>
             <div class="item"><a class="p-2 text-dark font-oswald" href="#">Вашы черновики <span class="ui teal left pointing label">{{ user.profile.get_total_draft }}</span></a></div>
             <div class="item"><a class="p-2 text-dark font-oswald" href="{{ user.profile.get_dish_book_absolute_url }}">Кулинарная книга <span class="ui teal left pointing label dish_book_count">{{ user.profile.get_total_dishes }}</span></a></div>
             <div class="item"><a class="p-2 text-dark " href="#">Выйти</a></div>

@@ -11,3 +11,4 @@ function addReview(name, id){
     document.querySelector('#exampleFormControlTextarea1').innerText = `${name}, `
     document.querySelector('#exampleFormControlTextarea1').focus()
 }
+

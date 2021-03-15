@@ -29,11 +29,11 @@ def edit(request):
             return redirect(request.user.profile.get_personal_absolute_url())
         else:
             context = {'profile_form': profile_form}
-            return render(request, 'account/profile/pesonal_page.html', context)
+            return render(request, 'contact/profile_page.html', context)
     else:
         profile_form = ProfileEditForm(instance=request.user.profile)
 
-    return render(request, 'account/profile/pesonal_page.html', {'profile_form': profile_form})
+    return render(request, 'contact/profile_page.html', {'profile_form': profile_form})
 
 
 @login_required
