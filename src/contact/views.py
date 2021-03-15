@@ -37,11 +37,12 @@ def edit(request):
 
 
 @login_required
-def personal_page(request, pk):
+def personal_page(request, slug):
+    user_profile = get_object_or_404(UserProfile, slug=slug)
     profile_form = ProfileEditForm(instance=request.user.profile)
-    meals = Dish.objects.filter(author_id=pk, draft=False).order_by('-created')
+    meals = Dish.objects.filter(author__profile=user_profile, draft=False).order_by('-created')
     profile = get_object_or_404(UserProfile, user=request.user)
-    reviews = DishComment.objects.filter(author_id=pk)
+    reviews = DishComment.objects.filter(author__profile=user_profile)
     threads = Thread.objects.by_user(profile)
     total_msg = 0
     for thread in threads:
@@ -54,7 +55,7 @@ def personal_page(request, pk):
         'profile': profile,
         'profile_form': profile_form
     }
-    return render(request, 'account/profile/pesonal_page.html', context)
+    return render(request, 'contact/profile_page.html', context)
 
 
 @login_required

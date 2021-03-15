@@ -113,7 +113,7 @@ class UserProfile(models.Model):
         return reverse('contact:user_profile', args=[self.user.pk])
 
     def get_personal_absolute_url(self):
-        return reverse('contact:personal_page', args=[self.user.pk])
+        return reverse('contact:personal_page', args=[self.slug])
 
     def get_dish_book_absolute_url(self):
         return reverse('contact:user_dish_book', args=[self.user.pk])
@@ -134,8 +134,8 @@ class UserProfile(models.Model):
             total_likes += item.likes.all().count()
         return total_likes
 
-    def get_total_posts_number(self):
-        return self.culinary_post.all().count()
+    # def get_total_posts_number(self):
+    #     return self.culinary_post.all().count()
 
     def get_total_posts(self):
         return self.culinary_post.all()
