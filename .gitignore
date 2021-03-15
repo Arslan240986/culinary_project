@@ -1,1 +1,13 @@
-venv
+/venv/
+.idea
+.idea/.gitignore
+.idea/codeStyles/
+.idea/dbnavigator.xml
+.idea/django_awchy.iml
+.idea/inspectionProfiles/
+.idea/misc.xml
+.idea/modules.xml
+/django_awchy/prod_settings.py
+
+
+static_cdn/
