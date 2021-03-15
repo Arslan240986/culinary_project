@@ -1,0 +1,302 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Bread crumbs -->
+{% block breadcrumbs %}
+<div class="active section">Добавить рецепт</div>
+{% endblock breadcrumbs %}
+
+{% block content %}
+
+{% if messages %}
+<div class="ui error message">
+    {% for message in messages %}
+    <div class="{{ message.tags }}">
+        {{ message|safe }}
+        <i class="close icon"></i>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+<form action="." method="post" enctype="multipart/form-data" class="ui equal width form textearea" novalidate>
+    {% csrf_token %}
+    <h4 class="ui ui teal dividing header font-oswald">Добавить рецепт</h4>
+    {{form.title.label_tag}}
+    <div class="{% if form.title.errors %}error{% endif %} field">
+        {{form.title.errors}}
+        {{form.title}}
+    </div>
+    {{form.description.label_tag}}
+    <div class="{% if form.description.errors %}error{% endif %} field">
+        {{form.description.errors}}
+        {{form.description}}
+    </div>
+    {{form.poster.label_tag}}
+    <div class="{% if form.poster.errors %}error{% endif %} field">
+            <div class="ui medium image poster_image_div ">
+                <img id="poster_image_id" class="ui centered medium rounded image" src="{% static  '/image/empty_image.jpeg' %}">
+                <div class="form__add-img"></div>
+            </div>
+        <input class="d_none" type="file" name="poster" accept="image/*" required="" id="id_poster" onchange="readURL(this)">
+        {{form.poster.errors}}
+        <div class="ui message">
+            <ul class="list">
+                <li><small>{{form.poster.help_text}}</small></li>
+            </ul>
+        </div>
+    </div>
+    <div class="fields">
+        <div class="field">{{form.category.errors}}</div>
+        <div class="field">{{form.sub_category.errors}}</div>
+    </div>
+    <div class="fields">
+        <div class="{% if form.category.errors %}error{% endif %} field">
+            <div class="recipe_box_category" data-href-template="{% url 'culinary_recipe:get_ajax_response_category' %}">
+            {{form.category.label_tag}}
+            {{form.category}}
+            </div>
+        </div>
+        <div class="{% if form.sub_category.errors %}error{% endif %} field sub_category">
+            <div class="sub_category">
+                {{form.sub_category.label_tag}}
+                {{form.sub_category}}
+            </div>
+        </div>
+    </div>
+
+            <div class="fields">
+                <div class="{% if form.country.errors %}error{% endif %} field">
+                    {{form.country.label_tag}}
+                    {{form.country.errors}}
+                    {{form.country}}
+                </div>
+                <div class="{% if form.complexity.errors %}error{% endif %} field">
+                    {{form.complexity.label_tag}}
+                    {{form.complexity.errors}}
+                    {{form.complexity}}
+                </div>
+                <div class="{% if form.vegetarian.errors %}error{% endif %} field">
+                    {{form.vegetarian.label_tag}}
+                    {{form.vegetarian.errors}}
+                    {{form.vegetarian}}
+                </div>
+            </div>
+       <div class="ui stackable grid">
+        <div class="four wide column">
+            <div class="field">
+                {{form.preparation_time_hour.label_tag}}
+                <div class="fields">
+                    <div class="{% if form.preparation_time_hour.errors %}error{% endif %} three wide field">
+                        {{form.preparation_time_hour.errors}}
+                        {{form.preparation_time_hour}}
+                    </div>
+                    <div class="{% if form.preparation_time_minute.errors %}error{% endif %} three wide field">
+                        {{form.preparation_time_minute.errors}}
+                        {{form.preparation_time_minute}}
+                    </div>
+                </div>
+                {{form.cooking_time_hour.label_tag}}
+                <div class="fields">
+                    <div class="{% if form.cooking_time_hour.errors %}error{% endif %} three wide field">
+                        {{form.cooking_time_hour.errors}}
+                        {{form.cooking_time_hour}}
+                    </div>
+                    <div class="{% if form.cooking_time_minute.errors %}error{% endif %} three wide field">
+                        {{form.cooking_time_minute.errors}}
+                        {{form.cooking_time_minute}}
+                    </div>
+                </div>
+            </div>
+            <div class="fields">
+                <div class="{% if form.calorie.errors %}error{% endif %} field">
+                    {{form.calorie.label_tag}}
+                    {{form.calorie.errors}}
+                    {{form.calorie}}
+                </div>
+                <div class="{% if form.protein.errors %}error{% endif %} field">
+                    {{form.protein.label_tag}}
+                    {{form.protein.errors}}
+                    {{form.protein}}
+                </div>
+            </div>
+            <div class="fields">
+                <div class="{% if form.fat.errors %}error{% endif %} field">
+                    {{form.fat.label_tag}}
+                    {{form.fat.errors}}
+                    {{form.fat}}
+                </div>
+                <div class="{% if form.carbohydrate.errors %}error{% endif %} field">
+                    {{form.carbohydrate.label_tag}}
+                    {{form.carbohydrate.errors}}
+                    {{form.carbohydrate}}
+                </div>
+            </div>
+            <div class="fields">
+                <div class="{% if form.servings.errors %}error {% endif %}field">
+                    {{form.servings.label_tag}}
+                    {{form.servings.errors}}
+                    {{form.servings}}
+                </div>
+            </div>
+            {{ form.technology.label_tag }}
+            <div class="{% if form.technology.errors %}error {% endif %}fields">
+                {{ form.technology.errors }}
+                {{ form.technology }}
+            </div>
+            {{ form.device.label_tag }}
+            <div class="{% if form.device.errors %}error {% endif %}fields">
+                {{ form.device.errors }}
+                {{ form.device }}
+            </div>
+        </div>
+        <div class="twelve wide column">
+            <fieldset>
+                <legend>Ингредиенты к ретцепту</legend>
+                <small>Используйте только те ингридиенты, которые предлагаются по мере ввода названия, или из <span class="red">Списка допустимых ингредиентов.</span>
+                    Если в нашем списке отсутствует необходимый ингредиент, обратитесь к администратору с просьбой добавить его.</small>
+    {% if ingredient_form.non_form_errors %}
+                {% for error in ingredient_form.non_form_errors %}
+                <div class="ui negative message">
+                    <i class="close icon"></i>
+                    <div class="header">
+                        {{ error }}
+                    </div>
+
+                </div>
+                {% endfor %}
+    {% endif %}
+                <div>
+                    <div class="fields">
+                        <table style="width: 100%">
+                            <thead>
+                            <tr>
+                                <th class="mr-2">Ингредиент</th>
+                                <th>Количество</th>
+                                <th>Мера веса/объема</th>
+                                <th>Примечание</th>
+                            </tr>
+                            </thead>
+                            {{ ingredient_form.management_form }}
+                            {% for form in ingredient_form %}
+                                {{ form.id }}
+
+                                <tbody class="inline {{ ingredient_form.prefix }} ">
+                                <tr>
+                                    <td class="mr-4">{{ form.name.errors }}</td>
+                                    <td class="{% if form.quantity.errors %}error {% endif%}field" style="width: 25px;">{{ form.quantity.errors }}</td>
+                                    <td>{{ form.measure.errors }}</td>
+                                    <td>{{ form.note.errors }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="mr-4">{{ form.name }}</td>
+                                    <td class="{% if form.quantity.errors %}error {% endif%}field" style="width: 25px;">{{ form.quantity }}</td>
+                                    <td>{{ form.measure }}</td>
+                                    <td>{{ form.note }}</td>
+                                    <td class="deleteButton"></td>
+                                </tr>
+                                </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Пошаговый рецепт</legend>
+                <small class="ml-4">
+                    Для описания процесса приготовления блюда Вы можете воспользоваться пошаговым рецептом, видеорецептом или
+                    объединить 2 этих способа. В пошаговом рецепте процесс приготовления разбивается на шаги, которые Вы
+                    описываете отдельно, сопровождая каждый шаг отдельной фотографией, сделанной в процессе приготовления.
+                </small>
+                {% if instruction_form.non_form_errors %}
+                    {% for error in instruction_form.non_form_errors %}
+                        <div class="ui negative message">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                {{ error }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <div>
+                    <table style="width: 100%">
+
+                        {{ instruction_form.management_form }}
+                            {% for form in instruction_form %}
+                        {{ form.id }}
+                        <tbody class="inline {{ instruction_form.prefix }}">
+                            <tr>
+                                <td>{{ form.description.errors }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {{ form.description.label_tag }}
+                                </td>
+                                <td>
+                                    {{ form.description }}
+                                </td>
+                                <td class="addButton"></td>
+                            </tr>
+                            <tr class="row">
+                                <td>{{ form.image.errors }}</td>
+                            </tr>
+                            <tr class="row">
+                                <td>
+                                    {{ form.image.label_tag }}
+                                </td>
+                                <td>
+                                    <div class="ui medium image ">
+                                        <img id="instruction_image_id" class="ui centered small rounded image instruction_image_div" src="{% static  '/image/empty_image.jpeg' %}" onclick="clickImageFile(this)">
+                                        <input class="d_none" type="file" name="step_set-0-image" accept="image/*" id="id_step_set-0-image" onchange="readURLInstrcution(this)">
+                                        <div class="form__add-img-instr"></div>
+                                    </div>
+
+
+                                </td>
+                            </tr>
+                        </tbody>
+                        {% endfor %}
+
+                    </table>
+                </div>
+
+            </fieldset>
+        </div>
+    </div>
+    <div class="row">
+            <div class="ui segment">
+                <div class="field">
+                    <div class="ui toggle checkbox">
+                        {{form.draft.label_tag}}
+                        {{form.draft}}
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="row mt-10">
+        <button type="submit" class="btn_custom ui fluid positive button">Опубликовать</button>
+    </div>
+</form>
+
+{% endblock content %}
+</div>
+{% block side %}
+{% endblock side %}
+
+{% block jscdn %}
+<script type="text/javascript" src="{% static 'js/add_recipe.js' %}"></script>
+{% endblock jscdn %}
+
+{% block javascript %}
+$(document).ready(function(){
+    <!--Inline formset add line and remove-->
+        $(".inline.{{ ingredient_form.prefix }}").formset({
+            prefix: "{{ ingredient_form.prefix }}",
+            deleteContainerClass: 'deleteButton',
+        })
+        $(".inline.{{ instruction_form.prefix }}").formset({
+            prefix: "{{ instruction_form.prefix }}",
+            deleteContainerClass: 'addButton',
+        })
+})
+
+{% endblock javascript %}

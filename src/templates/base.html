@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/base/jquery-ui.css"
+          type="text/css" media="all"/>
+    <!--    google-fonts-Oswald-->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+    <!--    google-fonts-Lobster-->
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Oswald&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'Semantic_UI/semantic.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block cdn %}
+    {% endblock cdn %}
+
+
+    <!-- Custom styles (optional) -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+    <title>{% block title %}Yammi{% endblock title %}</title>
+</head>
+
+<body class="body_yummy">
+
+{% include 'includes/header.html' %}
+
+
+<!-- Content side -->
+
+
+<div class="ui bread  " style="">
+<div class="custom_container">
+    <div class="ui stackable two column divided grid">
+
+        <!-- /.blog-sidebar Каталог рецептов -->
+        <div class="twelve wide column content_side_yummy p-10">
+            <!-- Bread crumbs -->
+            {% block steps_breadcrumbs %}
+            <div class="mt-2">
+                <div class="ui breadcrumb font-oswald black p-10">
+
+                    <a class="section navbar_links_yummy black" href="{% url 'culinary_recipe:home' %}">Главное</a>
+                    <i class="right chevron icon divider black"></i>
+                    <a class="section navbar_links_yummy black" href="{% url 'culinary_recipe:dishes' %}">Все категории</a>
+                    <i class="right chevron icon divider black"></i>
+
+                    {% block breadcrumbs %}
+                    {% endblock breadcrumbs %}
+                </div>
+            </div>
+            <hr>
+            {% endblock steps_breadcrumbs %}
+            {% block content %}
+            <hr>
+            {% endblock %}
+
+        </div>
+        {% include 'includes/side_bar.html' %}
+    </div>
+</div>
+</div>
+{% include 'includes/footer.html' %}
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://kit.fontawesome.com/f60ff1095d.js" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>-->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js "></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/i18n/jquery-ui-i18n.min.js"></script>
+
+
+<!--    JQuery formset-->
+<script type="text/javascript" src="{% static 'js/jquery.formset.js' %}"></script>
+<!--Semantik Ui Js-->
+<script type="text/javascript" src="{% static 'Semantic_UI/semantic.min.js' %}"></script>
+<!--  custom js -->
+{% block jscdn %}
+<script type="text/javascript" src="{% static 'js/test.js' %}"></script>
+{% endblock jscdn %}
+<script>
+var prevScrollpos = window.pageYOffset;
+document.querySelector('.bread').style.marginTop = document.querySelector("#navbar").offsetHeight + 5 + 'px'
+window.onmousewheel = function() {
+    var currentScrollPos = window.pageYOffset;
+    if (prevScrollpos > currentScrollPos) {
+        document.querySelector("#navbar").style.top = "0"
+    } else if(currentScrollPos == 0) {
+        document.querySelector("#navbar").style.top = "0"
+    }else {
+        document.querySelector("#navbar").style.top = '-'+document.querySelector("#navbar").offsetHeight + 'px';
+    }
+    prevScrollpos = currentScrollPos;
+}
+$(document).ready(function(){
+        $('.ui.dropdown').dropdown();
+        $('.ui.floating.labeled.icon.dropdown').dropdown();
+        $('.ui.accordion').accordion();
+
+        <!--   Add email for subcribe ajax response true or false     -->
+        $('.subscribe_button').click(function (e){
+            e.preventDefault();
+            var email = $('.form__input').val()
+            const url = $('#subscribe_form').attr('action')
+            let csrf = $('input[name=csrfmiddlewaretoken]').val()
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {'email': email, 'csrfmiddlewaretoken': csrf },
+                dataType: 'json',
+                success: function(response){
+                    if(response.status){
+                        if (document.contains(document.querySelector('.ui.positive.message'))){
+                            document.querySelector('.ui.positive.message').remove()
+                        }
+                        $('.footer-subsrcibe').before(`
+                            <div class="ui positive message">
+                            <i class="close icon"></i>
+                            <div class="header">
+                            Вы успешно добавили свой имаил на рассылку
+                            </div>
+                            <p>Спасибо за подписку</p>
+                            </div>`
+                        )
+                        $('.message .close').on('click', function() {
+                            $(this).closest('.message').transition('fade');
+                        });
+                    } else {
+                        if (document.contains(document.querySelector('.ui.warning.message'))){
+                           document.querySelector('.ui.warning.message').remove()
+                        }
+                        $('.footer-subsrcibe').before(`
+                            <div class="ui warning message">
+                            <i class="close icon"></i>
+                            <div class="header">
+                            Данный имаил уже находится в списке рассылок
+                            </div>
+                            <p>Спасибо за подписку.</p>
+                            </div>`
+                        )
+                        $('.message .close').on('click', function() {
+                            $(this).closest('.message').transition('fade');
+                        });
+                    };
+                },
+                error: function(rs, e){
+                    console.log('second', rs.responseText);
+                },
+            });
+        })
+})
+    {% block javascript %}
+    {% endblock javascript %}
+</script>
+
+</body>
+<style>
+
+    hr{
+        border: 1.5px solid black !important;
+    }
+    .p-10{
+    padding: 10px !important;
+    }
+    pt-10{
+        padding-top: 10px !important;
+    }
+    .font-s-25{
+        font-size: 25px !important;
+    }
+    .font-s-20{
+        font-size: 20px !important;
+    }
+    .p-auto{
+        padding: auto !important;
+    }
+    .black{
+        color: black !important;
+    }
+    .p-5{
+        padding: 5px !important;
+    }
+    .p-10{
+        padding: 10px !important;
+    }
+    .pl-10{
+        padding-left: 10px !important;
+    }
+    .pl-20{
+        padding-left: 20px !important;
+    }
+    .category_side_yummy{
+        background-image: url('/static/image/bg-y.jpg') !important;
+        background-repeat: repeat !important;
+        background-size: contain !important;
+    }
+    .last_dishes{
+        background-image: url('/static/image/bg-x.jpg') !important;
+        background-repeat: no-repeat !important;
+        background-size: cover !important;
+    }
+    .ui.accordion .accordion{
+        margin:0 !important;
+    }
+    .rounded{
+        background-color: white !important;
+        border: 1px solid rgb(190, 183, 183) !important;
+        border-radius: 10px !important;
+    }
+    .mt-10{
+        margin-top: 10px !important;
+    }
+    .m-4{
+        margin: 10px !important;
+    }
+    input{
+        background-color: rgb(237, 253, 251) !important;
+    }
+    textarea{
+        background-color: rgb(237, 253, 251) !important;
+    }
+    .selection{
+        background-color: rgb(237, 253, 251) !important;
+    }
+    .mb-10{
+        margin-bottom: 10px !important;
+    }
+    .main_point{
+        cursor: pointer;
+    }
+    .main_point:hover{
+        width: 1em !important;
+    }
+    .mr-5{
+        margin-right: 5px !important;
+    }
+    .mr-10{
+        margin-right: 10px !important;
+    }
+    .c-black{
+        color: black !important;
+    }
+    .w-10{
+        width: 10px;
+    }
+    .content .ml-40{
+        margin-left: -45px !important;
+    }
+    .content .comments .comment .content .ml-40{
+        margin-left: -90px !important;
+    }
+    #navbar{
+        z-index: 100 !important;
+    }
+    .overflow-a{
+        overflow: auto !important;
+        height: 300px !important;
+    }
+    .align-self-flex-end{
+        align-self: flex-end !important;
+    }
+    .body_private_message{
+        display: flex; flex-direction: column !important;
+    }
+    .bg-private_message{
+        background-color: rgb(242, 248, 244) !important;
+    }
+    .custom-bg-color{
+        background-color: rgb(238, 255, 230) !important;
+    }
+    .custom_chat_icon{
+        position: relative !important;
+    }
+    .d_none{
+        display: none !important;
+    }
+    .notification_number{
+        display: none !important;
+    }
+    .notification_number.visible{
+        display: block !important;
+    }
+    .notification_number{
+        position: absolute !important;
+        top: -5px !important;
+        left: 20px !important;
+        width: 20px !important;
+        height: 20px !important;
+        border-radius: 50% !important;
+        font-size: 20px !important;
+        color: red !important;
+        z-index: 10 !important;
+        background-color: red !important;
+        color: white !important;
+        padding: 2px !important;
+        line-height: 0.6 !important;
+    }
+    .notification_number small{
+        font-size: 13px !important;
+        font-weight: bold !important;
+        margin-bottom: 2px !important;
+    }
+    .pl-100{
+        padding-left: 100px;
+    }
+</style>
+</html>

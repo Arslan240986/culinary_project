@@ -1,0 +1,84 @@
+
+{% load meal_tags %}
+<div id="navbar" class="ui borderless stackable menu navbar_yummy">
+    <div class="ui container">
+    <div class="item">
+        <a href="/" class="mr-10">
+            <img src="/static/image/yumy.png" width="50" height="25" alt="">
+        </a>
+
+        <div class="ui pointing dropdown link item font-oswald my-2 mr-10 white nu_tam_tam" tabindex="0">
+        Рецепты
+        <i class="dropdown icon"></i>
+        <div class="menu bgc" tabindex="-1">
+            {% get_categories as categories %}
+            {% for category in categories %}
+                <a class="item font-oswald" href="{{ category.get_absolute_url }}">
+                    <div class=" navbar_links_yummy">
+                        {{ category.name }}
+                    </div>
+                </a>
+            {% endfor %}
+            </div>
+        </div>
+        <a class="p-2 navbar_links_yummy font-oswald" href="#">Кулинарные посты</a>
+    </div>
+
+    <div class="right menu">
+        <div class="item">
+            <form action="#" class="ui icon input mr-10" method="get">
+                <div class="ui action input">
+                    <input class=" font-oswald" type="search" placeholder="Введите слово" aria-label="Search" name="q">
+                    <button class="ui basic yellow button" type="submit">
+                        <i class="search link icon"></i>
+                    </button>
+                </div>
+            </form>
+
+                <div class="ui floating labeled icon dropdown menu basic yellow button chto_to" tabindex="0">
+                    <i class="add icon"></i>
+                    <span class="text">Добавить</span>
+                    <div class="menu bgc transition hidden mt-10" tabindex="-1">
+                        <div class="item">
+                            <div class="ui buttons">
+                                    <a href="#" class="ui yellow button">
+                                        <span>
+                                            Пост
+                                        </span>
+                                    </a>
+                                <div class="or" data-text="<->"></div>
+                                    <a href="{% url 'culinary_recipe:add_recipe' %}" class="ui yellow button">
+                                        <span>
+                                            Рецепт
+                                        </span>
+                                    </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+        </div>
+    </div>
+    </div>
+</div>
+<style>
+    .my_button{
+        width: 200px !important;
+    }
+    .w-100{
+        width: 100px !important;
+    }
+    .w-150{
+        width: 150px !important;
+    }
+    .mr-10{
+        margin-right: 10px !important;
+    }
+    .bgc{
+        background-color: rgb(0,0,0, 0.5) !important;
+    }
+    .white{
+        color: white !important;
+    }
+</style>
