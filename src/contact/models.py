@@ -115,17 +115,26 @@ class UserProfile(models.Model):
     def get_personal_absolute_url(self):
         return reverse('contact:personal_page', args=[self.slug])
 
+    def get_personal_draft_page_absolute_url(self):
+        return reverse('contact:personal_draft_page', args=[self.slug])
+
     def get_dish_book_absolute_url(self):
-        return reverse('contact:user_dish_book', args=[self.user.pk])
+        return reverse('contact:user_dish_book', args=[self.slug])
+
+    def get_total_recipe_moderator_false(self):
+        return Dish.objects.filter(draft=False, author=self.user, moderator=False).count()
 
     def get_total_draft(self):
         return Dish.objects.filter(draft=True, author=self.user).count()
 
-    def get_total_user_meal(self):
-        return self.user.dish.filter(draft=False, author=self.user).count()
+    def get_total_book(self):
+        return self.dishes.all().count()
+
+    def get_total_user_recipe(self):
+        return self.user.dish.filter(draft=False, author=self.user, moderator=True).count()
 
     def get_total_dishes(self):
-        return self.dishes.all().count()
+        return self.user.dish.all().count()
 
     def get_total_number_likes_of_dishes(self):
         dishes = self.user.dish.all()

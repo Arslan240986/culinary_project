@@ -178,9 +178,7 @@
                             </thead>
                             {{ ingredient_form.management_form }}
                             {% for form in ingredient_form %}
-                                {{ form.id }}
-
-                                <tbody class="inline {{ ingredient_form.prefix }} ">
+                                <tbody class="dynamic-form inline {{ ingredient_form.prefix }} ">
                                 <tr>
                                     <td class="mr-4">{{ form.name.errors }}</td>
                                     <td class="{% if form.quantity.errors %}error {% endif%}field" style="width: 25px;">{{ form.quantity.errors }}</td>
@@ -192,7 +190,11 @@
                                     <td class="{% if form.quantity.errors %}error {% endif%}field" style="width: 25px;">{{ form.quantity }}</td>
                                     <td>{{ form.measure }}</td>
                                     <td>{{ form.note }}</td>
-                                    <td class="deleteButton"></td>
+                                    <td class="deleteButton">
+                                        {{ form.DELETE }}
+                                        {{ form.id }}
+                                        {{ form.ORDER }}
+                                    </td>
                                 </tr>
                                 </tbody>
                             {% endfor %}
@@ -219,11 +221,9 @@
                 {% endif %}
                 <div>
                     <table style="width: 100%">
-
                         {{ instruction_form.management_form }}
                             {% for form in instruction_form %}
-                        {{ form.id }}
-                        <tbody class="inline {{ instruction_form.prefix }}">
+                        <tbody class="dynamic-form inline {{ instruction_form.prefix }}">
                             <tr>
                                 <td>{{ form.description.errors }}</td>
                             </tr>
@@ -234,7 +234,11 @@
                                 <td>
                                     {{ form.description }}
                                 </td>
-                                <td class="addButton"></td>
+                                <td class="addButton">
+                                    {{ form.DELETE }}
+                                    {{ form.id }}
+                                    {{ form.ORDER }}
+                                </td>
                             </tr>
                             <tr class="row">
                                 <td>{{ form.image.errors }}</td>
@@ -250,8 +254,6 @@
                                         <input class="d_none" type="file" name="step_set-{{forloop.counter0}}-image" accept="image/*" id="id_step_set-{{forloop.counter0}}-image" onchange="readURLInstrcution(this)">
                                         <div class="form__add-img-instr"></div>
                                     </div>
-
-
                                 </td>
                             </tr>
                         </tbody>
@@ -293,11 +295,18 @@ $(document).ready(function(){
         $(".inline.{{ ingredient_form.prefix }}").formset({
             prefix: "{{ ingredient_form.prefix }}",
             deleteContainerClass: 'deleteButton',
+            deleteCssClass: 'delete-row text-danger ingredient_delete_btn',
+            addCssClass: 'ui basic positive button',
+            formCssClass: 'ingredients__form',
         })
         $(".inline.{{ instruction_form.prefix }}").formset({
             prefix: "{{ instruction_form.prefix }}",
             deleteContainerClass: 'addButton',
+            deleteCssClass: 'delete-row text-danger steps_delete_btn',
+            addCssClass: 'ui basic positive button',
+            formCssClass: 'steps__form',
         })
+
 })
 
 {% endblock javascript %}

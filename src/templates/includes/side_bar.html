@@ -9,18 +9,17 @@
                 <div class="item p-10">
                     <div class="right floated content">
                         {% new_messages_not user.profile.id as notification %}
-                        <a href="#"><i class="user outline big grey icon custom_chat_icon"><span class="notification_number {% if user.profile.get_total_friend_request > 0 %}visible{% endif %}"><small>{{ user.profile.get_total_friend_request }}</small></span></i></a>
+                        <a href="{% url 'contact:my_invites_view' %}"><i class="user outline big grey icon custom_chat_icon"><span class="notification_number {% if user.profile.get_total_friend_request > 0 %}visible{% endif %}"><small>{{ user.profile.get_total_friend_request }}</small></span></i></a>
                         <a href="{{user.profile.get_absolute_url_for_friends_view}}"><i class="chat outline big grey icon custom_chat_icon"><span class="notification_number {% if notification > 0 %}visible{% endif %}"><small>{{notification}}</small></span></i></a>
                     </div>
                     <img src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}" alt="" class="ui avatar image">
                     <div class="content">{{user.profile.first_name}}</div>
                 </div>
             </div>
-            <div class="item"><a class="font-oswald" href="#">Все пользователи</a></div>
+            <div class="item"><a class="font-oswald" href="{% url 'contact:all_profiles_view' %}">Все пользователи</a></div>
             <div class="item"><a class="p-2 text-dark font-oswald" href="#">Отпарвить запрос на дружбу </a></div>
-            <div class="item"><a class="p-2 text-dark font-oswald" href="{{ user.profile.get_personal_absolute_url }}">Ваша страница <span class="ui teal left pointing label">{{ user.profile.get_total_user_meal }}</span></a></div>
-            <div class="item"><a class="p-2 text-dark font-oswald" href="#">Вашы черновики <span class="ui teal left pointing label">{{ user.profile.get_total_draft }}</span></a></div>
-            <div class="item"><a class="p-2 text-dark font-oswald" href="{{ user.profile.get_dish_book_absolute_url }}">Кулинарная книга <span class="ui teal left pointing label dish_book_count">{{ user.profile.get_total_dishes }}</span></a></div>
+            <div class="item"><a class="p-2 text-dark font-oswald" href="{{ user.profile.get_personal_absolute_url }}">Ваша страница</a></div>
+            <div class="item"><a class="p-2 text-dark font-oswald" href="{{ user.profile.get_dish_book_absolute_url }}">Кулинарная книга <span class="ui teal left pointing label dish_book_count">{{ user.profile.get_total_book }}</span></a></div>
             <div class="item"><a class="p-2 text-dark " href="#">Выйти</a></div>
         {% else %}
             <div class="item"><a class="p-2 text-dark" href="#">Войти</a></div>

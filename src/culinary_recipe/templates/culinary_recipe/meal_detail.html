@@ -6,22 +6,23 @@
 {% block title %}{{ meal.title }}{% endblock title %}
 
 
-                    {% block breadcrumbs %}
-                    <a class="section navbar_links_yummy black" href="{{ meal.category.get_absolute_url }}">{{meal.category.name}}</a>
-                    <i class="right chevron icon divider black"></i>
-                    <a class="section navbar_links_yummy black" href="{{ meal.sub_category.get_absolute_url }}">{{meal.sub_category.name}}</a>
-                    {% endblock breadcrumbs %}
+{% block breadcrumbs %}
+<a class="section navbar_links_yummy black" href="{{ meal.category.get_absolute_url }}">{{meal.category.name}}</a>
+<i class="right chevron icon divider black"></i>
+<a class="section navbar_links_yummy black"
+    href="{{ meal.sub_category.get_absolute_url }}">{{meal.sub_category.name}}</a>
+{% endblock breadcrumbs %}
 {% block content %}
 {% if messages %}
 
-    {% for message in messages %}
-    <div class="ui info message">
-        <i class="close icon"></i>
-        <div class="header">
-            {{ message }}
-        </div>
+{% for message in messages %}
+<div class="ui info message">
+    <i class="close icon"></i>
+    <div class="header">
+        {{ message }}
     </div>
-    {% endfor %}
+</div>
+{% endfor %}
 {% endif %}
 <div class="dish_detail">
     <div class="ui two right aligned column grid mx-10">
@@ -30,7 +31,7 @@
         <div class="right floated middle aligned eight wide column">
             <small>{{ meal.created }}/{{ meal.author }}</small>
             <img class="ui avatar image"
-                 src="{% if meal.author.profile.avatar %}{{ meal.author.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}">
+                src="{% if meal.author.profile.avatar %}{{ meal.author.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}">
         </div>
     </div>
 
@@ -49,17 +50,20 @@
                 <div class="ui grid p-10">
                     <div class="inline column row">
                         {% get_hit_count for meal as count %}
-                        <i class="ui eye big yellow icon main_point" aria-hidden="true"></i><small class="mr-5 font-s-20 c-black">{{count}}{{ hitcount.hit_counted }}{{ hitcount.pk }}</small>
+                        <i class="ui eye big yellow icon main_point" aria-hidden="true"></i><small
+                            class="mr-5 font-s-20 c-black">{{count}}{{ hitcount.hit_counted }}{{ hitcount.pk }}</small>
                         <a href="#dishComments">
-                            <i class='ui comment outline big yellow icon main_point'></i><small class="mr-5 font-s-20 c-black">
-                            {{ meal.get_total_comments}}</small>
+                            <i class='ui comment outline big yellow icon main_point'></i><small
+                                class="mr-5 font-s-20 c-black">
+                                {{ meal.get_total_comments}}</small>
                         </a>
-                        <i class='ui heart outline big yellow icon main_point'></i><small class="mr-5 font-s-20 c-black">
-                        1</small>
+                        <i class='ui heart outline big yellow icon main_point'></i><small
+                            class="mr-5 font-s-20 c-black">
+                            1</small>
                         <form action="{% url 'culinary_recipe:likes_meal' %}" method="post" id="like_form" name="like">
                             {% csrf_token %}
                             <i type="submit" id="like" value="{{ meal.id }}"
-                               class='ui thumbs{% if meal.is_liked %} down {% else %} up {% endif %}outline big yellow icon main_point icon'></i>
+                                class='ui thumbs{% if meal.is_liked %} down {% else %} up {% endif %}outline big yellow icon main_point icon'></i>
                             <span class="result_book mr-5 font-s-20 c-black">{{ meal.get_total_likes }}</span>
                         </form>
                     </div>
@@ -67,15 +71,15 @@
             </div>
             <div class="right aligned column">
                 {% if user != meal.author and user.is_authenticated %}
-                    <div class="subscribe_div_add {% if meal.dish_added %}active{% endif%}">
-                        <form class="need_change m-4" action="{% url 'contacts:add_dishes_to_book' %}" method="post"
-                              name="add_dishes_to_book" id="add_dishes_to_book">
-                            {% csrf_token %}
-                            <input type="hidden" class="meal_id" value="{{ meal.id }}">
-                            <input type="submit" class="add_dishes subscribe_form_btn subscribe_link font-oswald result"
-                                   value="{% if meal.dish_added %}в кулинарнй книге{% else %}в мою кулинарную книгу{% endif %}">
-                        </form>
-                    </div>
+                <div class="subscribe_div_add {% if meal.dish_added %}active{% endif%}">
+                    <form class="need_change m-4" action="{% url 'contact:add_dishes_to_book' %}" method="post"
+                        name="add_dishes_to_book" id="add_dishes_to_book">
+                        {% csrf_token %}
+                        <input type="hidden" class="meal_id" value="{{ meal.id }}">
+                        <input type="submit" class="add_dishes subscribe_form_btn subscribe_link font-oswald result"
+                            value="{% if meal.dish_added %}в кулинарнй книге{% else %}в мою кулинарную книгу{% endif %}">
+                    </form>
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -113,63 +117,64 @@
         <div class="four wide column">
             <h5 class="ui block grey header"> Время подготовки</h5>
             <p><small class="text-muted">
-                {% if meal.preparation_time_hour %}{{ meal.preparation_time_hour }}{% endif %} <smaal>ч</smaal> /
-                {% if meal.preparation_time_minute %}{{ meal.preparation_time_minute }}{% endif %} <smaal>мин</smaal>
+                    {% if meal.preparation_time_hour %}{{ meal.preparation_time_hour }}{% endif %} <smaal>ч</smaal> /
+                    {% if meal.preparation_time_minute %}{{ meal.preparation_time_minute }}{% endif %} <smaal>мин
+                    </smaal>
                 </small>
             </p>
             <p class="ui block grey header">Время готовки</p>
             <p><small class="text-muted">
-                {% if meal.cooking_time_hour %}{{ meal.cooking_time_hour }}{% endif %} <smaal>ч</smaal> /
-                {% if meal.cooking_time_minute %}{{ meal.cooking_time_minute }}{% endif %} <smaal>мин</smaal>
+                    {% if meal.cooking_time_hour %}{{ meal.cooking_time_hour }}{% endif %} <smaal>ч</smaal> /
+                    {% if meal.cooking_time_minute %}{{ meal.cooking_time_minute }}{% endif %} <smaal>мин</smaal>
                 </small>
             </p>
             <p class="ui block grey header">Количество порций</p>
             <p>
-               <small class="text-muted">{% if meal.servings %}{{ meal.servings }}{% endif %}</small>
+                <small class="text-muted">{% if meal.servings %}{{ meal.servings }}{% endif %}</small>
             </p>
             <p class="ui block grey header">Вегетарианское</p>
             <p>
                 <small class="text-muted">{% if meal.vegetarian %}{{ meal.vegetarian }}{% endif %}</small>
             </p>
             {% if meal.technology %}
-                <p class="ui block grey header">Технология</p>
-                <p>
-                    {% for technology in meal.technology.all %}
-                        <small class="text-muted">{{technology}}{% if not forloop.last %}, {% endif %}</small>
-                    {% endfor %}
-                </p>
+            <p class="ui block grey header">Технология</p>
+            <p>
+                {% for technology in meal.technology.all %}
+                <small class="text-muted">{{technology}}{% if not forloop.last %}, {% endif %}</small>
+                {% endfor %}
+            </p>
             {% endif %}
             {% if meal.device %}
-                <p class="ui block grey header">Устройтво</p>
-                <p>
-                    {% for device in meal.device.all %}
-                        <small class="text-muted">{{device}}{% if not forloop.last %}, {% endif %}</small>
-                    {% endfor %}
-                </p>
+            <p class="ui block grey header">Устройтво</p>
+            <p>
+                {% for device in meal.device.all %}
+                <small class="text-muted">{{device}}{% if not forloop.last %}, {% endif %}</small>
+                {% endfor %}
+            </p>
             {% endif %}
             {% if meal.calorie %}
-                <p class="ui block grey header">Калории</p>
-                <p>
-                    <small class="text-muted">{{meal.calorie}}</small>
-                </p>
+            <p class="ui block grey header">Калории</p>
+            <p>
+                <small class="text-muted">{{meal.calorie}}</small>
+            </p>
             {% endif %}
             {% if meal.protein %}
-                <p class="ui block grey header">Протеин</p>
-                <p>
-                    <small class="text-muted">{{meal.protein}}</small>
-                </p>
+            <p class="ui block grey header">Протеин</p>
+            <p>
+                <small class="text-muted">{{meal.protein}}</small>
+            </p>
             {% endif %}
             {% if meal.fat %}
-                <p class="ui block grey header">Жиры</p>
-                <p>
-                    <small class="text-muted">{{meal.fat}}</small>
-                </p>
+            <p class="ui block grey header">Жиры</p>
+            <p>
+                <small class="text-muted">{{meal.fat}}</small>
+            </p>
             {% endif %}
             {% if meal.carbohydrate %}
-                <p class="ui block grey header">Углеводы</p>
-                <p>
-                    <small class="text-muted">{{meal.carbohydrate}}</small>
-                </p>
+            <p class="ui block grey header">Углеводы</p>
+            <p>
+                <small class="text-muted">{{meal.carbohydrate}}</small>
+            </p>
             {% endif %}
         </div>
 
@@ -181,13 +186,16 @@
 <h3 id="dishComments" class="ui header">Коментарии</h3>
 <button class="cmt_btn ui fluid button mb-4">Показать / Скрыть коментарии</button>
 <div class="comment-box">
-<div class="comment"><div class="ui fluid button get_another_number" data-href-template="{{meal.get_absolute_url }}">Открыть сообшения</div></div>
+    <div class="comment">
+        <div class="ui fluid button get_another_number" data-href-template="{{meal.get_absolute_url }}">Открыть
+            сообшения</div>
+    </div>
     <div class="ui comments">
         {% recursetree pag_comments %}
         <div class="comment custom_comment">
             <a class="avatar" href="#">
                 <img src="{% if node.author.profile.avatar %}{{ node.author.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
-                     alt="avatarka">
+                    alt="avatarka">
             </a>
             <div class="content">
                 <a class="author">{{ node.author }}</a>
@@ -197,29 +205,29 @@
                 <div class="text">
                     {{ node.text }}
                 </div>
-                {% if node.level < 2 %}
-                <div id="{{node.id}}" class="actions">
+                {% if node.level < 2 %} <div id="{{node.id}}" class="actions">
                     <a class="ui basic mini positive button" onclick="addComment({{ node.id }})">Ответить</a>
-                </div>
-                {% endif %}
-            </div>
-
-            {% if not node.is_leaf_node %}
-            <div class="comments">
-                {{children}}
             </div>
             {% endif %}
         </div>
-        {% endrecursetree %}
+
+        {% if not node.is_leaf_node %}
+        <div class="comments">
+            {{children}}
+        </div>
+        {% endif %}
     </div>
-    {% include "includes/paginator.html" %}
+    {% endrecursetree %}
+</div>
+{% include "includes/paginator.html" %}
 </div>
 {% else %}
-    <h3 id="dishComments" class="ui header">Пока нет комментариев</h3>
+<h3 id="dishComments" class="ui header">Пока нет комментариев</h3>
 {% endif %}
 <!-- Form for reviews -->
 
-<form action="{% url 'culinary_recipe:add_review' meal.id %}" method="post" class="ui form input_background formReview" id="formReview">
+<form action="{% url 'culinary_recipe:add_review' meal.id %}" method="post" class="ui form input_background formReview"
+    id="formReview">
     {% csrf_token %}
     {{ form }}
     <input type="hidden" name="parent" id="contactparent" value="">
@@ -235,4 +243,3 @@
 <!--Like and add dish to culinary book action Js cdn-->
 <script type="text/javascript" src="{% static 'js/meal_detail.js' %}"></script>
 {% endblock jscdn %}
-

@@ -168,21 +168,21 @@
                         </tr>
                         <tr>
                             <td>Druzya</td>
-                            <td><a href="{{ profile.get_absolute_url_for_friends_view }}">{{ profile.get_friends_total_number }}</a></td>
-                        </tr>
-                        <tr>
-                            <td>Like</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>vy postavili Like</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Novye soovsheniya
+                            <td><a href="{{ profile.get_absolute_url_for_friends_view }}">
+                                <span class="ui teal label">{{ profile.get_friends_total_number }}</span></a>
                             </td>
-                            <td>{{ msg_count }}</td>
+                        </tr>
+                        <tr>
+                            <td>Ваши рецепты в ожидаеии проверки</td>
+                            <td> <span class="ui teal label">{{ profile.get_total_recipe_moderator_false }}</span></td>
+                        </tr>
+                        <tr>
+                            <td>Вашы черновики</td>
+                            <td> <span class="ui teal label">{{ profile.get_total_draft }}</span></td>
+                        </tr>
+                        <tr>
+                            <td>Ваши рецепты</td>
+                            <td><span class="ui teal label">{{ profile.get_total_user_recipe }}</span></td>
                         </tr>
                         </tbody>
                     </table>
@@ -191,6 +191,85 @@
         </div>
     </div>
     <!-- ALl about user added dishes list-->
+    <div class="personal_info_title row ">
+        <h4>Ваши Черновики</h4>
+    </div>
+
+    <table class="ui table fluid">
+        <tbody>
+        {% for meal in meals_draft %}
+        <tr>
+            <td>
+                <div class="dishe_images">
+                    <img class="user_image" src="{{ meal.poster.url }}" alt="{{ meal.title }}">
+                </div>
+            </td>
+            <td>
+                <div class="ui middle aligned">
+                    <span>{{ meal.title|truncatechars:"20" }}</span>
+                </div>
+            </td>
+            <td>
+                <div class="dish_created">
+                <span class="dish_date">
+                  {{ meal.created|date:"j E Y" }}
+                </span>
+                </div>
+            </td>
+            <td>
+
+                <div class="ui two buttons">
+                    <div class="ui basic green button"><a class="text-success"
+                                                          href="{{ meal.get_update_absolute_url }}">Редактировать</a>
+                    </div>
+                    <div class="ui basic red button"><a class="text-danger coolor-danger"
+                                                        href="{{ meal.get_delete_absolute_url }}">Удалить</a></div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="personal_info_title row ">
+        <h4>Ваши рецепты в ожидаеии проверки</h4>
+    </div>
+
+    <table class="ui table fluid">
+        <tbody>
+        {% for meal in meals_not_added %}
+        <tr>
+            <td>
+                <div class="dishe_images">
+                    <img class="user_image" src="{{ meal.poster.url }}" alt="{{ meal.title }}">
+                </div>
+            </td>
+            <td>
+                <div class="ui middle aligned">
+                    <span>{{ meal.title|truncatechars:"20" }}</span>
+                </div>
+            </td>
+            <td>
+                <div class="dish_created">
+                <span class="dish_date">
+                  {{ meal.created|date:"j E Y" }}
+                </span>
+                </div>
+            </td>
+            <td>
+
+                <div class="ui two buttons">
+                    <div class="ui basic green button"><a class="text-success"
+                                                          href="{{ meal.get_update_absolute_url }}">Редактировать</a>
+                    </div>
+                    <div class="ui basic red button"><a class="text-danger coolor-danger"
+                                                        href="{{ meal.get_delete_absolute_url }}">Удалить</a></div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
     <div class="personal_info_title row ">
         <h4>Ваши Рецепты</h4>
     </div>
@@ -237,41 +316,8 @@
     {% block side %}
     {% endblock side %}
 </div>
-{% block javascript %}
-    $(document).ready(function(){
-        $('#modal-btn').click(function(){
-            $('.ui.modal').modal('show')
-            $('.ui.radio.checkbox').checkbox();
-            $('.ui.toggle.checkbox').checkbox();
-            $('#avatar_image_id').click(()=>{
-                $('#id_avatar').click()
-                $('#id_avatar').change((e)=>{
-                    console.log()
-                })
-            })
 
-        })
-        var options = $.extend({},
-            $.datepicker.regional["ru"], {
-              dateFormat: "dd.mm.yy",
-              changeMonth: true,
-              changeYear: true,
-              highlightWeek: true,
-            }
-        );
-        $('.date_input').datepicker(options);
-
-    })
-    function readURL(input){
-        if(input.files && input.files[0]){
-            console.log('arslan')
-           var reader = new FileReader()
-           reader.onload = function (e){
-              var image = e.target.result
-              var imageField = document.getElementById('avatar_image_id')
-              imageField.src = image
-           }
-           reader.readAsDataURL(input.files[0])
-        }
-     }
-{% endblock javascript %}
+<!--  custom js -->
+{% block jscdn %}
+<script type="text/javascript" src="{% static 'js/profile_page.js' %}"></script>
+{% endblock jscdn %}

@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Ваши друзья
+{% endblock title %}
+
+{% block content %}
+<div class="ui message"><div class="header">Ваши друзья</div></div>
+    {% for obj, value in friends.items %}
+        <div class="ui segment mt-2">
+            <div class="ui stackable grid">
+                <div class="row">
+                    <div class="four wide center aligned middle aligned column">
+                        <img class="ui small circular image" src="{{ obj.avatar.url }}" alt="" style="display:inline !important; ">
+                    </div>
+                    <div class="four wide center aligned middle aligned column">
+                        <h3>{{ obj.first_name }}</h3>
+                        <p>{{ obj.email }}</p>
+                    </div>
+                    <div class="eight wide center aligned middle aligned column">
+                        <div class="row">
+                            <a href="{{ obj.get_absolute_url_for_friends }}">
+                                <button class="mini ui primary button w-big">
+                                    Просмотреть профиль
+                                </button>
+                            </a>
+                        </div>
+                        <div class="row mt-10 mb-10">
+<!--                            <a href="{{obj.get_privet_messages_absolute_url}}">-->
+                                <button datatype="{{obj.slug}}" id="modal-btn-private-message" class="mini ui positive basic button w-big">
+<!--                                    <button class="mini ui positive basic button w-big">-->
+                                    {% if value %}
+                                    У вас {{ value }} новые сообщении
+                                    {% else %}
+                                        Написать сообщения
+                                    {% endif %}
+                                </button>
+<!--                                </a>-->
+                        </div>
+                            <form action="{% url 'contact:remove_from_friend' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="profile_pk" value="{{ obj.id }}">
+                                <button class="mini ui negative basic button my-2 w-big" type="submit">
+                                    <i class="minus square icon"></i>Удалить из друзей
+                                </button>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+<div class="ui tiny modal personal_message">
+    <i class="close icon"></i>
+        {% include 'contact/chat/thread.html' %}
+</div>
+{% endblock content %}
+
+{% block javascript %}
+var global_val_for_visibility_msg = 10
+
+<!--This is get messages from date base and popup window for privet message with form-->
+    $(document).ready(function(){
+        $('.mini.ui.positive.basic.button.w-big').click( (event) => {
+            $('.ui.tiny.modal.personal_message').modal({
+                onHide: function() {
+                    global_val_for_visibility_msgval = 10
+                    window.location.reload()
+                },
+            }).modal('show');
+            var slug = $(event.target).attr('datatype')
+            getJson(slug)
+        })
+    })
+    function getJson(slug){
+        document.querySelector('.bg-private_message').innerHTML = '';
+        const pathname = `/private/chat/json/${slug}`
+        $.ajax({
+            type: 'GET',
+            url: pathname,
+            success: function (response){
+                const data = response.data
+                $('.private_msg_form').attr('action', `${pathname}/`)
+
+                if ( response.load_more['load_more']) {
+                    document.querySelector('.bg-private_message').innerHTML = `<div class="comment"><div class="ui fluid button get_another_number">Открыть сообшения</div></div>`;
+                }
+                data.map(post=>{
+                    el = `<div class="comment private_message_custom ${ post.sender }">
+                                <a class="avatar">
+                                    <img class="ui avatar image" src="${ post.user_avatar }">
+                                </a>
+                            <div class="content">
+                                <a class="author">${post.user_name}</a>
+                                <div class="metadata">
+                                    <span class="date">${post.timestamp}</span>
+                                </div>
+                                <div class="text">
+                                    ${post.message}
+                                </div>
+                            </div>
+                        </div>`
+                    document.querySelector('.bg-private_message').innerHTML += el
+                })
+                $('.overflow-a').scrollTop($('.overflow-a').prop('scrollHeight'))
+            },
+            error: function (error){
+            }
+        })
+    }
+<!--this Jq is POST's new message in db and put it private message windows-->
+    $('.private_msg_form').submit(function(e){
+            e.preventDefault()
+            var message = $('.private_message_text').val()
+            const url = $('.private_msg_form').attr('action')
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    'message': message,
+                },
+                success: function(resp){
+                    const last_data = resp.data
+                    last_data.map(post=>{
+                        last_msg = `<div class="comment ${ post.sender }">
+                                    <a class="avatar">
+                                        <img class="ui avatar image" src="${ post.user_avatar }">
+                                    </a>
+                                <div class="content">
+                                    <a class="author">${post.user_name}</a>
+                                    <div class="metadata">
+                                        <span class="date">${post.timestamp}</span>
+                                    </div>
+                                    <div class="text">
+                                        ${post.message}
+                                    </div>
+                                </div>
+                            </div>`
+                        document.querySelector('.bg-private_message').innerHTML += last_msg
+                    })
+                $('.private_message_text').val('')
+                $('.overflow-a').scrollTop($('.overflow-a').prop('scrollHeight'))
+                },
+                error: function(error){
+                    console.log('error', error)
+                }
+            })
+        })
+<!--This is when scrolling top shows more chat from db history-->
+        $('.overflow-a').click((e) => {
+            if ($(e.target).hasClass('get_another_number')){
+                $('.get_another_number').remove()
+                global_val_for_visibility_msg += 10
+            const url = $('.private_msg_form').attr('action')
+            $.ajax({
+                type: 'GET',
+                url:   url + global_val_for_visibility_msg + '/',
+                success: function(some){
+                    const new_data = some.new_data
+                    $('.comment').first().before(`<div class="ui active centered inline black loader"></div>`)
+                    setTimeout(function() {
+                        $('.ui.active.centered.inline.loader').remove()
+                        new_data.map(post=>{
+                            load_msg = `<div class="comment ${ post.sender }">
+                                        <a class="avatar">
+                                            <img class="ui avatar image" src="${ post.user_avatar }">
+                                        </a>
+                                    <div class="content">
+                                        <a class="author">${post.user_name}</a>
+                                        <div class="metadata">
+                                            <span class="date">${post.timestamp}</span>
+                                        </div>
+                                        <div class="text">
+                                            ${post.message}
+                                        </div>
+                                    </div>
+                                </div>`
+                            $('.comment').first().before(load_msg)
+                        });
+
+                        if ( some.load_more['load_more'] ){
+                            $('.comment').first().before(`<div class="comment"><div class="ui fluid button get_another_number">Открыть сообшения</div></div>`);
+                        }
+
+                    }, 1000);
+                },
+                error: function(error){
+                    console.log('error', error)
+                }
+            })
+            }
+        })
+
+{% endblock javascript %}

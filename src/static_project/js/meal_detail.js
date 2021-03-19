@@ -25,11 +25,11 @@ $(document).ready(function(){
                     success: function(response){
                         h = $('.result_book').html(response['form'])
                         if (response['is_liked']=='Like'){
-                            $('#like').removeClass('up')
-                            $('#like').addClass('down')
-                        } else if (response['is_liked']=='Unlike'){
                             $('#like').removeClass('down')
                             $('#like').addClass('up')
+                        } else if (response['is_liked']=='Unlike'){
+                            $('#like').removeClass('up')
+                            $('#like').addClass('down')
                         }
                     },
                     error: function(rs, e){
@@ -83,13 +83,12 @@ $(document).ready(function(){
             <button type="submit" class="ui basic positive button mt-10 child_comment_buttons">ДОБАВИТЬ КОММЕНТАРИЙ</button></div></form>`);
         $('.child_comment_buttons').click(function(e){
             e.preventDefault();
-            let csrf = $('input[name=csrfmiddlewaretoken]').val()
             let text = $('textarea[id=id_text]').val()
             let parent = $('input[name=parent]').val()
             $.ajax({
                 type: 'POST',
                 url: url_for_comments,
-                data: {parent, text, 'csrfmiddlewaretoken': csrf },
+                data: {parent, text, 'csrfmiddlewaretoken': csrf_for_comments },
                 dataType: 'json',
                 success: function(response){
                     if (document.contains(document.querySelector('.ui.positive.message'))){
@@ -103,7 +102,7 @@ $(document).ready(function(){
                             </div>
                             <p>Ваш комментарий принят после прохождения модерации будет добавлен на сайт</p>
                         </div>`)
-                        <!--message close-->
+                        // <!--message close-->
                         $('.message .close').on('click', function() {
                             $(this).closest('.message').transition('fade');
                         });
@@ -116,107 +115,4 @@ $(document).ready(function(){
             });
         });
     }
-function removeCommentForm(){
-        document.getElementById('replay_form').remove()
-    }
 
-    $(document).ready(function(){
-        $('.formReview').submit(function(e){
-            e.preventDefault();
-            const url = $(this).attr('action');
-            console.log('checking ' + url)
-            let csrf = $('input[name=csrfmiddlewaretoken]').val();
-            let text = $('textarea[id=id_text]').val();
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: {text, 'csrfmiddlewaretoken': csrf },
-                dataType: 'json',
-                success: function(response){
-                    if (document.contains(document.querySelector('.ui.positive.message'))){
-                        document.querySelector('.ui.positive.message').remove()
-                    }
-                    if (response.status){
-                        $('.formReview').before(`<div class="ui positive message">
-                            <i class="close icon"></i>
-                            <div class="header">
-                                Спасибо за участие
-                            </div>
-                            <p>Ваш комментарий принят после прохождения модерации будет добавлен на сайт</p>
-                        </div>`)
-                        <!--message close-->
-                        $('.message .close').on('click', function() {
-                            $(this).closest('.message').transition('fade');
-                        });
-                    }
-                        <!-- this is clear textarea after saving comment-->
-                    $('textarea[id=id_text]').val('');
-                },
-                error: function(rs, e){
-                    console.log(rs.responseText);
-                },
-            });
-        });
-    });
-
-
-<!--Load More Comments From DB-->
-var global_val_for_visibility_comments = document.querySelectorAll('.comment.custom_comment').length
-$('.get_another_number').click((e) => {
-    $('.comment-box').scrollTop($('.custom_comment').first().prop('scrollHeight'))
-    const url = $('.get_another_number').attr('data-href-template')
-    $('.get_another_number').css('display', 'none')
-    global_val_for_visibility_comments += 10
-    $.ajax({
-        type: 'GET',
-        url:   url + global_val_for_visibility_comments + '/',
-        success: function(some){
-            const new_data = some.new_data
-            $('.comment-box').scrollTop($('.custom_comment').first().prop('scrollHeight'))
-            $('.comment-box').first().before(`<div class="ui active centered inline loader"></div>`)
-            setTimeout(function() {
-                $('.ui.active.centered.inline.loader').remove();
-                new_data.map(post=>{
-                    var comment_div = $('<div class="comment custom_comment"></div>');
-                    var action_btn = $(`<div id="${post.id}" class="actions">
-                                            <a class="ui basic mini positive button" onclick="addComment(${ post.id })">Ответить</a>
-                                        </div>`);
-                    var content_comment =  $(`<div class="content">
-                                                <a class="author">${post.author}</a>
-                                                <div class="metadata">
-                                                    <span class="date">${post.created}</span>
-                                                </div>
-                                                <div class="text">
-                                                    ${post.text}
-                                                </div>
-                                            </div>`)
-                    load_msg = $(`<a class="avatar">
-                                    <img src="{% if meal.author.profile.avatar %}{{ meal.author.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}">
-                                </a>`)
-                    if (post.level == 2){
-                        comment_div = $('<div class="comment custom_comment pl-40 pt-20"></div>')
-                        comment_div.html(load_msg)
-                        comment_div.append(content_comment)
-                    } else if (post.level == 1){
-                        comment_div = $('<div class="comment custom_comment pl-20 pt-20"></div>')
-                        comment_div.html(load_msg)
-                        content_comment.append(action_btn)
-                        comment_div.append(content_comment)
-                    } else {
-                        comment_div.html(load_msg)
-                        content_comment.append(action_btn)
-                        comment_div.append(content_comment)
-                    }
-                    $('.custom_comment').first().before(comment_div)
-                })
-
-                if ( some.load_more['load_more'] ){
-                    $('.get_another_number').css('display', 'block')
-                }
-            }, 500);
-        },
-        error: function(error){
-            console.log('error', error)
-        }
-    })
-})

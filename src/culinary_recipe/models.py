@@ -135,11 +135,10 @@ class Vegeterian(models.Model):
 
 
 def get_poster_image_filepath(self, fileName):
-    return f'meal/{self.pk}/poster/{fileName}'
+    return f'meal/{self.slug}/poster/{fileName}'
 
 
 def get_steps_image_filepath(self, fileName):
-    print(fileName)
     return f'meal/{self.meal.pk}/steps/{fileName}'
 
 

@@ -1,4 +1,6 @@
 from django import forms
+from django.forms import HiddenInput, BaseInlineFormSet
+from django.forms.formsets import BaseFormSet
 from django.forms.models import inlineformset_factory
 from .models import DishComment, Dish, Category, Step, Ingredient, SubCategory, Technology
 
@@ -87,12 +89,18 @@ class IngredientForm(forms.ModelForm):
         }
 
 
-IngredientFormSet = inlineformset_factory(Dish, Ingredient, IngredientForm,
-                                          extra=0, min_num=2, validate_min=True,)
+class BaseArticleFormSet(BaseInlineFormSet):
+    ordering_widget = HiddenInput
 
-InstructionFormSet = inlineformset_factory(Dish, Step,
+
+IngredientFormSet = inlineformset_factory(Dish, Ingredient, IngredientForm, formset=BaseArticleFormSet,
+                                          extra=0, min_num=2, validate_min=True, can_delete=True, can_order=True)
+
+InstructionFormSet = inlineformset_factory(Dish, Step, formset=BaseArticleFormSet,
                                            fields=('description',
-                                                   'image'), extra=0, min_num=1, validate_min=True,
+                                                   'image'),
+                                           can_delete=True, can_order=True,
+                                           extra=0, min_num=1, validate_min=True,
                                            widgets={
                                                'description': forms.Textarea(attrs={'class': 'form-control m-2', 'rows':5}),
                                            })

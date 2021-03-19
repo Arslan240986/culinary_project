@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'culinary_recipe',
     'contact',
     'private_chat',
+    'culinary_post',
 ]
 
 MIDDLEWARE = [

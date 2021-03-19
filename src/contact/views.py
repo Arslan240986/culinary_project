@@ -40,29 +40,32 @@ def edit(request):
 def personal_page(request, slug):
     user_profile = get_object_or_404(UserProfile, slug=slug)
     profile_form = ProfileEditForm(instance=request.user.profile)
-    meals = Dish.objects.filter(author__profile=user_profile, draft=False).order_by('-created')
-    profile = get_object_or_404(UserProfile, user=request.user)
+    meals = Dish.objects.filter(author__profile=user_profile, draft=False, moderator=True).order_by('-created')
+    meals_not_added = Dish.objects.filter(author__profile=user_profile, draft=False, moderator=False)
+    meals_draft = Dish.objects.filter(author__profile=user_profile, draft=True)
     reviews = DishComment.objects.filter(author__profile=user_profile)
-    threads = Thread.objects.by_user(profile)
+    threads = Thread.objects.by_user(user_profile)
     total_msg = 0
     for thread in threads:
-        msg = ChatMessage.objects.filter(thread=thread, is_readed=False).exclude(user=profile).count()
+        msg = ChatMessage.objects.filter(thread=thread, is_readed=False).exclude(user=user_profile).count()
         total_msg += msg
     context = {
         'msg_count': total_msg,
         'meals': meals,
+        'meals_not_added': meals_not_added,
+        'meals_draft': meals_draft,
         'reviews': reviews,
-        'profile': profile,
+        'profile': user_profile,
         'profile_form': profile_form
     }
     return render(request, 'contact/profile_page.html', context)
 
 
 @login_required
-def personal_draft_page(request, pk):
-    meals = Dish.objects.filter(author_id=pk, draft=True)
-    return render(request, 'account/profile/pesonal_draft_page.html',
-                  {'meals': meals,})
+def personal_draft_page(request, slug):
+    profile = get_object_or_404(UserProfile, slug=slug)
+    meals = Dish.objects.filter(author__profile=profile, draft=True)
+    return render(request, 'contact/personal_draft_page.html', {'meals': meals,})
 
 
 def contact_view(request):
@@ -100,7 +103,7 @@ def add_dishes(request):
             profile.dishes.remove(id)
             profile.save()
             meal.save()
-            context['count'] = request.user.profile.get_total_dishes()
+            context['count'] = request.user.profile.get_total_book()
         else:
             meal.dish_added = True
             profile.dishes.add(id)
@@ -112,13 +115,13 @@ def add_dishes(request):
 
 
 @login_required()
-def user_dish_book(request, pk):
+def user_dish_book(request, slug):
     """Кулинарная книга"""
-    profile = get_object_or_404(UserProfile, user=pk)
+    profile = get_object_or_404(UserProfile, slug=slug)
     if request.method == "GET":
         if request.user == profile.user:
             dishes = profile.dishes.all()
-            return render(request, 'account/profile/dish_book.html', {'dishes': dishes})
+            return render(request, 'contact/dish_book.html', {'dishes': dishes})
         else:
             return HttpResponse('Wy pytayetes voyti ne svoyu knigu')
 
@@ -132,7 +135,7 @@ def invites_received_view(request):
     context = {
         'qs': result
     }
-    return render(request, 'account/profile/my_invites.html', context)
+    return render(request, 'contact/my_invites.html', context)
 
 
 @login_required
@@ -172,7 +175,7 @@ def invite_profiles_list_view(request):
 
 class UserProfileDetailView(DetailView):
     model = UserProfile
-    template_name = 'account/profile/profile_detail.html'
+    template_name = 'contact/profile_detail.html'
 
     def get_object(self):
         slug = self.kwargs.get('slug')
@@ -181,21 +184,24 @@ class UserProfileDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = User.objects.get(username__iexact=self.request.user)
-        profile = UserProfile.objects.get(user=user)
-        rel_r = Relationship.objects.filter(sender=profile)
-        rel_s = Relationship.objects.filter(receiver=profile)
+        request_user = get_object_or_404(User, id=self.request.user.id)
+        user_profile = self.get_object()
+        recipes = user_profile.user.dish.all().filter(moderator=True, draft=False)
+        profile_request_user = UserProfile.objects.get(user=request_user)
+        rel_r = Relationship.objects.filter(sender=profile_request_user)
+        rel_s = Relationship.objects.filter(receiver=profile_request_user)
         context['rel_receiver'] = [item.receiver.user for item in rel_r]
         context['rel_sender'] = [item.sender.user for item in rel_s]
         context['is_empty'] = False
-        context['posts'] = self.get_object().get_total_posts()
-        context['len_posts'] = True if len(self.get_object().get_total_posts()) > 0 else False
+        context['recipes'] = recipes
+        context['posts'] = 'self.get_object().get_total_posts()'
+        context['len_posts'] = 'True if len(self.get_object().get_total_posts()) > 0 else False'
         return context
 
 
 class ProfileFriendList(LoginRequiredMixin, ListView):
     model = UserProfile
-    template_name = "account/profile/profile_friends_list.html"
+    template_name = "contact/profile_friends_list.html"
     context_object_name = 'friends'
 
     def get_queryset(self):
@@ -214,7 +220,7 @@ class ProfileFriendList(LoginRequiredMixin, ListView):
 
 class ProfileListView(LoginRequiredMixin, ListView):
     model = UserProfile
-    template_name = 'account/profile/profile_list.html'
+    template_name = 'contact/profile_list.html'
     context_object_name = 'qs'
 
     def get_queryset(self):
@@ -223,7 +229,7 @@ class ProfileListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = User.objects.get(username__iexact=self.request.user)
+        user = get_object_or_404(User, id=self.request.user.id)
         profile = UserProfile.objects.get(user=user)
         rel_r = Relationship.objects.filter(sender=profile)
         rel_s = Relationship.objects.filter(receiver=profile)
