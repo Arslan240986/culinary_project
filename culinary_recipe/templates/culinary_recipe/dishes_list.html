@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load hitcount_tags %}
+{% block title %}{% if category %}{{ category }}{% else %} Все ретцепты {% endif %}{% endblock title %}
+    {% if category %}
+        {% block breadcrumbs %}
+                <span class="text-muted" >{{category.name }}</span>
+        {% endblock breadcrumbs %}
+    {% endif %}
+{% block content %}
+
+{% if country %}
+    <h3>Страна {{country.name}}</h3>
+{% else %}
+    <h3>Ретцепты приготовления</h3>
+{% endif %}
+
+{% for meal in meals %}
+    <div class="ui fluid card">
+        <div class="content">
+            <div class="header">
+                <div class="right floated meta">
+                    <img class="ui avatar image" src="{{ meal.author.profile.avatar.url }}">
+                    <a href="#"><span>{{ meal.author.username }}</span></a>
+                </div>
+                <a class="button_link" href="{{ meal.get_absolute_url }}">
+                    {{ meal.title }}
+                </a>
+                <a href="{% url 'culinary_recipe:update_meal' meal.slug %}">Obnovit</a>
+                <i class="fa fa-cutlery"></i>
+            </div>
+        </div>
+        <div class="content">
+                <div class="ui medium rounded image">
+                    <img src="{{ meal.poster.url }}" width="300px" height="300px" alt="{{ meal.title }}">
+                </div>
+        </div>
+        <div class="content">
+                <small class="card-text text-muted">Категория:
+                    <a class="button_link text-muted" href="{{ meal.category.get_absolute_url }}">{{ meal.category }}</a>
+                    <a class="button_link text-muted" href="{{ meal.sub_category.get_absolute_url }}">{{ meal.sub_category.name }}</a>
+
+                </small>
+                <p class="description">{{ meal.description }}</p>
+                <small class="card-text text-muted">Ингредиенты:
+                    {% for ings in meal.ingredient_set.all %}
+                <span class="text-muted" >{{ ings.name }}{% if not forloop.last %},{% endif %}</span>
+                    {% endfor %}
+                </small>
+          </div>
+          <div class="extra content">
+                {% get_hit_count for meal as count %}
+              <i class="ui eye icon" aria-hidden="true"></i><small>{{ count}}</small>
+              <i class='ui comment icon'></i><small> {{ meal.get_total_comments }}</small>
+              <i class='ui heart icon'></i><small> 1</small>
+              <i class='ui thumbs up icon'></i><small>{{ meal.get_total_likes }}</small>
+          </div>
+    </div>
+{% endfor %}
+    <div class="my-4">
+        {% include 'includes/paginator.html' %}
+    </div>
+
+{% endblock %}

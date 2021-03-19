@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+
+            {% block classes %}
+                <div class="col-lg-9 blog-main bg-light" style="background-color: bisque;">
+            {% endblock classes %}
+
+{% block content %}
+    <div class="ui message">
+        <h4>Кулинарная книга</h4>
+    </div>
+    <table class="ui table fluid">
+        <tbody>
+        {% for meal in dishes %}
+        <tr>
+            <td>
+                <div class="dishe_images">
+                    <img class="user_image" src="{{ meal.poster.url }}" alt="{{ meal.title }}">
+                </div>
+            </td>
+            <td>
+                <div class="ui middle aligned">
+                    <a href="{{ meal.get_absolute_url }}"><span>{{ meal.title|truncatechars:"20" }}</span></a>
+                </div>
+            </td>
+            <td>
+                <div class="dish_created">
+                <span class="dish_date">
+                  {{ meal.created|date:"j E Y" }}
+                </span>
+                </div>
+            </td>
+            <td>
+                <form class="remove_dishes m-4" action="{% url 'contact:add_dishes_to_book' %}" method="post"
+                              name="add_dishes_to_book" id="add_dishes_to_book">
+                            {% csrf_token %}
+                            <input type="hidden" class="meal_id" value="{{ meal.id }}">
+                            <input type="submit" class="add_dishes subscribe_form_btn subscribe_link font-oswald result"
+                                   value="{% if meal.dish_added %} удалить из кулинарной книги{% else %}в мою кулинарную книгу{% endif %}">
+                        </form>
+            </td>
+        </tr>
+        {% empty %}
+        <div class="ui info message">
+            <div class="header">
+                Вы еще не добавили ретцепт
+            </div>
+        </div>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% endblock content %}
+                    {% block side %}
+{% endblock side %}
+                    </div>
+{% block javascript %}
+$(document).ready(function(){
+    $(document).on('click', '.remove_dishes', function(event){
+        event.preventDefault()
+        var pk = $('.meal_id').val()
+        const url = $('.remove_dishes').attr('action')
+        let csrf = $('input[name=csrfmiddlewaretoken]').val()
+        console.log(pk, url, csrf)
+        $.ajax({
+                type: 'POST',
+                url: url,
+                data: {'id': pk, 'csrfmiddlewaretoken': csrf },
+                dataType: 'json',
+                success: function(response){
+                    $('.dish_book_count').html(response['count'])
+                },
+                error: function(rs, e){
+                    console.log('second', rs.responseText);
+                },
+        });
+        $(this).parents('tr').remove()
+    });
+});
+{% endblock javascript %}

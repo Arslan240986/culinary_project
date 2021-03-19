@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/base/jquery-ui.css"
+          type="text/css" media="all"/>
+    <!--    google-fonts-Oswald-->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+    <!--    google-fonts-Lobster-->
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Oswald&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'Semantic_UI/semantic.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block cdn %}
+    {% endblock cdn %}
+
+
+    <!-- Custom styles (optional) -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+    <title>{% block title %}Yammi{% endblock title %}</title>
+</head>
+
+<body class="body_yummy">
+
+{% include 'includes/header.html' %}
+
+
+<!-- Content side -->
+
+
+<div class="ui bread  " style="">
+<div class="custom_container">
+    <div class="ui stackable two column divided grid">
+
+        <!-- /.blog-sidebar Каталог рецептов -->
+        <div class="twelve wide column content_side_yummy p-10">
+            <!-- Bread crumbs -->
+            {% block steps_breadcrumbs %}
+            <div class="mt-2">
+                <div class="ui breadcrumb font-oswald black p-10">
+
+                    <a class="section navbar_links_yummy black" href="{% url 'culinary_recipe:home' %}">Главное</a>
+                    <i class="right chevron icon divider black"></i>
+                    <a class="section navbar_links_yummy black" href="{% url 'culinary_recipe:dishes' %}">Все категории</a>
+                    <i class="right chevron icon divider black"></i>
+
+                    {% block breadcrumbs %}
+                    {% endblock breadcrumbs %}
+                </div>
+            </div>
+            <hr>
+            {% endblock steps_breadcrumbs %}
+            {% block content %}
+            <hr>
+            {% endblock %}
+
+        </div>
+        {% include 'includes/side_bar.html' %}
+    </div>
+</div>
+</div>
+{% include 'includes/footer.html' %}
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://kit.fontawesome.com/f60ff1095d.js" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>-->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js "></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/i18n/jquery-ui-i18n.min.js"></script>
+
+
+<!--    JQuery formset-->
+<script type="text/javascript" src="{% static 'js/jquery.formset.js' %}"></script>
+<!--Semantik Ui Js-->
+<script type="text/javascript" src="{% static 'Semantic_UI/semantic.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/base.js' %}"></script>
+<!--  custom js -->
+{% block jscdn %}
+
+{% endblock jscdn %}
+<script>
+    {% block javascript %}
+    {% endblock javascript %}
+</script>
+</body>
+</html>
