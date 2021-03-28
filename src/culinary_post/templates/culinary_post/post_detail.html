@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mptt_tags %}
+{% load hitcount_tags %}
+
+{% block title %}{{ post.title }}{% endblock title %}
+
+{% block breadcrumbs %}
+<a class="section navbar_links_yummy black" href="{% url 'culinary_post:culinary_post_view' %}">Кулинарные посты</a>
+<i class="right chevron icon divider black"></i>
+<a class="section navbar_links_yummy black"
+    href="#">{{post.title}}</a>
+{% endblock breadcrumbs %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="ui info message">
+        <i class="close icon"></i>
+        <div class="header">
+            {{ message }}
+        </div>
+    </div>
+    {% endfor %}
+{% endif %}
+<div class="dish_detail">
+    <div class="ui two right aligned column grid mx-10">
+        <div class="right floated middle aligned eight wide column">
+            <small>{{ post.created }}/{{ post.user }}</small>
+            <img class="ui avatar image"
+                src="{% if post.user.profile.avatar %}{{ post.user.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}">
+        </div>
+    </div>
+
+    <div class="dish_row">
+        <h1 class="font-lobster p-10">{{ post.title }}</h1>
+    </div>
+    <div class="row">
+        <p class="font-oswald p-10">{{post.content}}</p>
+    </div>
+
+    <div class="row">
+        <img class="ui fluid rounded image" src="{{ post.image.url }}" alt="{{ post.title }}">
+    </div>
+
+    <div class="ui equal width grid p-10">
+        <div class="equal width row">
+            <div class="column">
+                <div class="ui grid p-10">
+                    <div class="inline column row">
+                        {% get_hit_count for post as count %}
+                        <i class="ui eye big yellow icon main_point" aria-hidden="true"></i><small
+                            class="mr-5 font-s-20 c-black">{{count}}{{ hitcount.hit_counted }}{{ hitcount.pk }}</small>
+                        <a href="#dishComments">
+                            <i class='ui comment outline big yellow icon main_point'></i><small
+                                class="mr-5 font-s-20 c-black">
+                                {{ post.get_total_comments}}</small>
+                        </a>
+                        <i class='ui heart outline big yellow icon main_point'></i><small
+                            class="mr-5 font-s-20 c-black">
+                            1</small>
+                        <div class="right floated">
+                            <form action="{% url 'culinary_post:like_post_view' %}" method="post" class="like_form"
+                                id="{{ post.id }}">
+                                {% csrf_token %}
+                                <input type="hidden" name="post_id" value="{{ post.id }}">
+                                <button type="submit" class="mini ui labeled button like-btn{{post.id}}" tabindex="0">
+                                    <div class="mini ui red button">
+                                        <i class="thumbs icon{% if user.profile in post.liked.all %} down {% else %} up {% endif %}"></i>
+                                    </div>
+                                    <a class="ui basic red left pointing label like-count">
+                                        {{ post.get_total_likes }}
+                                    </a>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Show comments -->
+<hr>
+{% if post_comments %}
+<h3 id="dishComments" class="ui header">Коментарии</h3>
+<button class="cmt_btn ui fluid button mb-4">Показать / Скрыть коментарии</button>
+<div class="comment-box">
+    <div class="comment">
+        <div class="ui fluid button get_another_number" data-href-template="{{meal.get_absolute_url }}">Открыть
+            сообшения</div>
+    </div>
+    <div class="ui comments">
+        {% for comment in post_comments %}
+        <div class="comment custom_comment">
+            <a class="avatar" href="#">
+                <img src="{% if comment.user.profile.avatar %}{{ comment.user.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
+                    alt="avatarka">
+            </a>
+            <div class="content">
+                <a class="author">{{ comment.user }}</a>
+                <div class="metadata">
+                    <span class="date">{{ comment.created }}</span>
+                </div>
+                <div class="text">
+                    {{ comment.body }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+    <h3 id="dishComments" class="ui header">Пока нет комментариев</h3>
+{% endif %}
+<!-- Form for reviews -->
+
+<form action="{% url 'culinary_post:post_add_comment' post.id %}" method="post" class="ui form input_background formReview"
+    id="formReview">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="ui fluid basic positive button mt-10 comment_button">ДОБАВИТЬ КОММЕНТАРИЙ</button>
+</form>
+{{status}}
+<!-- Form for reviews -->
+
+{% endblock content %}
+
+{% block jscdn %}
+    <!--Like and add dish to culinary book action Js cdn-->
+    <script type="text/javascript" src="{% static 'js/meal_detail.js' %}"></script>
+{% endblock jscdn %}
+
+{% block javascript %}
+
+$(document).ready(function(){
+    <!--Comments show and hide js-->
+    let display = false
+    $('.cmt_btn').click(function(){
+        if(display===false){
+            $(this).next('.comment-box').show('slow');
+            display = true
+        } else {
+            $(this).next('.comment-box').hide('slow');
+            display = false
+        }
+    });
+
+    <!--    Like-btn ajax js-->
+    $('.like_form').submit(function(e){
+        e.preventDefault()
+        const post_id = $(this).attr('id')
+        const url = $(this).attr('action')
+        let result;
+        let likes = parseInt($.trim($(`.like-count${post_id}`).text()))
+        $.ajax({
+            type: 'POST',
+            url:url,
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'post_id': post_id,
+            },
+            success: function(response){
+                if($('.thumbs.icon').hasClass('down')){
+                    $(`.thumbs.icon`).removeClass('down')
+                    $(`.thumbs.icon`).addClass('up')
+                    $.trim($(`.like-count`).text(response['likes']))
+                } else {
+                    $(`.thumbs.icon`).removeClass('up')
+                    $(`.thumbs.icon`).addClass('down')
+                    $.trim($(`.like-count`).text(response['likes']))
+                }
+            },
+            error: function(error){
+                console.log('error', error)
+            }
+        })
+    })
+
+<!--adding comments-->
+$('.comment_button').click(function(e){
+            e.preventDefault();
+            const url = $('.formReview').attr('action');
+            let csrf = $('input[name=csrfmiddlewaretoken]').val();
+            let body = $('textarea[id=id_body]').val();
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {body, 'csrfmiddlewaretoken': csrf },
+                dataType: 'json',
+                success: function(response){
+                    if (document.contains(document.querySelector('.ui.positive.message'))){
+                        document.querySelector('.ui.positive.message').remove()
+                    }
+                    if (response.status){
+                        $('.formReview').before(`<div class="ui positive message">
+                            <i class="close icon"></i>
+                            <div class="header">
+                                Спасибо за участие
+                            </div>
+                            <p>Ваш комментарий принят после прохождения модерации будет добавлен на сайт</p>
+                        </div>`)
+                        <!--message close-->
+                        $('.message .close').on('click', function() {
+                            $(this).closest('.message').transition('fade');
+                        });
+                    }
+                        <!-- this is clear textarea after saving comment-->
+                    $('textarea[id=id_text]').val('');
+                },
+                error: function(rs, e){
+                    console.log(rs.responseText);
+                },
+            });
+        });
+});
+{% endblock javascript %}

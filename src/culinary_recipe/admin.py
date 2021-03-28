@@ -128,6 +128,6 @@ admin.site.register(DishLike)
 
 @admin.register(DishComment)
 class ReviewAdmin(MPTTModelAdmin):
-    list_display = ('author', 'status', 'meal', 'id')
+    list_display = ('id', 'text', 'author', 'status', 'meal',)
     list_editable = ('status',)
 

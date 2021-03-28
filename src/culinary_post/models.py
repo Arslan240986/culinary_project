@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import FileExtensionValidator
 from contact.models import UserProfile
 from django.core.exceptions import ValidationError
+from django.urls import reverse
 
 
 def validate_max_len(val):
@@ -22,11 +23,20 @@ class CulinaryPost(models.Model):
     def __str__(self):
         return str(self.content[:20])
 
+    def get_absolute_url(self):
+        return reverse('culinary_post:culinary_post_detail_view', args=[self.pk])
+
+    def get_update_absolute_url(self):
+        return reverse('culinary_post:post_update', args=[self.pk])
+
+    def get_delete_absolute_url(self):
+        return reverse('culinary_post:post_delete', args=[self.pk])
+
     def get_total_likes(self):
         return self.liked.all().count()
 
     def get_total_comments(self):
-        return self.postcomment_set.all().count()
+        return self.post_comments.all().count()
 
     class Meta:
         ordering = ('-created',)
@@ -35,9 +45,10 @@ class CulinaryPost(models.Model):
 
 
 class PostComment(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='culinary_comment')
-    post = models.ForeignKey(CulinaryPost, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='post_comment')
+    post = models.ForeignKey(CulinaryPost, on_delete=models.CASCADE, related_name='post_comments')
     body = models.TextField(max_length=300)
+    status = models.BooleanField(default=False)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 

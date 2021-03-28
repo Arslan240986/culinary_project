@@ -21,7 +21,7 @@
             {% endfor %}
             </div>
         </div>
-        <a class="p-2 navbar_links_yummy font-oswald" href="#">Кулинарные посты</a>
+        <a class="p-2 navbar_links_yummy font-oswald" href="{% url 'culinary_post:culinary_post_view' %}">Кулинарные посты</a>
     </div>
 
     <div class="right menu">
@@ -41,7 +41,7 @@
                     <div class="menu bgc transition hidden mt-10" tabindex="-1">
                         <div class="item">
                             <div class="ui buttons">
-                                    <a href="#" class="ui yellow button">
+                                    <a href="{% url 'culinary_post:culinary_post_add' %}" class="ui yellow button">
                                         <span>
                                             Пост
                                         </span>

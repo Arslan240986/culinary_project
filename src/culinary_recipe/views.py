@@ -12,10 +12,11 @@ from django.views.generic import DetailView, ListView, CreateView, UpdateView, D
 from hitcount.views import HitCountDetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Dish, Country, Category, SubCategory, DishLike, Ingredient, Step
-# from posts.models import CulinaryPost
+from culinary_post.models import CulinaryPost
 from .forms import DishCommentForm, DishForm, IngredientFormSet, InstructionFormSet
 from .utils import getMonth
 # from .tasks import comment_add
+from contact.models import UserProfile
 
 
 class CategoryViewList(ListView):
@@ -25,7 +26,7 @@ class CategoryViewList(ListView):
     context_object_name = 'categories'
     extra_context = {
         'countries': Country.objects.all(),
-        # 'posts': CulinaryPost.objects.all().order_by('-created')[:6],
+        'posts': CulinaryPost.objects.all().order_by('-created')[:6],
     }
 
 
@@ -80,26 +81,36 @@ class MealDetailView(HitCountDetailView):
     template_name = 'culinary_recipe/meal_detail.html'
 
     def get(self, request, *args, **kwargs):
-        meal = get_object_or_404(Dish, slug=self.kwargs.get('slug'))
+        meal = get_object_or_404(Dish, slug=self.kwargs.get('slug'), id=self.kwargs.get('pk'))
         form = DishCommentForm()
         comments = meal.comments.filter(status=False)
         comment_size = len(comments)
         context = dict()
         try:
             upper = self.kwargs['number']
+            print(upper)
             if upper:
-                low = upper - 10
-                comments = list(reversed(comments.values('id', 'parent_id', 'author', 'created', 'text', 'level')))[low:upper]
-                for comment in comments:
+                low = upper - 5
+                comments_number = list(reversed(comments.values('id', 'parent_id', 'author_id', 'created', 'text', 'level')))[low:upper]
+                if not comments_number[-1]['level'] == 0:
+                    while not comments_number[-1]['level'] == 0:
+                        upper += 1
+                        print(upper)
+                        print(low)
+                        comments_number = list(reversed(comments.values('id', 'parent_id', 'author_id', 'created', 'text', 'level')))[low:upper]
+                        print(comments_number[-1])
+                for comment in comments_number:
                     date_time = str(comment['created']).split(' ')
                     date = date_time[0].split('-')
                     time = date_time[1].split(':')
                     comment['created'] = f'{date[2]} {getMonth(date[1])} {date[0]} г. {time[0]}:{time[1]}'
+                    comment['user_name'] = UserProfile.objects.get(id=comment['author_id']).first_name
+                    comment['user_avatar'] = UserProfile.objects.get(id=comment['author_id']).avatar.url
 
                 context['load_more'] = False if upper >= comment_size else True;
-            return JsonResponse({'new_data': comments, 'load_more': context}, safe=False)
+            return JsonResponse({'new_data': comments_number, 'load_more': context}, safe=False)
         except:
-            first_num = 10
+            first_num = 5
             ne = list(reversed(comments))[:first_num]
             new_comments = list(reversed(ne))
             if new_comments:
@@ -171,40 +182,6 @@ def like_unlike_post(request):
         }
         return JsonResponse(data, safe=False)
     return redirect('/')
-
-# class LikeJsonView(View):
-#     def get_client_ip(self, request):
-#         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-#         if x_forwarded_for:
-#             ip = x_forwarded_for.split(',')[0]
-#         else:
-#             ip = request.META.get('REMOTE_ADDR')
-#         return ip
-#
-#     def post(self, request):
-#         ip = self.get_client_ip(request)
-#         ip_lists = LikeIp.objects.filter(ip=ip).exists()
-#         if ip_lists:
-#             ip = LikeIp.objects.get(ip=ip)
-#         else:
-#             LikeIp.objects.create(ip=self.get_client_ip(request))
-#             ip = LikeIp.objects.get(ip=ip)
-#         id = request.POST.get('id')
-#         meal = get_object_or_404(Dish, id=id)
-#         if ip in [i for i in meal.likes.all()]:
-#             meal.likes.remove(ip.id)
-#             meal.is_liked = False
-#             meal.save()
-#         else:
-#             meal.is_liked = True
-#             meal.likes.add(ip.id)
-#             meal.save()
-#         context = {
-#             'is_liked': meal.is_liked,
-#             'form': meal.get_total_likes()
-#         }
-#         if request.is_ajax():
-#             return JsonResponse(context)
 
 
 class DishCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
@@ -370,7 +347,7 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 class DishDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Dish
-    template_name = 'meals/add/meal_delete.html'
+    template_name = 'culinary_recipe/recipe_delete.html'
 
     def get_success_url(self):
         return self.request.user.profile.get_personal_absolute_url()

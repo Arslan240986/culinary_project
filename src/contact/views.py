@@ -50,6 +50,7 @@ def personal_page(request, slug):
         msg = ChatMessage.objects.filter(thread=thread, is_readed=False).exclude(user=user_profile).count()
         total_msg += msg
     context = {
+        'posts' : user_profile.get_total_posts(),
         'msg_count': total_msg,
         'meals': meals,
         'meals_not_added': meals_not_added,
@@ -194,8 +195,8 @@ class UserProfileDetailView(DetailView):
         context['rel_sender'] = [item.sender.user for item in rel_s]
         context['is_empty'] = False
         context['recipes'] = recipes
-        context['posts'] = 'self.get_object().get_total_posts()'
-        context['len_posts'] = 'True if len(self.get_object().get_total_posts()) > 0 else False'
+        context['posts'] = self.get_object().get_total_posts()
+        context['len_posts'] = True if len(self.get_object().get_total_posts()) > 0 else False
         return context
 
 

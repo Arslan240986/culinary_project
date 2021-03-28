@@ -187,10 +187,10 @@
 <button class="cmt_btn ui fluid button mb-4">Показать / Скрыть коментарии</button>
 <div class="comment-box">
     <div class="comment">
-        <div class="ui fluid button get_another_number" data-href-template="{{meal.get_absolute_url }}">Открыть
-            сообшения</div>
+        <div class="ui fluid button get_another_number" data-href-template="{{meal.get_absolute_url }}">Открыть сообшения</div>
+        <div class="ui active centered inline black loader d_none"></div>
     </div>
-    <div class="ui comments">
+    <div class="ui threaded comments">
         {% recursetree pag_comments %}
         <div class="comment custom_comment">
             <a class="avatar" href="#">
@@ -198,7 +198,7 @@
                     alt="avatarka">
             </a>
             <div class="content">
-                <a class="author">{{ node.author }}</a>
+                <a class="author" href="{{node.author.profile.get_user_profile_detail_absolute_url}}">{{ node.author.profile.first_name }}</a>
                 <div class="metadata">
                     <span class="date">{{ node.created }}</span>
                 </div>
@@ -219,7 +219,6 @@
     </div>
     {% endrecursetree %}
 </div>
-{% include "includes/paginator.html" %}
 </div>
 {% else %}
 <h3 id="dishComments" class="ui header">Пока нет комментариев</h3>
@@ -240,6 +239,6 @@
 {% endblock content %}
 
 {% block jscdn %}
-<!--Like and add dish to culinary book action Js cdn-->
-<script type="text/javascript" src="{% static 'js/meal_detail.js' %}"></script>
+    <!--Like and add dish to culinary book action Js cdn-->
+    <script type="text/javascript" src="{% static 'js/meal_detail.js' %}"></script>
 {% endblock jscdn %}

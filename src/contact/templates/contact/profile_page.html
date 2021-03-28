@@ -19,11 +19,12 @@
         </div>
         <div class="image content">
             <div class="ui medium image">
-                <img id="avatar_image_id" class="ui centered medium rounded image" src="{{ profile_form.initial.avatar.url }}" alt="{{ profile_form.initial.avatar }}">
+                <img id="avatar_image_id" class="ui centered medium rounded image"
+                    src="{{ profile_form.initial.avatar.url }}" alt="{{ profile_form.initial.avatar }}">
             </div>
             <div class="description">
                 <form action="{% url 'contact:user_profile' %}" method="post" enctype="multipart/form-data"
-                      class="ui equal width form" novalidate>
+                    class="ui equal width form" novalidate>
                     {% csrf_token %}
                     <div class="field">
                         {{ profile_form.first_name.label_tag }}
@@ -62,9 +63,9 @@
                     <div class="inline fields">
                         <div class="field">
                             <input type="file" class="d_none" name="avatar" id="id_avatar" onchange="readURL(this)">
-<!--                            {{ profile_form.avatar.label_tag }}-->
-<!--                            {{ profile_form.avatar.errors }}-->
-<!--                            {{ profile_form.avatar }}-->
+                            <!--                            {{ profile_form.avatar.label_tag }}-->
+                            <!--                            {{ profile_form.avatar.errors }}-->
+                            <!--                            {{ profile_form.avatar }}-->
                         </div>
                         <div class="field">
                             {{ profile_form.gender.label_tag }}
@@ -136,54 +137,59 @@
             <div class="ui row">
                 <div class="ui six wide column">
                     <img class="ui centered medium rounded image"
-                         src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
-                         alt="">
+                        src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
+                        alt="">
                     <div class="ui centered grid m-4">
                         <a class="ui secondary button" id="modal-btn">Редактировать профиль</a>
                     </div>
                 </div>
 
                 <div class="ui ten wide column">
-                    <table class="ui table fluid">
+                    <table class="ui unstackable table fluid">
                         <tbody class="font-oswald">
-                        <tr>
-                            <td>polzovatel</td>
-                            <td>{{ user.username }}</td>
-                        </tr>
-                        <tr>
-                            <td>Imya</td>
-                            <td>{{ profile.first_name }}</td>
-                        </tr>
-                        <tr>
-                            <td>Familiya</td>
-                            <td>{{ profile.last_name }}</td>
-                        </tr>
-                        <tr>
-                            <td>email</td>
-                            <td>{{ profile.email }}</td>
-                        </tr>
-                        <tr>
-                            <td>Sozdan profil</td>
-                            <td>{{ profile.created }}</td>
-                        </tr>
-                        <tr>
-                            <td>Druzya</td>
-                            <td><a href="{{ profile.get_absolute_url_for_friends_view }}">
-                                <span class="ui teal label">{{ profile.get_friends_total_number }}</span></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Ваши рецепты в ожидаеии проверки</td>
-                            <td> <span class="ui teal label">{{ profile.get_total_recipe_moderator_false }}</span></td>
-                        </tr>
-                        <tr>
-                            <td>Вашы черновики</td>
-                            <td> <span class="ui teal label">{{ profile.get_total_draft }}</span></td>
-                        </tr>
-                        <tr>
-                            <td>Ваши рецепты</td>
-                            <td><span class="ui teal label">{{ profile.get_total_user_recipe }}</span></td>
-                        </tr>
+                            <tr>
+                                <td>polzovatel</td>
+                                <td>{{ user.username }}</td>
+                            </tr>
+                            <tr>
+                                <td>Imya</td>
+                                <td>{{ profile.first_name }}</td>
+                            </tr>
+                            <tr>
+                                <td>Familiya</td>
+                                <td>{{ profile.last_name }}</td>
+                            </tr>
+                            <tr>
+                                <td>email</td>
+                                <td>{{ profile.email }}</td>
+                            </tr>
+                            <tr>
+                                <td>Sozdan profil</td>
+                                <td>{{ profile.created }}</td>
+                            </tr>
+                            <tr>
+                                <td>Druzya</td>
+                                <td><a href="{{ profile.get_absolute_url_for_friends_view }}">
+                                        <span class="ui teal label">{{ profile.get_friends_total_number }}</span></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Ваши рецепты в ожидаеии проверки</td>
+                                <td> <span class="ui teal label">{{ profile.get_total_recipe_moderator_false }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Вашы черновики</td>
+                                <td> <span class="ui teal label">{{ profile.get_total_draft }}</span></td>
+                            </tr>
+                            <tr>
+                                <td>Ваши рецепты</td>
+                                <td><span class="ui teal label">{{ profile.get_total_user_recipe }}</span></td>
+                            </tr>
+                            <tr>
+                                <td>Ваши кулинарные посты</td>
+                                <td><span class="ui teal label">{{ profile.get_total_posts_number }}</span></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -191,126 +197,199 @@
         </div>
     </div>
     <!-- ALl about user added dishes list-->
+    {% if meals_draft %}
     <div class="personal_info_title row ">
-        <h4>Ваши Черновики</h4>
+        <h2>Ваши Черновики</h2>
     </div>
 
-    <table class="ui table fluid">
+    <table class="ui unstackable table fluid">
         <tbody>
-        {% for meal in meals_draft %}
-        <tr>
-            <td>
-                <div class="dishe_images">
-                    <img class="user_image" src="{{ meal.poster.url }}" alt="{{ meal.title }}">
-                </div>
-            </td>
-            <td>
-                <div class="ui middle aligned">
-                    <span>{{ meal.title|truncatechars:"20" }}</span>
-                </div>
-            </td>
-            <td>
-                <div class="dish_created">
-                <span class="dish_date">
-                  {{ meal.created|date:"j E Y" }}
-                </span>
-                </div>
-            </td>
-            <td>
-
-                <div class="ui two buttons">
-                    <div class="ui basic green button"><a class="text-success"
-                                                          href="{{ meal.get_update_absolute_url }}">Редактировать</a>
+            {% for meal in meals_draft %}
+            <tr>
+                <td>
+                    <div class="dishe_images">
+                        <img class="user_image" src="{{ meal.poster.url }}" alt="{{ meal.title }}">
                     </div>
-                    <div class="ui basic red button"><a class="text-danger coolor-danger"
-                                                        href="{{ meal.get_delete_absolute_url }}">Удалить</a></div>
-                </div>
-            </td>
-        </tr>
-        {% endfor %}
+                </td>
+                <td>
+                    <div class="ui middle aligned">
+                        <a href="{{meal.get_absolute_url }}"><span>{{ meal.title|truncatechars:"20" }}</span></a>
+                    </div>
+                </td>
+                <td>
+                    <div class="dish_created">
+                        <span class="dish_date">
+                            {{ meal.created|date:"j E Y" }}
+                        </span>
+                    </div>
+                </td>
+                <td>
+
+                    <div class="ui two buttons">
+                        <a class="ui basic green button" href="{{ meal.get_update_absolute_url }}">
+                            <i class="edit green icon"></i>
+                        </a>
+                        <a class="ui basic red button" href="{{ meal.get_delete_absolute_url }}">
+                            <i class="delete red icon"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
-
+      {% else %}
     <div class="personal_info_title row ">
-        <h4>Ваши рецепты в ожидаеии проверки</h4>
+        <h2>У Вас пока нет рецептов в черновике</h2>
+    </div>
+    {% endif %}
+    <hr>
+
+
+{% if meals_not_added %}
+    <div class="personal_info_title row ">
+        <h2>Ваши рецепты в ожидаеии проверки</h2>
     </div>
 
-    <table class="ui table fluid">
+    <table class="ui unstackable table fluid">
         <tbody>
-        {% for meal in meals_not_added %}
-        <tr>
-            <td>
-                <div class="dishe_images">
-                    <img class="user_image" src="{{ meal.poster.url }}" alt="{{ meal.title }}">
-                </div>
-            </td>
-            <td>
-                <div class="ui middle aligned">
-                    <span>{{ meal.title|truncatechars:"20" }}</span>
-                </div>
-            </td>
-            <td>
-                <div class="dish_created">
-                <span class="dish_date">
-                  {{ meal.created|date:"j E Y" }}
-                </span>
-                </div>
-            </td>
-            <td>
-
-                <div class="ui two buttons">
-                    <div class="ui basic green button"><a class="text-success"
-                                                          href="{{ meal.get_update_absolute_url }}">Редактировать</a>
+            {% for meal in meals_not_added %}
+            <tr>
+                <td>
+                    <div class="dishe_images">
+                        <img class="user_image" src="{{ meal.poster.url }}" alt="{{ meal.title }}">
                     </div>
-                    <div class="ui basic red button"><a class="text-danger coolor-danger"
-                                                        href="{{ meal.get_delete_absolute_url }}">Удалить</a></div>
-                </div>
-            </td>
-        </tr>
-        {% endfor %}
+                </td>
+                <td>
+                    <div class="ui middle aligned">
+                        <a href="{{meal.get_absolute_url }}"><span>{{ meal.title|truncatechars:"20" }}</span></a>
+                    </div>
+                </td>
+                <td>
+                    <div class="dish_created">
+                        <span class="dish_date">
+                            {{ meal.created|date:"j E Y" }}
+                        </span>
+                    </div>
+                </td>
+                <td>
+
+                    <div class="ui two buttons">
+                        <a class="ui basic green button" href="{{ meal.get_update_absolute_url }}">
+                            <i class="edit green icon"></i>
+                        </a>
+                        <a class="ui basic red button" href="{{ meal.get_delete_absolute_url }}">
+                            <i class="delete red icon"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
+     {% else %}
     <div class="personal_info_title row ">
-        <h4>Ваши Рецепты</h4>
+        <h2>У Вас пока нет рецептов в ожидаеии проверки</h2>
+    </div>
+    {% endif %}
+    <hr>
+
+    {% if meals %}
+    <div class="personal_info_title row ">
+        <h2>Ваши Рецепты</h2>
     </div>
 
-    <table class="ui table fluid">
+    <table class="ui unstackable table fluid">
         <tbody>
-        {% for meal in meals %}
-        <tr>
-            <td>
-                <div class="dishe_images">
-                    <img class="user_image" src="{{ meal.poster.url }}" alt="{{ meal.title }}">
-                </div>
-            </td>
-            <td>
-                <div class="ui middle aligned">
-                    <span>{{ meal.title|truncatechars:"20" }}</span>
-                </div>
-            </td>
-            <td>
-                <div class="dish_created">
-                <span class="dish_date">
-                  {{ meal.created|date:"j E Y" }}
-                </span>
-                </div>
-            </td>
-            <td>
-
-                <div class="ui two buttons">
-                    <div class="ui basic green button"><a class="text-success"
-                                                          href="{{ meal.get_update_absolute_url }}">Редактировать</a>
+            {% for meal in meals %}
+            <tr>
+                <td>
+                    <div class="dishe_images">
+                        <img class="user_image" src="{{ meal.poster.url }}" alt="{{ meal.title }}">
                     </div>
-                    <div class="ui basic red button"><a class="text-danger coolor-danger"
-                                                        href="{{ meal.get_delete_absolute_url }}">Удалить</a></div>
-                </div>
-            </td>
-        </tr>
-        {% endfor %}
+                </td>
+                <td>
+                    <div class="ui middle aligned">
+                        <a href="{{meal.get_absolute_url }}"> <span>{{ meal.title|truncatechars:"20" }}</span></a>
+                    </div>
+                </td>
+                <td>
+                    <div class="dish_created">
+                        <span class="dish_date">
+                            {{ meal.created|date:"j E Y" }}
+                        </span>
+                    </div>
+                </td>
+                <td>
+
+                    <div class="ui two buttons">
+                        <a class="ui basic green button" href="{{ meal.get_update_absolute_url }}">
+                            <i class="edit green icon"></i>
+                        </a>
+                        <a class="ui basic red button" href="{{ meal.get_delete_absolute_url }}">
+                            <i class="delete red icon"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
+    {% else %}
+    <div class="personal_info_title row ">
+        <h2>У Вас пока нет рецептов</h2>
+    </div>
+    {% endif %}
+    <hr>
+            {% if posts %}
+            <div class="personal_info_title row ">
+                <h2>Посты пользователя</h2>
+            </div>
 
+            <table class="ui unstackable table fluid">
+                <tbody>
+                    {% for post in posts %}
+                    <tr>
+                        <td>
+                            <div class="dishe_images">
+                                <img class="user_image"
+                                    src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'image/empty_image.jpg' %}{% endif %}"
+                                    alt="{{ meal.title }}">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="ui middle aligned">
+                                <a href="{{ post.get_absolute_url }}"><span>{{ post.title|truncatechars:"20" }}</span></a>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="dish_created">
+                                <span class="dish_date">
+                                    {{ post.created|date:"j E Y" }}
+                                </span>
+                            </div>
+                        </td>
+                        <td>
 
+                    <div class="ui two buttons">
+                        <a class="ui basic green button" href="{{ post.get_update_absolute_url }}">
+                            <i class="edit green icon"></i>
+                        </a>
+                        <a class="ui basic red button" href="{{ post.get_delete_absolute_url }}">
+                            <i class="delete red icon"></i>
+                        </a>
+                    </div>
+                </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="personal_info_title row ">
+                <h2>У Вас пока нет постов</h2>
+            </div>
+            {% endif %}
+    <hr>
     {% endblock content %}
 
     {% block side %}

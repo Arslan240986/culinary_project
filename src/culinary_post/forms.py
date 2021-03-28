@@ -11,8 +11,8 @@ class CulinaryPostModelForm(forms.ModelForm):
 
 
 class PostCommentModelForm(forms.ModelForm):
-    body = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Оставить коментарий',
-                                                                   'class': 'mb-2',
+    body = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Оставить коментарий',
+                                                                   'class': 'mb-2','rows': 2,
                                                                    }))
 
     class Meta:

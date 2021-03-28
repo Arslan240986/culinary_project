@@ -20,9 +20,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('culinary_recipe.urls', namespace='culinary_recipe')),
     path('profile/', include('contact.urls', namespace='profile')),
+    path('posts/', include('culinary_post.urls', namespace='culinary_post')),
     path('private/chat/', include('private_chat.urls', namespace='private_chat')),
+    path('', include('culinary_recipe.urls', namespace='culinary_recipe')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
