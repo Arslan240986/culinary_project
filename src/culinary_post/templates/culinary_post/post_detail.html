@@ -89,27 +89,39 @@
 <button class="cmt_btn ui fluid button mb-4">Показать / Скрыть коментарии</button>
 <div class="comment-box">
     <div class="comment">
-        <div class="ui fluid button get_another_number" data-href-template="{{meal.get_absolute_url }}">Открыть
+        {% if comment_size > post_comments_len %}
+        <div class="ui fluid button get_another_number" data-href-template="{{post.get_absolute_url }}">Открыть
             сообшения</div>
+        {% endif %}
     </div>
-    <div class="ui comments">
-        {% for comment in post_comments %}
+    <div class="ui threaded comments">
+        {% recursetree post_comments %}
         <div class="comment custom_comment">
             <a class="avatar" href="#">
-                <img src="{% if comment.user.profile.avatar %}{{ comment.user.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
+                <img src="{% if node.author.avatar %}{{ node.author.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
                     alt="avatarka">
             </a>
             <div class="content">
-                <a class="author">{{ comment.user }}</a>
+                <a class="author" href="{{ node.author.get_user_profile_detail_absolute_url }}">{{ node.author.first_name }}</a>
                 <div class="metadata">
-                    <span class="date">{{ comment.created }}</span>
+                    <span class="date">{{ node.created }}</span>
                 </div>
                 <div class="text">
-                    {{ comment.body }}
+                    {{ node.text }}
                 </div>
+                {% if node.level < 2 %} <div id="{{node.id}}" class="actions">
+                    <a class="ui basic mini positive button" onclick="addComment({{ node.id }})">Ответить</a>
             </div>
+            {% endif %}
         </div>
-        {% endfor %}
+
+        {% if not node.is_leaf_node %}
+        <div class="comments">
+            {{children}}
+        </div>
+        {% endif %}
+    </div>
+    {% endrecursetree %}
     </div>
 </div>
 {% else %}
@@ -130,90 +142,5 @@
 
 {% block jscdn %}
     <!--Like and add dish to culinary book action Js cdn-->
-    <script type="text/javascript" src="{% static 'js/meal_detail.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/post_detail.js' %}"></script>
 {% endblock jscdn %}
-
-{% block javascript %}
-
-$(document).ready(function(){
-    <!--Comments show and hide js-->
-    let display = false
-    $('.cmt_btn').click(function(){
-        if(display===false){
-            $(this).next('.comment-box').show('slow');
-            display = true
-        } else {
-            $(this).next('.comment-box').hide('slow');
-            display = false
-        }
-    });
-
-    <!--    Like-btn ajax js-->
-    $('.like_form').submit(function(e){
-        e.preventDefault()
-        const post_id = $(this).attr('id')
-        const url = $(this).attr('action')
-        let result;
-        let likes = parseInt($.trim($(`.like-count${post_id}`).text()))
-        $.ajax({
-            type: 'POST',
-            url:url,
-            data: {
-                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-                'post_id': post_id,
-            },
-            success: function(response){
-                if($('.thumbs.icon').hasClass('down')){
-                    $(`.thumbs.icon`).removeClass('down')
-                    $(`.thumbs.icon`).addClass('up')
-                    $.trim($(`.like-count`).text(response['likes']))
-                } else {
-                    $(`.thumbs.icon`).removeClass('up')
-                    $(`.thumbs.icon`).addClass('down')
-                    $.trim($(`.like-count`).text(response['likes']))
-                }
-            },
-            error: function(error){
-                console.log('error', error)
-            }
-        })
-    })
-
-<!--adding comments-->
-$('.comment_button').click(function(e){
-            e.preventDefault();
-            const url = $('.formReview').attr('action');
-            let csrf = $('input[name=csrfmiddlewaretoken]').val();
-            let body = $('textarea[id=id_body]').val();
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: {body, 'csrfmiddlewaretoken': csrf },
-                dataType: 'json',
-                success: function(response){
-                    if (document.contains(document.querySelector('.ui.positive.message'))){
-                        document.querySelector('.ui.positive.message').remove()
-                    }
-                    if (response.status){
-                        $('.formReview').before(`<div class="ui positive message">
-                            <i class="close icon"></i>
-                            <div class="header">
-                                Спасибо за участие
-                            </div>
-                            <p>Ваш комментарий принят после прохождения модерации будет добавлен на сайт</p>
-                        </div>`)
-                        <!--message close-->
-                        $('.message .close').on('click', function() {
-                            $(this).closest('.message').transition('fade');
-                        });
-                    }
-                        <!-- this is clear textarea after saving comment-->
-                    $('textarea[id=id_text]').val('');
-                },
-                error: function(rs, e){
-                    console.log(rs.responseText);
-                },
-            });
-        });
-});
-{% endblock javascript %}

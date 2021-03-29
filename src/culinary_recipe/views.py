@@ -104,8 +104,9 @@ class MealDetailView(HitCountDetailView):
                     date = date_time[0].split('-')
                     time = date_time[1].split(':')
                     comment['created'] = f'{date[2]} {getMonth(date[1])} {date[0]} г. {time[0]}:{time[1]}'
-                    comment['user_name'] = UserProfile.objects.get(id=comment['author_id']).first_name
-                    comment['user_avatar'] = UserProfile.objects.get(id=comment['author_id']).avatar.url
+                    comment['user_name'] = UserProfile.objects.get(user_id=comment['author_id']).first_name
+                    comment['user_avatar'] = UserProfile.objects.get(user_id=comment['author_id']).avatar.url
+                    comment['user_personal_page'] = UserProfile.objects.get(user_id=comment['author_id']).get_user_profile_detail_absolute_url()
 
                 context['load_more'] = False if upper >= comment_size else True;
             return JsonResponse({'new_data': comments_number, 'load_more': context}, safe=False)
@@ -129,6 +130,7 @@ class MealDetailView(HitCountDetailView):
         context = {'meal': meal,
                    'form': form,
                    'pag_comments': new_comments,
+
                    }
         return render(request, self.template_name, context)
 

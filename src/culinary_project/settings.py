@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'mptt',
     'hitcount',
@@ -45,6 +46,12 @@ INSTALLED_APPS = [
     'contact',
     'private_chat',
     'culinary_post',
+
+    # django allauth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -74,6 +81,11 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 WSGI_APPLICATION = 'culinary_project.wsgi.application'
 
@@ -140,11 +152,6 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_cdn', 'static_root
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_cdn', 'media_root')
 
-LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = 'account_login'
-LOGOUT_URL = 'account_logout'
-SITE_ID = 1
-
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # redis settings
@@ -160,3 +167,12 @@ CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+
+# Allauth settings
+LOGIN_REDIRECT_URL = 'contact:user_profile'
+LOGIN_URL = 'account_login'
+LOGOUT_URL = 'account_logout'
+SITE_ID = 1
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'

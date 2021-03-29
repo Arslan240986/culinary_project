@@ -17,6 +17,7 @@ from private_chat.models import ChatMessage, Thread
 
 @login_required
 def edit(request):
+    user_profile = get_object_or_404(UserProfile, user=request.user)
     if request.method == 'POST':
         profile_form = ProfileEditForm(instance=request.user.profile,
                                         data=request.POST,
@@ -33,7 +34,7 @@ def edit(request):
     else:
         profile_form = ProfileEditForm(instance=request.user.profile)
 
-    return render(request, 'contact/profile_page.html', {'profile_form': profile_form})
+    return render(request, 'contact/profile_page.html', {'profile_form': profile_form, 'profile': user_profile})
 
 
 @login_required
@@ -110,7 +111,7 @@ def add_dishes(request):
             profile.dishes.add(id)
             profile.save()
             meal.save()
-            context['count'] = request.user.profile.get_total_dishes()
+            context['count'] = request.user.profile.get_total_book()
         if request.is_ajax():
             return JsonResponse(context)
 
@@ -171,7 +172,7 @@ def invite_profiles_list_view(request):
     context = {
         'qs': qs
     }
-    return render(request, 'account/profile/to_invite_list.html', context)
+    return render(request, 'contact/to_invite_list.html', context)
 
 
 class UserProfileDetailView(DetailView):

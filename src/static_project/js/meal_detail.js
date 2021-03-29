@@ -37,6 +37,7 @@ $(document).ready(function () {
             },
         });
     });
+    
     //        Add recipe to the culinary_book
     $(document).on('click', '.add_dishes', function (event) {
         event.preventDefault()
@@ -176,7 +177,7 @@ $(document).ready( () => {
                     new_data.map(post => {
                         var avatar_a_element = `<a class="avatar" href="#"><img src="${post.user_avatar}"></a>`
                         var content_div_element = `<div class="content">
-                                                        <a class="author">${post.user_name}</a>
+                                                        <a class="author" href="${post.user_personal_page}">${post.user_name}</a>
                                                         <div class="metadata">
                                                             <span class="date">${post.created}</span>
                                                         </div>

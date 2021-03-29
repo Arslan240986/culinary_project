@@ -3,6 +3,8 @@ from django.core.validators import FileExtensionValidator
 from contact.models import UserProfile
 from django.core.exceptions import ValidationError
 from django.urls import reverse
+from mptt.fields import TreeForeignKey
+from mptt.models import MPTTModel
 
 
 def validate_max_len(val):
@@ -44,20 +46,26 @@ class CulinaryPost(models.Model):
         verbose_name_plural = 'Кулинарные посты'
 
 
-class PostComment(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='post_comment')
-    post = models.ForeignKey(CulinaryPost, on_delete=models.CASCADE, related_name='post_comments')
-    body = models.TextField(max_length=300)
-    status = models.BooleanField(default=False)
-    updated = models.DateTimeField(auto_now=True)
+class CulinaryPostComment(MPTTModel):
+    """Комментарии к постам"""
+    text = models.TextField('Написать комментарии', max_length=5000)
+    parent = TreeForeignKey('self', verbose_name='Родитель',
+                               on_delete=models.CASCADE, related_name='children',
+                               null=True, blank=True)
+    post = models.ForeignKey(CulinaryPost, verbose_name='Пост', on_delete=models.CASCADE, related_name='post_comments')
+    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Автор')
+    update = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.pk)
+        return f'{self.author} -to- {self.text}'
 
-    class Meta:
-        verbose_name = 'Коментария к посту'
-        verbose_name_plural = 'Коментарии к постам'
+    class MPTTMeta:
+        ordering = ['created']
+        order_insertion_by = ['created']
+        verbose_name = 'Коментария'
+        verbose_name_plural = 'Коментарии'
 
 
 LIKE_CHOICES = (

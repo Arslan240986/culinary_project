@@ -17,13 +17,13 @@
                 </div>
             </div>
             <div class="item"><a class="font-oswald" href="{% url 'contact:all_profiles_view' %}">Все пользователи</a></div>
-            <div class="item"><a class="p-2 text-dark font-oswald" href="#">Отпарвить запрос на дружбу </a></div>
+            <div class="item"><a class="p-2 text-dark font-oswald" href="{% url 'contact:invite_profiles_view' %}">Отпарвить запрос на дружбу </a></div>
             <div class="item"><a class="p-2 text-dark font-oswald" href="{{ user.profile.get_personal_absolute_url }}">Ваша страница</a></div>
             <div class="item"><a class="p-2 text-dark font-oswald" href="{{ user.profile.get_dish_book_absolute_url }}">Кулинарная книга <span class="ui teal left pointing label dish_book_count">{{ user.profile.get_total_book }}</span></a></div>
-            <div class="item"><a class="p-2 text-dark " href="#">Выйти</a></div>
+            <div class="item"><a class="p-2 text-dark " href="{% url 'account_logout' %}">Выйти</a></div>
         {% else %}
-            <div class="item"><a class="p-2 text-dark" href="#">Войти</a></div>
-            <div class="item"><a class="btn btn-outline-primary" href="#">Регистрация</a></div>
+            <div class="item"><a class="p-2 text-dark" href="{% url 'account_login' %}">Войти</a></div>
+            <div class="item"><a class="btn btn-outline-primary" href="{% url 'account_signup' %}">Регистрация</a></div>
         {% endif %}
     </div>
 
