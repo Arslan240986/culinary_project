@@ -82,7 +82,8 @@ class IngredientForm(forms.ModelForm):
         widgets = {
             'note': forms.Textarea(attrs={'cols': 6, 'rows': 3,
                                           'class': 'form-control'}),
-            'name': forms.TextInput(attrs={'class': 'form-control dish_ingredient_name'}),
+            'name': forms.TextInput(attrs={'class': 'form-control dish_ingredient_name',
+                                           'autocomplete': 'off'}),
             'measure': forms.Select(attrs={'class': 'ui my_dropdow'}),
             'quantity': forms.TextInput(attrs={'class': 'form-control'}),
 

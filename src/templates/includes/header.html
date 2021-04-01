@@ -10,7 +10,7 @@
         <div class="ui pointing dropdown link item font-oswald my-2 mr-10 white nu_tam_tam" tabindex="0">
         Рецепты
         <i class="dropdown icon"></i>
-        <div class="menu bgc" tabindex="-1">
+        <div class="menu bgc add_post_box_custom" tabindex="-1">
             {% get_categories as categories %}
             {% for category in categories %}
                 <a class="item font-oswald" href="{{ category.get_absolute_url }}">
@@ -38,7 +38,7 @@
                 <div class="ui floating labeled icon dropdown menu basic yellow button chto_to" tabindex="0">
                     <i class="add icon"></i>
                     <span class="text">Добавить</span>
-                    <div class="menu bgc transition hidden mt-10" tabindex="-1">
+                    <div class="menu bgc transition hidden mt-10 add_post_box_custom" tabindex="-1">
                         <div class="item">
                             <div class="ui buttons">
                                     <a href="{% url 'culinary_post:culinary_post_add' %}" class="ui yellow button">

@@ -17,7 +17,7 @@ urlpatterns = [
     path('review/<int:pk>/', views.AddCommentToDish.as_view(), name='add_review'),
     path('recipe/dishes/<slug:slug>/', views.GetItems.as_view(), name='last_list'),
     path('likes_meal/', views.like_unlike_post, name='likes_meal'),
-    # # path('category/ingredients/<slug:slug>/', views.IngredientViewMeal.as_view(), name='by_ingredient'),
+    path('json/', views.ingredient_list_view, name='get_ingredient_lists'),
     # path('category/country/<slug:slug>/', views.DishByCountry.as_view(), name='by_country'),
     path('<slug:slug>/', views.get_sub_category, name='cats_list'),
 ]

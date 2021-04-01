@@ -194,7 +194,10 @@
                                     <td>{{ form.note.errors }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="mr-4">{{ form.name }}</td>
+                                    <td class="ingredient_name_td mr-4" data-href="{% url 'culinary_recipe:get_ingredient_lists' %}">
+                                        {{ form.name }}
+                                        <div class="d_none" id="autocomplete_list"></div>
+                                    </td>
                                     <td class="{% if form.quantity.errors %}error {% endif%}field" style="width: 25px;">
                                         {{ form.quantity }}</td>
                                     <td>{{ form.measure }}</td>
@@ -301,15 +304,23 @@
 
 {% block javascript %}
 $(document).ready(function(){
-<!--Inline formset add line and remove-->
-$(".inline.{{ ingredient_form.prefix }}").formset({
-prefix: "{{ ingredient_form.prefix }}",
-deleteContainerClass: 'deleteButton',
-})
-$(".inline.{{ instruction_form.prefix }}").formset({
-prefix: "{{ instruction_form.prefix }}",
-deleteContainerClass: 'addButton',
-})
+    <!--Inline formset add line and remove-->
+    $(".inline.{{ ingredient_form.prefix }}").formset({
+        prefix: "{{ ingredient_form.prefix }}",
+        deleteText: '<i class="ui times circle red icon"></i>',
+        deleteContainerClass: 'deleteButton',
+        deleteCssClass: 'delete-row text-danger ingredient_delete_btn',
+        addCssClass: 'ui basic positive button',
+        formCssClass: 'ingredients__form',
+    })
+    $(".inline.{{ instruction_form.prefix }}").formset({
+        prefix: "{{ instruction_form.prefix }}",
+        deleteText: '<i class="ui times circle red icon"></i>',
+        deleteContainerClass: 'addButton',
+        deleteCssClass: 'delete-row text-danger steps_delete_btn',
+        addCssClass: 'ui basic positive button',
+        formCssClass: 'steps__form',
+    })
 })
 
 {% endblock javascript %}

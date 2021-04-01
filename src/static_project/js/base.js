@@ -12,7 +12,7 @@ $(document).ready(function () {
         }
         prevScrollpos = currentScrollPos;
     }
-
+    $('.add_post_box_custom').css('top', $("#navbar").height()-20+ 'px')
     $('.ui.dropdown').dropdown();
     $('.ui.floating.labeled.icon.dropdown').dropdown();
     $('.ui.accordion').accordion();
@@ -69,5 +69,12 @@ $(document).ready(function () {
                 console.log('second', rs.responseText);
             },
         });
+    })
+    $('.custom_chat_icon').hover((e)=>{
+        $(e.target).removeClass('grey')
+        $(e.target).addClass('yellow')
+    },(e)=>{
+        $(e.target).removeClass('yellow')
+        $(e.target).addClass('grey')
     })
 })

@@ -359,3 +359,9 @@ def get_ajax_response_category(request):
     category_id = request.GET.get('category_id')
     sub_category = SubCategory.objects.filter(category_id=category_id)
     return JsonResponse(list(sub_category.values('id', 'name')), safe=False)
+
+
+def ingredient_list_view(request):
+    ings = set(list(Ingredient.objects.all().values_list('name', flat=True)))
+    print(set(ings))
+    return JsonResponse(list(ings), safe=False)

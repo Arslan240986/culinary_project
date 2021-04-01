@@ -1,32 +1,50 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
 
 {% load i18n %}
 {% load account %}
 
 {% block head_title %}{% trans "Confirm E-mail Address" %}{% endblock %}
 
+{% block steps_breadcrumbs %}
+{% endblock steps_breadcrumbs %}
 
 {% block content %}
-<h1>{% trans "Confirm E-mail Address" %}</h1>
+<hr>
+<div class="ui middle aligned center aligned  grid">
+    <div class="ui card" style="width: 400px; margin-top: 30px; height: 100%;">
+        <div class="ui center aligned teal image header">
+            <img src="/static/image/yumy.png" width="50" height="25" class="image">
+            <div class="content">
+                <h1>{% trans "Confirm E-mail Address" %}</h1>
+            </div>
+        </div>
+        <div class="item p-10">
+            {% if confirmation %}
 
-{% if confirmation %}
+            {% user_display confirmation.email_address.user as user_display %}
 
-{% user_display confirmation.email_address.user as user_display %}
+            <p>{% blocktrans with confirmation.email_address.email as email %}Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an e-mail address for user {{ user_display }}.{% endblocktrans %}</p>
 
-<p>{% blocktrans with confirmation.email_address.email as email %}Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an e-mail address for user {{ user_display }}.{% endblocktrans %}</p>
 
-<form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
-{% csrf_token %}
-    <button type="submit">{% trans 'Confirm' %}</button>
-</form>
 
-{% else %}
+        <form class="ui large form" method="POST" action="{% url 'account_confirm_email' confirmation.key %}">
+            {% csrf_token %}
+            <button class="ui fluid button green" type="submit">{% trans 'Confirm' %}</button>
+        </form>
+                        </div>
+        {% else %}
+        <div class="ui extra center aligned content">
+            {% url 'account_email' as email_url %}
+            <p>{% blocktrans %}This e-mail confirmation link expired or is invalid. Please <a href="{{ email_url }}">issue a new e-mail confirmation request</a>.{% endblocktrans %}</p>
+            <p>или</p>
+            <p>Войдите с одного из вашего аккаунта</p>
+            {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+            <a href="#">
+                <i class="ui facebook large icon"></i>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
 
-{% url 'account_email' as email_url %}
-
-<p>{% blocktrans %}This e-mail confirmation link expired or is invalid. Please <a href="{{ email_url }}">issue a new e-mail confirmation request</a>.{% endblocktrans %}</p>
-
-{% endif %}
-
-{% endblock %}
