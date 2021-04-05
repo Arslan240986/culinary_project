@@ -1,84 +1,110 @@
-
+{% load static %}
 {% load meal_tags %}
-<div id="navbar" class="ui borderless stackable menu navbar_yummy">
-    <div class="ui container">
+<div id="navbar" class="ui borderless menu navbar_yummy">
+    <div class="item"><i class="big white bars icon"></i></div>
+    <div class="ui container navbar_menu_container">
+        <div class="item">
+            <a href="/" class="mr-10">
+                <img src="/static/image/yumy.png" width="50" height="25" alt="">
+            </a>
+
+            <div class="ui pointing dropdown link item font-oswald my-2 mr-10 white nu_tam_tam" tabindex="0">
+                Рецепты
+                <i class="dropdown icon"></i>
+                <div class="menu bgc add_post_box_custom" tabindex="-1">
+                    {% get_categories as categories %}
+                    {% for category in categories %}
+                    <a class="item font-oswald" href="{{ category.get_absolute_url }}">
+
+                        <div class=" navbar_links_yummy">
+                            {{ category.name }}
+                        </div>
+                        {% if category.sub_category.all %}
+                        <div class="menu">
+                            {% for sub_category in category.sub_category.all %}
+                            <div class="item">{{sub_category.name}}</div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </a>
+
+
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="item"><a class="p-2 navbar_links_yummy font-oswald"
+                             href="{% url 'culinary_post:culinary_post_view' %}">Кулинарные посты</a></div>
+
+        <div class="right menu">
+            <div class="item">
+                <i class="big yellow search link icon search_form_ushefa_icon display"></i>
+                <form action="{% url 'culinary_recipe:search_dishes' %}"
+                      class="ui icon input mr-10 search_form_ushefa display" method="get">
+                    <div class="ui action input">
+                        <input class=" font-oswald" type="search" placeholder="Введите слово" aria-label="Search"
+                               name="q">
+                        <button class="ui basic yellow button" type="submit">
+                            <i class="search link icon"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="add_dropdown_box_button_ushefa top ui floating labeled icon dropdown menu basic yellow button"
+                     tabindex="0">
+                    <i class="add icon add_dropdown_icon_ushefa"></i>
+                    <span class="text add_more_text_ushefa">Добавить</span>
+                    <div class="menu bgc transition hidden mt-10 add_post_box_custom" tabindex="-1">
+                        <div class="item">
+                            <div class="ui buttons">
+                                <a href="{% url 'culinary_post:culinary_post_add' %}" class="ui button add_post_icon">
+                                    Пост
+                                </a>
+                                <a href="{% url 'culinary_recipe:add_recipe' %}" class="ui button add_recipe_icon">
+                                    Рецепт
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="sub_navbar" class="ui borderless menu navbar_yummy d_none">
     <div class="item">
         <a href="/" class="mr-10">
             <img src="/static/image/yumy.png" width="50" height="25" alt="">
         </a>
-
-        <div class="ui pointing dropdown link item font-oswald my-2 mr-10 white nu_tam_tam" tabindex="0">
-        Рецепты
-        <i class="dropdown icon"></i>
-        <div class="menu bgc add_post_box_custom" tabindex="-1">
-            {% get_categories as categories %}
-            {% for category in categories %}
-                <a class="item font-oswald" href="{{ category.get_absolute_url }}">
-                    <div class=" navbar_links_yummy">
-                        {{ category.name }}
-                    </div>
-                </a>
-            {% endfor %}
-            </div>
-        </div>
-        <a class="p-2 navbar_links_yummy font-oswald" href="{% url 'culinary_post:culinary_post_view' %}">Кулинарные посты</a>
     </div>
 
     <div class="right menu">
-        <div class="item">
-            <form action="#" class="ui icon input mr-10" method="get">
-                <div class="ui action input">
-                    <input class=" font-oswald" type="search" placeholder="Введите слово" aria-label="Search" name="q">
-                    <button class="ui basic yellow button" type="submit">
-                        <i class="search link icon"></i>
-                    </button>
+        {% if user.is_authenticated %}
+        <div class="item centered_custom">
+            <div class="image">
+                <img class="ui img-container avatar image" src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}" alt="avatar" >
+                    <div class="text white">{{user.profile.first_name}}</div>
                 </div>
-            </form>
-
-                <div class="ui floating labeled icon dropdown menu basic yellow button chto_to" tabindex="0">
-                    <i class="add icon"></i>
-                    <span class="text">Добавить</span>
-                    <div class="menu bgc transition hidden mt-10 add_post_box_custom" tabindex="-1">
-                        <div class="item">
-                            <div class="ui buttons">
-                                    <a href="{% url 'culinary_post:culinary_post_add' %}" class="ui yellow button">
-                                        <span>
-                                            Пост
-                                        </span>
-                                    </a>
-                                <div class="or" data-text="<->"></div>
-                                    <a href="{% url 'culinary_recipe:add_recipe' %}" class="ui yellow button">
-                                        <span>
-                                            Рецепт
-                                        </span>
-                                    </a>
-                            </div>
+            </div>
+        {% endif %}
+        <div class="item">
+            <div class="add_dropdown_box_button_ushefa ui floating labeled icon dropdown menu basic yellow button"
+                 tabindex="0">
+                <i class="add icon add_dropdown_icon_ushefa"></i>
+                <span class="text add_more_text_ushefa">Добавить</span>
+                <div class="menu bgc transition hidden mt-10 add_post_box_custom" tabindex="-1">
+                    <div class="item">
+                        <div class="ui buttons">
+                            <a href="{% url 'culinary_post:culinary_post_add' %}" class="ui button add_post_icon">
+                                Пост
+                            </a>
+                            <a href="{% url 'culinary_recipe:add_recipe' %}" class="ui button add_recipe_icon">
+                                Рецепт
+                            </a>
                         </div>
                     </div>
-
                 </div>
-
+            </div>
         </div>
     </div>
-    </div>
 </div>
-<style>
-    .my_button{
-        width: 200px !important;
-    }
-    .w-100{
-        width: 100px !important;
-    }
-    .w-150{
-        width: 150px !important;
-    }
-    .mr-10{
-        margin-right: 10px !important;
-    }
-    .bgc{
-        background-color: rgb(0,0,0, 0.5) !important;
-    }
-    .white{
-        color: white !important;
-    }
-</style>
+

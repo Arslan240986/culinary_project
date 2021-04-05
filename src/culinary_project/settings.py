@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django.contrib.postgres',
 
     'mptt',
     'hitcount',
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'contact',
     'private_chat',
     'culinary_post',
+
 
     # django allauth
     'allauth',

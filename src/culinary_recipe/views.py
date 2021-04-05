@@ -5,7 +5,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
 from django.views.generic.base import View
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
@@ -60,12 +60,12 @@ class DishByCountry(View):
 
 
 class Search(ListView):
-    template_name = 'meals/dishes_list.html'
+    template_name = 'culinary_recipe/dishes_list.html'
 
     def get_queryset(self):
         q = self.request.GET.get('q')
         meals = Dish.objects.filter(
-            Q(ingredients__name__icontains=q) | Q(title__icontains=q))
+            Q(ingredient__name__icontains=q) | Q(title__icontains=q)).distinct()
         return meals
 
     def get_context_data(self,  *args, **kwargs):
@@ -82,23 +82,21 @@ class MealDetailView(HitCountDetailView):
 
     def get(self, request, *args, **kwargs):
         meal = get_object_or_404(Dish, slug=self.kwargs.get('slug'), id=self.kwargs.get('pk'))
+        meal_ings_list = set(meal.ingredient_set.all().values_list('name', flat=True))
+        similar_meals = Dish.objects.filter(ingredient__name__in=meal_ings_list, moderator=True, draft=False).exclude(id=self.kwargs.get('pk'))[:3]
         form = DishCommentForm()
         comments = meal.comments.filter(status=False)
         comment_size = len(comments)
         context = dict()
         try:
             upper = self.kwargs['number']
-            print(upper)
             if upper:
                 low = upper - 5
                 comments_number = list(reversed(comments.values('id', 'parent_id', 'author_id', 'created', 'text', 'level')))[low:upper]
                 if not comments_number[-1]['level'] == 0:
                     while not comments_number[-1]['level'] == 0:
                         upper += 1
-                        print(upper)
-                        print(low)
                         comments_number = list(reversed(comments.values('id', 'parent_id', 'author_id', 'created', 'text', 'level')))[low:upper]
-                        print(comments_number[-1])
                 for comment in comments_number:
                     date_time = str(comment['created']).split(' ')
                     date = date_time[0].split('-')
@@ -130,7 +128,7 @@ class MealDetailView(HitCountDetailView):
         context = {'meal': meal,
                    'form': form,
                    'pag_comments': new_comments,
-
+                   'similar_meals': similar_meals
                    }
         return render(request, self.template_name, context)
 
@@ -270,7 +268,6 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         for item, value in self.request.POST.items():
             if 'on' in value:
                 if 'ingredient' in item and not ingredient_form.deleted_forms:
-                    print('ingredien ')
                     new_arr = item.split('-')
                     ingredient_id = new_arr[0]+'-'+new_arr[1]
             if item == f'{ingredient_id}-id':
@@ -283,7 +280,6 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         for item, value in self.request.POST.items():
             if 'on' in value:
                 if 'step' in item and not instruction_form.deleted_forms:
-                    print('instrac ')
                     new_arr = item.split('-')
                     instruction_id = new_arr[0] + '-' + new_arr[1]
             if item == f'{instruction_id}-id':
@@ -363,5 +359,4 @@ def get_ajax_response_category(request):
 
 def ingredient_list_view(request):
     ings = set(list(Ingredient.objects.all().values_list('name', flat=True)))
-    print(set(ings))
     return JsonResponse(list(ings), safe=False)

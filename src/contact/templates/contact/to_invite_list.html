@@ -5,27 +5,30 @@
 {% endblock title %}
 
 {% block content %}
-    {% for obj in qs %}
 <div class="ui message">
     <div class="header">
         Отпрпавить запрос на дружбу
     </div>
 </div>
+    {% for obj in qs %}
+
         <div class="ui segment mt-2">
             <div class="ui grid">
                 <div class="row">
-                    <div class="four wide column">
+                    <div class="four wide center aligned middle aligned column">
                         <img class="ui small circular image" src="{{ obj.avatar.url }}" alt="">
                     </div>
-                    <div class="twelve wide column">
+                    <div class="four wide center aligned middle aligned column">
                         <h3>{{ obj.user }}</h3>
                         <p>{{ obj.email }}</p>
+                    </div>
+                    <div class="eight wide center aligned middle aligned column">
                         <a href="{{ obj.get_absolute_url_for_friends }}">
                             <button class="mini ui primary button w-big">
                                 Просмотреть профиль
                             </button>
                         </a>
-                            <form action="{% url 'contacts:send_invitation' %}" method="post">
+                            <form action="{% url 'contact:send_invitation' %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="profile_pk" value="{{ obj.id }}">
                                 <button class="mini ui positive basic button my-2 w-big" type="submit">

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 {% load static %}
-
+{% load meal_tags %}
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/base/jquery-ui.css"
           type="text/css" media="all"/>
     <!--    google-fonts-Oswald-->
@@ -29,52 +29,97 @@
 </head>
 
 <body class="body_yummy">
-
 {% include 'includes/header.html' %}
+<div class="ui small center basic test modal ushefa_modal center aligned grid">
 
-
-<!-- Content side -->
-
-
-<div class="ui bread  " style="">
-<div class="custom_container">
-    <div class="ui stackable two column divided grid">
-
-        <!-- /.blog-sidebar Каталог рецептов -->
-        <div class="twelve wide column content_side_yummy p-10">
-            <!-- Bread crumbs -->
-            {% block steps_breadcrumbs %}
-            <div class="mt-2">
-                <div class="ui breadcrumb font-oswald black p-10">
-
-                    <a class="section navbar_links_yummy black" href="{% url 'culinary_recipe:home' %}">Главное</a>
-                    <i class="right chevron icon divider black"></i>
-                    <a class="section navbar_links_yummy black" href="{% url 'culinary_recipe:dishes' %}">Все категории</a>
-                    <i class="right chevron icon divider black"></i>
-
-                    {% block breadcrumbs %}
-                    {% endblock breadcrumbs %}
-                </div>
+    <i class="big white close icon"></i>
+    <div class="ui header">
+        <hr>
+        <div class="item"><a class="p-2 navbar_links_yummy font-oswald"
+                             href="{% url 'culinary_post:culinary_post_view' %}">Кулинарные посты</a></div>
+        <hr>
+        {% get_categories as categories_modal %}
+        <div class="ui inverted accordion">
+            {% for category in categories_modal %}
+            {% if category.sub_category.all %}
+            <div class="title">
+                <i class="dropdown icon"></i>
+                <a href="{{ category.get_absolute_url }}"
+                   class="navbar_links_yummy font-oswald font-oswald">
+                    {{ category.name }}
+                </a>
             </div>
-            <hr>
-            {% endblock steps_breadcrumbs %}
-            {% block content %}
-            <hr>
-            {% endblock %}
 
+            <div class="middle aligned content" id="{{ category.slug }}">
+                {% for sub_category in category.sub_category.all %}
+                <p class="accordion transition visible" style="display: block !important;">
+                    <a href="{{ sub_category.get_absolute_url }}"
+                       class="navbar_links_yummy font-oswald font-oswald pl-20">
+                        {{sub_category.name}}
+                    </a>
+                </p>
+                {% endfor %}
+            </div>
+            {% else %}
+            <a href="{{ category.get_absolute_url }}"
+               class="navbar_links_yummy font-oswald font-oswald pl-10">
+                {{ category.name }}
+            </a>
+            {% endif %}
+            {% endfor %}
         </div>
-        {% include 'includes/side_bar.html' %}
     </div>
 </div>
+<!-- Content side -->
+<div class=" ui bread " style="">
+    <div class="custom_container">
+        <div class="ui stackable two column divided grid">
+
+            <!-- /.blog-sidebar Каталог рецептов -->
+            <div class="twelve wide column content_side_yummy p-10">
+                <!-- Bread crumbs -->
+                {% block steps_breadcrumbs %}
+                <div class="mt-2">
+                    <div class="ui breadcrumb font-oswald black p-10">
+
+                        <a class="section navbar_links_yummy black"
+                           href="{% url 'culinary_recipe:home' %}">Главное</a>
+                        <i class="right chevron icon divider black"></i>
+                        <a class="section navbar_links_yummy black" href="{% url 'culinary_recipe:dishes' %}">Все
+                            категории</a>
+                        <i class="right chevron icon divider black"></i>
+
+                        {% block breadcrumbs %}
+                        {% endblock breadcrumbs %}
+                    </div>
+                </div>
+                <hr>
+                {% endblock steps_breadcrumbs %}
+                {% block content %}
+                <hr>
+                {% endblock %}
+
+            </div>
+            {% include 'includes/side_bar.html' %}
+        </div>
+    </div>
 </div>
+
 {% include 'includes/footer.html' %}
+
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://kit.fontawesome.com/f60ff1095d.js" crossorigin="anonymous"></script>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
 
 <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
 <!--<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>-->
@@ -96,6 +141,10 @@
 <script>
     {% block javascript %}
     {% endblock javascript %}
+
+
+
+
 </script>
 </body>
 </html>

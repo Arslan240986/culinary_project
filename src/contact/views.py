@@ -23,9 +23,8 @@ def edit(request):
                                         data=request.POST,
                                         files=request.FILES)
         if profile_form.is_valid():
-            profile = get_object_or_404(UserProfile, user=request.user)
             if request.FILES:
-                profile.avatar.delete()
+                user_profile.avatar.delete()
             profile_form.save()
             return redirect(request.user.profile.get_personal_absolute_url())
         else:

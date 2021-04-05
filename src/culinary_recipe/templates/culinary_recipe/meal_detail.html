@@ -180,6 +180,25 @@
 
     </div>
 </div>
+<!--Similar recipe views -->
+<hr>
+{% if similar_meals %}
+<h4 class="font-lobster p-10">Похожие рецепты</h4>
+<div class="ui stackable centered three column grid">
+    <div class="row">
+        {% for meal in similar_meals %}
+        <div class="five wide column">
+            <div class="card">
+                <img class="img-thumbnail cat_image" src="{{ meal.poster.url }}" alt="Card image cap">
+                <div class="card-body">
+                    <a class="ui link" href="{{meal.get_absolute_url}}"><p class="card-text">{{ meal.title }}</p></a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
 <!-- Show comments -->
 <hr>
 {% if pag_comments %}
