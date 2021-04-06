@@ -2,9 +2,9 @@
 $(document).ready(function () {
     var prevScrollpos = window.pageYOffset;
     var sub_nav = document.querySelector("#sub_navbar").offsetHeight + 5;
-    var navbar = document.querySelector("#navbar").offsetHeight + 5;
+    var navbar = document.querySelector("#navbar").offsetHeight + 3;
     document.querySelector("#sub_navbar").style.marginTop = navbar + 'px'
-    document.querySelector('.bread').style.marginTop = sub_nav + navbar + 'px'
+    document.querySelector('.bread').style.marginTop = navbar + 'px'
 
     // function to hide navbar
     function navbarHide(item){
@@ -16,13 +16,15 @@ $(document).ready(function () {
                 item.style.top = "0"
             } else {
                 item.style.top = '-150px';
+                $('.ui.dropdown').dropdown('hide');
             }
             prevScrollpos = currentScrollPos;
         }
     }
     $('.add_post_box_custom').css('top', $("#navbar").height() - 14 + 'px')
+    $('.ui.dropdown.user_post').dropdown();
     $('.ui.dropdown').dropdown();
-    $('.ui.floating.labeled.icon.dropdown').dropdown();
+    // $('.ui.floating.labeled.icon.dropdown').dropdown();
     $('.ui.accordion').accordion();
 
     // <!--   Add email for subcribe ajax response true or false     -->
@@ -89,7 +91,6 @@ $(document).ready(function () {
     if ($(window).width() <= 768) {
         navbarHide(document.querySelector("#sub_navbar"))
         $('#sub_navbar').removeClass('d_none')
-        document.querySelector('.bread').style.marginTop = document.querySelector("#navbar").offsetHeight + 5 + navbar + 'px' // that keeps top height of breadcrumbs by navbar
         $('.add_dropdown_box_button_ushefa').removeClass('labeled')
         $('.add_more_text_ushefa').remove()
         $('.add_dropdown_icon_ushefa').addClass('big')
@@ -97,17 +98,16 @@ $(document).ready(function () {
         navbarHide(document.querySelector("#navbar"))
     }
     $(window).resize(() => {
-        console.log(document.querySelector("#navbar").getBoundingClientRect())
         $('.add_post_box_custom').css('top', $("#navbar").height() - 14 + 'px') // that keeps top height of dropdown add recipe and post by navbar
         if ($(window).width() <= 768) {
             navbarHide(document.querySelector("#sub_navbar"))
             document.querySelector("#sub_navbar").style.marginTop = navbar + 'px'
-            document.querySelector('.bread').style.marginTop = document.querySelector("#navbar").offsetHeight + 5 + navbar + 'px' // that keeps top height of breadcrumbs by navbar
             $('#sub_navbar').removeClass('d_none')
             $('.add_dropdown_box_button_ushefa').removeClass('labeled')
             $('.add_more_text_ushefa').remove()
             $('.add_dropdown_icon_ushefa').addClass('big')
         } else if ($(window).width() > 768 && document.contains(document.querySelector('.add_more_text_ushefa')) == false) {
+            console.log($('.item.centered_custom.top').html())
             navbarHide(document.querySelector("#navbar"))
             document.querySelector('.bread').style.marginTop = navbar + 5+'px'
             $('#sub_navbar').addClass('d_none')
@@ -136,16 +136,7 @@ $(document).ready(function () {
     })
     // sidebar open close semantic ui
     $('.big.white.bars.icon').click(() => {
-        $('.ui.basic.modal.ushefa_modal')
-            .modal({
-                closable: false,
-                onApprove: function () {
-                    console.log('ok')
-                    window.alert('Approved!');
-                }
-            })
-            .modal('show')
-            ;
+        $('.ui.basic.modal.ushefa_modal').modal('show');
     })
 
 })

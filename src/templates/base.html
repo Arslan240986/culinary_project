@@ -15,6 +15,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
     <!--    google-fonts-Lobster-->
     <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Oswald&display=swap" rel="stylesheet">
+    <!--google font Yanone-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@300&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{% static 'Semantic_UI/semantic.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
@@ -54,7 +57,7 @@
                 {% for sub_category in category.sub_category.all %}
                 <p class="accordion transition visible" style="display: block !important;">
                     <a href="{{ sub_category.get_absolute_url }}"
-                       class="navbar_links_yummy font-oswald font-oswald pl-20">
+                       class="navbar_links_yummy font-oswald pl-20">
                         {{sub_category.name}}
                     </a>
                 </p>
@@ -62,7 +65,7 @@
             </div>
             {% else %}
             <a href="{{ category.get_absolute_url }}"
-               class="navbar_links_yummy font-oswald font-oswald pl-10">
+               class="navbar_links_yummy font-oswald pl-10">
                 {{ category.name }}
             </a>
             {% endif %}

@@ -523,13 +523,15 @@ ul.collapse {
 }
 
 .font-oswald {
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Oswald', sans-serif !important;
 }
 
 .font-lobster {
-    font-family: 'Lobster', cursive;
+    font-family: 'Lobster', cursive !important;
 }
-
+.font-yanone{
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+}
 
 /* Meal-detail */
 
@@ -611,15 +613,22 @@ ul.collapse {
 
 .navbar_yummy {
     background-color: rgb(0, 0, 0, 0.5) !important;
-    position: fixed;
-    left: 0;
-    top: 0;
-    margin: 0;
-    padding: 0;
-    z-index: 1;
-    width: 100%;
-    transition: top 0.6s;
-    height: auto;
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 1 !important;
+    width: 100% !important;
+    transition: top 0.6s !important;
+    height: 75px !important;
+}
+.navbar_yummy_second{
+    background-color: rgb(0, 0, 0, 0.5) !important;
+    /* position: fixed !important; */
+    z-index: 1 !important;
+    width: 100% !important;
+    transition: top 0.6s !important;
 }
 
 .navbar_links_yummy {
@@ -964,23 +973,24 @@ textarea {
 .notification_number {
     position: absolute !important;
     top: -5px !important;
-    left: 20px !important;
-    width: 20px !important;
-    height: 20px !important;
+    left: 55px !important;
+    width: 25px !important;
+    height: 25px !important;
     border-radius: 50% !important;
     font-size: 20px !important;
     color: red !important;
     z-index: 10 !important;
     background-color: red !important;
     color: white !important;
-    padding: 2px !important;
+    padding-top: 2px !important;
     line-height: 0.6 !important;
+    text-align: center !important;
 }
 
-.notification_number small {
+.notification_number> small {
     font-size: 13px !important;
     font-weight: bold !important;
-    margin-bottom: 2px !important;
+    /* margin-bottom: 2px !important; */
 }
 
 .form-control.dish_ingredient_name {
@@ -1029,6 +1039,7 @@ textarea {
     background-repeat: no-repeat;
     background-size: contain;
 }
+
 .big.white.bars.icon{
     display: none !important;
 }
@@ -1040,6 +1051,7 @@ textarea {
     /* .ui.container.navbar_menu_container{
         display: none !important;
     } */
+    
     .big.white.bars.icon{
         display: block !important;
     }
@@ -1058,7 +1070,7 @@ textarea {
     .navbar_menu_container> .item.search_item_form{
         display: inline-flex !important;
     }
-    .add_dropdown_box_button_ushefa.top{
+    .add_dropdown_box_button_ushefa.top, .item.centered_custom.top{
         display: none !important;
     }
 }
@@ -1080,12 +1092,16 @@ textarea {
     display: inline-flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    margin: auto !important;
+    margin: 0 !important;
     border: 1px solid white !important;
     border-radius: 3px !important;
+    margin-right: 5px !important;
 }
   .img-container{
     margin: auto !important;
     text-align: center !important;
     display: block !important;
+  }
+  .divider{
+      margin: 0 !important;
   }

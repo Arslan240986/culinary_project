@@ -9,17 +9,17 @@
 
 {% for obj in qs %}
 <div class="ui segment mt-2">
-    <div class="ui stackable three column grid">
+    <div class="ui stackable grid">
         <div class="row">
-            <div class="four wide column">
-                <img src="{{ obj.avatar.url }}" alt="" class="m-2 ui small circular image">
+            <div class="four wide center aligned middle aligned column">
+                <img src="{{ obj.avatar.url }}" alt="" class="m-2 ui small circular image" style="display:inline !important; ">
             </div>
-            <div class="six wide column">
+            <div class="four wide center aligned middle aligned column">
                 <h3>{{ obj.user }}</h3>
                 <p>{{ obj.email }}</p>
             </div>
-            <div class="six wide column">
-                <a href=""><button class="mini ui primary button w-big mb-2">Просмотреть профиль</button></a>
+            <div class="eight wide center aligned middle aligned column">
+                <a href=""><button class="mini ui primary button w-big mb-2 mb-10">Просмотреть профиль</button></a>
                 <form action="{% url 'contact:accept_invite' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="profile_pk" value="{{ obj.pk }}">
@@ -28,7 +28,7 @@
                     </button>
                 </form>
 
-                <form action="{% url 'contact:reject_invite' %}" method="post">
+                <form action="{% url 'contact:reject_invite' %}" method="post" class="mt-10">
                     {% csrf_token %}
                     <input type="hidden" name="profile_pk" value="{{ obj.pk }}">
                     <button type="submit" class="mini ui negative basic button w-big mb-2">

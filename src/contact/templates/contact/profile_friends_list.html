@@ -23,12 +23,12 @@
             <div class="eight wide center aligned middle aligned column">
                 <div class="row">
                     <a href="{{ obj.get_absolute_url_for_friends }}">
-                        <button class="mini ui primary button w-big">
+                        <button class="mini ui primary button w-big mb-10">
                             Просмотреть профиль
                         </button>
                     </a>
                 </div>
-                <div class="row mt-10 mb-10">
+                <div class="row">
                     <!--                            <a href="{{obj.get_privet_messages_absolute_url}}">-->
                     <button datatype="{{obj.slug}}" id="modal-btn-private-message"
                         class="mini ui positive basic button w-big">
@@ -41,7 +41,7 @@
                     </button>
                     <!--                                </a>-->
                 </div>
-                <form action="{% url 'contact:remove_from_friend' %}" method="post">
+                <form action="{% url 'contact:remove_from_friend' %}" method="post" class="mt-10">
                     {% csrf_token %}
                     <input type="hidden" name="profile_pk" value="{{ obj.id }}">
                     <button class="mini ui negative basic button my-2 w-big" type="submit">
