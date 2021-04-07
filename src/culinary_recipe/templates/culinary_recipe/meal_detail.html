@@ -57,9 +57,6 @@
                                 class="mr-5 font-s-20 c-black">
                                 {{ meal.get_total_comments}}</small>
                         </a>
-                        <i class='ui heart outline big yellow icon main_point'></i><small
-                            class="mr-5 font-s-20 c-black">
-                            1</small>
                         <form action="{% url 'culinary_recipe:likes_meal' %}" method="post" id="like_form" name="like">
                             {% csrf_token %}
                             <i type="submit" id="like" value="{{ meal.id }}"

@@ -3,25 +3,28 @@ $(document).ready(function () {
     var prevScrollpos = window.pageYOffset;
     var sub_nav = document.querySelector("#sub_navbar").offsetHeight + 5;
     var navbar = document.querySelector("#navbar").offsetHeight + 3;
-    document.querySelector("#sub_navbar").style.marginTop = navbar + 'px'
-    document.querySelector('.bread').style.marginTop = navbar + 'px'
-
+    document.querySelector('.bread').style.marginTop = navbar +'px'
     // function to hide navbar
     function navbarHide(item){
+        
         window.onmousewheel = function () {
             var currentScrollPos = window.pageYOffset;
             if (prevScrollpos > currentScrollPos) {
                 item.style.top = "0"
+                $(item).children('#sub_navbar').attr('style', 'margin-top: 75px !important;')
             } else if (currentScrollPos == 0) {
+                $(item).children('#sub_navbar').attr('style', 'margin-top: 75px !important;')
                 item.style.top = "0"
-            } else {
-                item.style.top = '-150px';
+            } else if(prevScrollpos+5 < currentScrollPos) {
                 $('.ui.dropdown').dropdown('hide');
+                $(item).children('#sub_navbar').attr('style', 'margin-top: -75px !important;')
+                item.style.top = '-150px';
             }
             prevScrollpos = currentScrollPos;
         }
     }
-    $('.add_post_box_custom').css('top', $("#navbar").height() - 14 + 'px')
+    navbarHide(document.querySelector("#navbar"))
+    $('.add_post_box_custom').css('top', $("#navbar").height() - 20 + 'px')
     $('.ui.dropdown.user_post').dropdown();
     $('.ui.dropdown').dropdown();
     // $('.ui.floating.labeled.icon.dropdown').dropdown();
@@ -89,7 +92,8 @@ $(document).ready(function () {
     })
     // this is add dropdown button adapgtive Jquery function 
     if ($(window).width() <= 768) {
-        navbarHide(document.querySelector("#sub_navbar"))
+        document.querySelector('.bread').style.marginTop = navbar + navbar+'px'
+        // navbarHide(document.querySelector("#sub_navbar"))
         $('#sub_navbar').removeClass('d_none')
         $('.add_dropdown_box_button_ushefa').removeClass('labeled')
         $('.add_more_text_ushefa').remove()
@@ -98,18 +102,14 @@ $(document).ready(function () {
         navbarHide(document.querySelector("#navbar"))
     }
     $(window).resize(() => {
-        $('.add_post_box_custom').css('top', $("#navbar").height() - 14 + 'px') // that keeps top height of dropdown add recipe and post by navbar
         if ($(window).width() <= 768) {
-            navbarHide(document.querySelector("#sub_navbar"))
-            document.querySelector("#sub_navbar").style.marginTop = navbar + 'px'
+            // navbarHide(document.querySelector("#sub_navbar"))
             $('#sub_navbar').removeClass('d_none')
             $('.add_dropdown_box_button_ushefa').removeClass('labeled')
             $('.add_more_text_ushefa').remove()
             $('.add_dropdown_icon_ushefa').addClass('big')
         } else if ($(window).width() > 768 && document.contains(document.querySelector('.add_more_text_ushefa')) == false) {
-            console.log($('.item.centered_custom.top').html())
-            navbarHide(document.querySelector("#navbar"))
-            document.querySelector('.bread').style.marginTop = navbar + 5+'px'
+            // navbarHide(document.querySelector("#navbar"))
             $('#sub_navbar').addClass('d_none')
             $('.add_dropdown_box_button_ushefa').addClass('labeled')
             $('.add_dropdown_icon_ushefa').removeClass('big')
