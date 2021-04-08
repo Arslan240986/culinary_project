@@ -5,7 +5,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.core.paginator import Paginator
 
 from django.views.generic.base import View
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
@@ -44,11 +44,21 @@ class GetItems(View):
     """Вывод под категорий"""
     def get(self, request, slug=None):
         meal = Dish.objects.filter(draft=False, moderator=True)
+
         category_name = None
         if slug:
             meal = meal.filter(sub_category__slug=slug, moderator=True, draft=False)
             category_name = get_object_or_404(SubCategory, slug=slug)
-        return render(request, 'culinary_recipe/dishes_list.html', {'meals': meal, 'category': category_name,})
+        paginator = Paginator(meal, 2)
+
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context = {
+            'meals': page_obj,
+            'category': category_name,
+            'page_obj': page_obj
+        }
+        return render(request, 'culinary_recipe/dishes_list.html', context)
 
 
 class DishByCountry(View):

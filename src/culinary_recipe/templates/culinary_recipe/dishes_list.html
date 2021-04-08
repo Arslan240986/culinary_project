@@ -52,7 +52,6 @@
         {% get_hit_count for meal as count %}
         <i class="ui eye icon" aria-hidden="true"></i><small>{{ count}}</small>
         <i class='ui comment icon'></i><small> {{ meal.get_total_comments }}</small>
-        <i class='ui heart icon'></i><small> 1</small>
         <i class='ui thumbs up icon'></i><small>{{ meal.get_total_likes }}</small>
     </div>
 </div>
@@ -60,5 +59,7 @@
 <div class="my-4">
     {% include 'includes/paginator.html' %}
 </div>
-
+<div class="ui center aligned container">
+{% include 'includes/pagination.html' %}
+</div>
 {% endblock %}
