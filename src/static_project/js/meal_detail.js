@@ -25,11 +25,11 @@ $(document).ready(function () {
             success: function (response) {
                 h = $('.result_book').html(response['form'])
                 if (response['is_liked'] == 'Like') {
-                    $('#like').removeClass('down')
-                    $('#like').addClass('up')
-                } else if (response['is_liked'] == 'Unlike') {
                     $('#like').removeClass('up')
                     $('#like').addClass('down')
+                } else if (response['is_liked'] == 'Unlike') {
+                    $('#like').removeClass('down')
+                    $('#like').addClass('up')
                 }
             },
             error: function (rs, e) {

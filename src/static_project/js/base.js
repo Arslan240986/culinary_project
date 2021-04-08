@@ -24,7 +24,7 @@ $(document).ready(function () {
         }
     }
     navbarHide(document.querySelector("#navbar"))
-    $('.add_post_box_custom').css('top', $("#navbar").height() - 20 + 'px')
+    $('.add_post_box_custom').attr('style', `top: ${$("#navbar").height() - 13}px !important;`)
     $('.ui.dropdown.user_post').dropdown();
     $('.ui.dropdown').dropdown();
     // $('.ui.floating.labeled.icon.dropdown').dropdown();
