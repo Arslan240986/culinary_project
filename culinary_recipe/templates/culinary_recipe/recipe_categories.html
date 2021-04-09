@@ -5,30 +5,30 @@
 
 <!-- Bread crumbs -->
 {% block breadcrumbs %}
-        <div class="active section">{{ category.name }}</div>
+<div class="active section">{{ category.name }}</div>
 {% endblock %}
 
 {% block content %}
 <h3>{{ category.name }}</h3>
 {% for sub_category in sub_categories %}
-    <h4><a class="button_link" href="{{ sub_category.get_absolute_url }}">{{ sub_category.name }}</a> :</h4>
-        <div>
+<h4><a class="button_link" href="{{ sub_category.get_absolute_url }}">{{ sub_category.name }}</a> :</h4>
+<div>
 
-        </div>
+</div>
 
-    <div class="ui three column grid">
-        <div class="row">
-            {% for meal in sub_category.get_last_three_dishes %}
-            <div class="five wide column">
-                <div class="card">
-                    <img class="card-img-top" src="{{ meal.poster.url }}" alt="Card image cap">
-                    <div class="card-body">
-                        <p class="card-text">{{ meal.title }}</p>
-                    </div>
+<div class="ui stackable centered three column grid">
+    <div class="row">
+        {% for meal in sub_category.get_last_three_dishes %}
+        <div class="five wide column">
+            <div class="card">
+                <img class="img-thumbnail cat_image" src="{{ meal.poster.url }}" alt="Card image cap">
+                <div class="card-body">
+                    <a class="ui link" href="{{meal.get_absolute_url}}"><p class="card-text">{{ meal.title }}</p></a>
                 </div>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
+</div>
 {% endfor %}
 {% endblock %}

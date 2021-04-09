@@ -1,58 +1,61 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Все пользователи
+Все пользователи
 {% endblock title %}
 
 {% block content %}
-<div class="ui message"><div class="header">Все пользователи</div></div>
-    {% for obj in qs %}
-        <div class="ui segment mt-2">
-            <div class="ui stackable grid">
-                <div class="row">
-                    <div class="four wide center aligned middle aligned column" >
-                        <img class="ui small circular image" src="{{ obj.avatar.url }}" alt="" style="display:inline !important; ">
-                    </div>
-                    <div class="four wide center aligned middle aligned column">
-                        <h3>{{ obj.user }}</h3>
-                        <p>{{ obj.email }}</p>
-                    </div>
-                    <div class="eight wide center aligned middle aligned column">
-                        <a href="{{ obj.get_absolute_url_for_friends }}">
-                            <button class="mini ui primary button w-big">
-                                Просмотреть профиль
-                            </button>
-                        </a>
-                        {% if obj.user not in rel_receiver and obj.user not in rel_sender %}
-                            <form action="{% url 'contact:send_invitation' %}" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="profile_pk" value="{{ obj.id }}">
-                                <button class="mini ui positive basic button my-2 w-big" type="submit">
-                                    <i class="plus square icon"></i>Добавить в друзя
-                                </button>
-                            </form>
-                        {% endif %}
+<div class="ui message">
+    <div class="header">Все пользователи</div>
+</div>
+{% for obj in qs %}
+<div class="ui segment mt-2">
+    <div class="ui stackable grid">
+        <div class="row">
+            <div class="four wide center aligned middle aligned column">
+                <img class="ui small circular image" src="{{ obj.avatar.url }}" alt=""
+                    style="display:inline !important; ">
+            </div>
+            <div class="four wide center aligned middle aligned column">
+                <h3>{{ obj.user }}</h3>
+                <p>{{ obj.email }}</p>
+            </div>
+            <div class="eight wide center aligned middle aligned column">
+                <a href="{{ obj.get_absolute_url_for_friends }}">
+                    <button class="mini ui primary button w-big">
+                        Просмотреть профиль
+                    </button>
+                </a>
+                {% if obj.user not in rel_receiver and obj.user not in rel_sender %}
+                <form action="{% url 'contact:send_invitation' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="profile_pk" value="{{ obj.id }}">
+                    <button class="mini ui positive basic button my-2 w-big" type="submit">
+                        <i class="plus square icon"></i>Добавить в друзя
+                    </button>
+                </form>
+                {% endif %}
 
-                        {% if obj.user in rel_receiver and request.user not in obj.friends.all %}
-                            <button class="mini ui disabled button my-2 w-big">
-                                <i class="user icon"></i>Запрос отправлен
-                            </button>
-                        {% endif %}
+                {% if obj.user in rel_receiver and request.user not in obj.friends.all %}
+                <button class="mini ui disabled button my-2 w-big">
+                    <i class="user icon"></i>Запрос отправлен
+                </button>
+                {% endif %}
 
-                        {% if request.user in obj.friends.all %}
-                            <form action="{% url 'contact:remove_from_friend' %}" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="profile_pk" value="{{ obj.id }}">
-                                <button class="mini ui negative basic button my-2 w-big" type="submit">
-                                    <i class="minus square icon"></i>Удалить из друзей
-                                </button>
-                            </form>
-                        {% endif %}
+                {% if request.user in obj.friends.all %}
+                <form action="{% url 'contact:remove_from_friend' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="profile_pk" value="{{ obj.id }}">
+                    <button class="mini ui negative basic button my-2 w-big" type="submit">
+                        <i class="minus square icon"></i>Удалить из друзей
+                    </button>
+                </form>
+                {% endif %}
 
-                    </div>
-                </div>
             </div>
         </div>
-    {% endfor %}
+    </div>
+</div>
+{% endfor %}
 
 {% endblock content %}

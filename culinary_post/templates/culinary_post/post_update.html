@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}
+Обновить пост
+{% endblock title %}
+
+{% block content %}
+<div class="ui segment">
+    <h3>Обновить пост</h3>
+    <form action="" class="ui form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit" class="ui button primary mt-4">Обновить</button>
+    </form>
+</div>
+{% endblock content %}

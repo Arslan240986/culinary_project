@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $('#modal-btn').click(function () {
-        $('.ui.modal').modal('show')
+        $('.ui.modal.mymodal').modal('show')
         $('.ui.radio.checkbox').checkbox();
         $('.ui.toggle.checkbox').checkbox();
         $('#avatar_image_id').click(() => {

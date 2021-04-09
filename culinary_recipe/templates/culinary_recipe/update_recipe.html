@@ -33,11 +33,12 @@
     </div>
     {{form.poster.label_tag}}
     <div class="{% if form.poster.errors %}error{% endif %} field">
-            <div class="ui medium image poster_image_div ">
-                <img id="poster_image_id" class="ui centered medium rounded image" src="{{ form.initial.poster.url }}">
-                <div class="form__add-img"></div>
-            </div>
-        <input class="d_none" type="file" name="poster" accept="image/*" required="" id="id_poster" onchange="readURL(this)">
+        <div class="ui medium image poster_image_div ">
+            <img id="poster_image_id" class="ui centered medium rounded image" src="{{ form.initial.poster.url }}">
+            <div class="form__add-img"></div>
+        </div>
+        <input class="d_none" type="file" name="poster" accept="image/*" required="" id="id_poster"
+            onchange="readURL(this)">
         {{form.poster.errors}}
         <div class="ui message">
             <ul class="list">
@@ -51,9 +52,10 @@
     </div>
     <div class="fields">
         <div class="{% if form.category.errors %}error{% endif %} field">
-            <div class="recipe_box_category" data-href-template="{% url 'culinary_recipe:get_ajax_response_category' %}">
-            {{form.category.label_tag}}
-            {{form.category}}
+            <div class="recipe_box_category"
+                data-href-template="{% url 'culinary_recipe:get_ajax_response_category' %}">
+                {{form.category.label_tag}}
+                {{form.category}}
             </div>
         </div>
         <div class="{% if form.sub_category.errors %}error{% endif %} field sub_category">
@@ -64,24 +66,24 @@
         </div>
     </div>
 
-            <div class="fields">
-                <div class="{% if form.country.errors %}error{% endif %} field">
-                    {{form.country.label_tag}}
-                    {{form.country.errors}}
-                    {{form.country}}
-                </div>
-                <div class="{% if form.complexity.errors %}error{% endif %} field">
-                    {{form.complexity.label_tag}}
-                    {{form.complexity.errors}}
-                    {{form.complexity}}
-                </div>
-                <div class="{% if form.vegetarian.errors %}error{% endif %} field">
-                    {{form.vegetarian.label_tag}}
-                    {{form.vegetarian.errors}}
-                    {{form.vegetarian}}
-                </div>
-            </div>
-       <div class="ui stackable grid">
+    <div class="fields">
+        <div class="{% if form.country.errors %}error{% endif %} field">
+            {{form.country.label_tag}}
+            {{form.country.errors}}
+            {{form.country}}
+        </div>
+        <div class="{% if form.complexity.errors %}error{% endif %} field">
+            {{form.complexity.label_tag}}
+            {{form.complexity.errors}}
+            {{form.complexity}}
+        </div>
+        <div class="{% if form.vegetarian.errors %}error{% endif %} field">
+            {{form.vegetarian.label_tag}}
+            {{form.vegetarian.errors}}
+            {{form.vegetarian}}
+        </div>
+    </div>
+    <div class="ui stackable grid">
         <div class="four wide column">
             <div class="field">
                 {{form.preparation_time_hour.label_tag}}
@@ -152,9 +154,11 @@
         <div class="twelve wide column">
             <fieldset>
                 <legend>Ингредиенты к ретцепту</legend>
-                <small>Используйте только те ингридиенты, которые предлагаются по мере ввода названия, или из <span class="red">Списка допустимых ингредиентов.</span>
-                    Если в нашем списке отсутствует необходимый ингредиент, обратитесь к администратору с просьбой добавить его.</small>
-    {% if ingredient_form.non_form_errors %}
+                <small>Используйте только те ингридиенты, которые предлагаются по мере ввода названия, или из <span
+                        class="red">Списка допустимых ингредиентов.</span>
+                    Если в нашем списке отсутствует необходимый ингредиент, обратитесь к администратору с просьбой
+                    добавить его.</small>
+                {% if ingredient_form.non_form_errors %}
                 {% for error in ingredient_form.non_form_errors %}
                 <div class="ui negative message">
                     <i class="close icon"></i>
@@ -164,30 +168,35 @@
 
                 </div>
                 {% endfor %}
-    {% endif %}
+                {% endif %}
                 <div>
                     <div class="fields">
                         <table style="width: 100%">
                             <thead>
-                            <tr>
-                                <th class="mr-2">Ингредиент</th>
-                                <th>Количество</th>
-                                <th>Мера веса/объема</th>
-                                <th>Примечание</th>
-                            </tr>
+                                <tr>
+                                    <th class="mr-2">Ингредиент</th>
+                                    <th>Количество</th>
+                                    <th>Мера веса/объема</th>
+                                    <th>Примечание</th>
+                                </tr>
                             </thead>
                             {{ ingredient_form.management_form }}
                             {% for form in ingredient_form %}
-                                <tbody class="dynamic-form inline {{ ingredient_form.prefix }} ">
+                            <tbody class="dynamic-form inline {{ ingredient_form.prefix }} ">
                                 <tr>
                                     <td class="mr-4">{{ form.name.errors }}</td>
-                                    <td class="{% if form.quantity.errors %}error {% endif%}field" style="width: 25px;">{{ form.quantity.errors }}</td>
+                                    <td class="{% if form.quantity.errors %}error {% endif%}field" style="width: 25px;">
+                                        {{ form.quantity.errors }}</td>
                                     <td>{{ form.measure.errors }}</td>
                                     <td>{{ form.note.errors }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="mr-4">{{ form.name }}</td>
-                                    <td class="{% if form.quantity.errors %}error {% endif%}field" style="width: 25px;">{{ form.quantity }}</td>
+                                    <td class="ingredient_name_td mr-4" data-href="{% url 'culinary_recipe:get_ingredient_lists' %}">
+                                        {{ form.name }}
+                                        <div class="d_none" id="autocomplete_list"></div>
+                                    </td>
+                                    <td class="{% if form.quantity.errors %}error {% endif%}field" style="width: 25px;">
+                                        {{ form.quantity }}</td>
                                     <td>{{ form.measure }}</td>
                                     <td>{{ form.note }}</td>
                                     <td class="deleteButton">
@@ -196,7 +205,7 @@
                                         {{ form.ORDER }}
                                     </td>
                                 </tr>
-                                </tbody>
+                            </tbody>
                             {% endfor %}
                         </table>
                     </div>
@@ -205,24 +214,26 @@
             <fieldset>
                 <legend>Пошаговый рецепт</legend>
                 <small class="ml-4">
-                    Для описания процесса приготовления блюда Вы можете воспользоваться пошаговым рецептом, видеорецептом или
+                    Для описания процесса приготовления блюда Вы можете воспользоваться пошаговым рецептом,
+                    видеорецептом или
                     объединить 2 этих способа. В пошаговом рецепте процесс приготовления разбивается на шаги, которые Вы
-                    описываете отдельно, сопровождая каждый шаг отдельной фотографией, сделанной в процессе приготовления.
+                    описываете отдельно, сопровождая каждый шаг отдельной фотографией, сделанной в процессе
+                    приготовления.
                 </small>
                 {% if instruction_form.non_form_errors %}
-                    {% for error in instruction_form.non_form_errors %}
-                        <div class="ui negative message">
-                            <i class="close icon"></i>
-                            <div class="header">
-                                {{ error }}
-                            </div>
-                        </div>
-                    {% endfor %}
+                {% for error in instruction_form.non_form_errors %}
+                <div class="ui negative message">
+                    <i class="close icon"></i>
+                    <div class="header">
+                        {{ error }}
+                    </div>
+                </div>
+                {% endfor %}
                 {% endif %}
                 <div>
                     <table style="width: 100%">
                         {{ instruction_form.management_form }}
-                            {% for form in instruction_form %}
+                        {% for form in instruction_form %}
                         <tbody class="dynamic-form inline {{ instruction_form.prefix }}">
                             <tr>
                                 <td>{{ form.description.errors }}</td>
@@ -249,9 +260,13 @@
                                 </td>
                                 <td>
                                     <div class="ui medium image ">
-                                        <img id="instruction_image_id" class="ui centered small rounded image instruction_image_div"
-                                             src="{% if form.initial.image %}{{ form.initial.image.url }}{% else %}{% static  '/image/empty_image.jpeg' %} {% endif %}" onclick="clickImageFile(this)">
-                                        <input class="d_none" type="file" name="step_set-{{forloop.counter0}}-image" accept="image/*" id="id_step_set-{{forloop.counter0}}-image" onchange="readURLInstrcution(this)">
+                                        <img id="instruction_image_id"
+                                            class="ui centered small rounded image instruction_image_div"
+                                            src="{% if form.initial.image %}{{ form.initial.image.url }}{% else %}{% static  '/image/empty_image.jpeg' %} {% endif %}"
+                                            onclick="clickImageFile(this)">
+                                        <input class="d_none" type="file" name="step_set-{{forloop.counter0}}-image"
+                                            accept="image/*" id="id_step_set-{{forloop.counter0}}-image"
+                                            onchange="readURLInstrcution(this)">
                                         <div class="form__add-img-instr"></div>
                                     </div>
                                 </td>
@@ -266,14 +281,14 @@
         </div>
     </div>
     <div class="row">
-            <div class="ui segment">
-                <div class="field">
-                    <div class="ui toggle checkbox">
-                        {{form.draft.label_tag}}
-                        {{form.draft}}
-                    </div>
+        <div class="ui segment">
+            <div class="field">
+                <div class="ui toggle checkbox">
+                    {{form.draft.label_tag}}
+                    {{form.draft}}
                 </div>
             </div>
+        </div>
     </div>
     <div class="row mt-10">
         <button type="submit" class="btn_custom ui fluid positive button">Обновить</button>
@@ -291,21 +306,23 @@
 
 {% block javascript %}
 $(document).ready(function(){
-    <!--Inline formset add line and remove-->
-        $(".inline.{{ ingredient_form.prefix }}").formset({
-            prefix: "{{ ingredient_form.prefix }}",
-            deleteContainerClass: 'deleteButton',
-            deleteCssClass: 'delete-row text-danger ingredient_delete_btn',
-            addCssClass: 'ui basic positive button',
-            formCssClass: 'ingredients__form',
-        })
-        $(".inline.{{ instruction_form.prefix }}").formset({
-            prefix: "{{ instruction_form.prefix }}",
-            deleteContainerClass: 'addButton',
-            deleteCssClass: 'delete-row text-danger steps_delete_btn',
-            addCssClass: 'ui basic positive button',
-            formCssClass: 'steps__form',
-        })
+<!--Inline formset add line and remove-->
+    $(".inline.{{ ingredient_form.prefix }}").formset({
+        prefix: "{{ ingredient_form.prefix }}",
+        deleteText: '<i class="ui times circle red icon"></i>',
+        deleteContainerClass: 'deleteButton',
+        deleteCssClass: 'delete-row text-danger ingredient_delete_btn',
+        addCssClass: 'ui basic positive button',
+        formCssClass: 'ingredients__form',
+    })
+    $(".inline.{{ instruction_form.prefix }}").formset({
+        prefix: "{{ instruction_form.prefix }}",
+        deleteText: '<i class="ui times circle red icon"></i>',
+        deleteContainerClass: 'addButton',
+        deleteCssClass: 'delete-row text-danger steps_delete_btn',
+        addCssClass: 'ui basic positive button',
+        formCssClass: 'steps__form',
+    })
 
 })
 

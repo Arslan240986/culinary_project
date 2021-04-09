@@ -1,10 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}
+Удалить пост
+{% endblock title %}
+
+{% block content %}
+
+{% if messages %}
+{% for message in messages %}
+
+<div class="ui negative message mt-2">
+    <div class="header">
+        {{ message }}
+    </div>
+</div>
+
+{% endfor %}
+{% endif %}
+
+{% if not messages %}
+<div class="ui segment mt-2">
+    <h3>Удалить пост?</h3>
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>Вы уверены что хотите удалить пост?</p>
+        <button type="submit" class="ui button negative">Удалить</button>
+    </form>
+</div>
+{% endif %}
+
+{% endblock content %}

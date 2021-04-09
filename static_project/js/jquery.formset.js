@@ -237,7 +237,7 @@
         prefix: 'form',                  // The form prefix for your django formset
         formTemplate: null,              // The jQuery selection cloned to generate new form instances
         addText: 'Добавить еще поле',          // Text for the add link
-        deleteText: '<i class="times circle red icon"></i>',            // Text for the delete link
+        deleteText: '',            // Text for the delete link
         addContainerClass: null,         // Container CSS class for the add link
         deleteContainerClass: null,      // Container CSS class for the delete link
         addCssClass: '',          // CSS class applied to the add link

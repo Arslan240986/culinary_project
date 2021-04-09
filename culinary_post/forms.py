@@ -1,5 +1,5 @@
 from django import forms
-from .models import CulinaryPost, PostComment
+from .models import CulinaryPost, CulinaryPostComment
 
 
 class CulinaryPostModelForm(forms.ModelForm):
@@ -11,10 +11,11 @@ class CulinaryPostModelForm(forms.ModelForm):
 
 
 class PostCommentModelForm(forms.ModelForm):
-    body = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Оставить коментарий',
-                                                                   'class': 'mb-2',
-                                                                   }))
+    """Форма отзывов"""
 
     class Meta:
-        model = PostComment
-        fields = ('body',)
+        model = CulinaryPostComment
+        fields = ('text',)
+        widgets = {
+            'text': forms.Textarea(attrs={'rows': 2})
+        }

@@ -17,14 +17,14 @@ from private_chat.models import ChatMessage, Thread
 
 @login_required
 def edit(request):
+    user_profile = get_object_or_404(UserProfile, user=request.user)
     if request.method == 'POST':
         profile_form = ProfileEditForm(instance=request.user.profile,
                                         data=request.POST,
                                         files=request.FILES)
         if profile_form.is_valid():
-            profile = get_object_or_404(UserProfile, user=request.user)
             if request.FILES:
-                profile.avatar.delete()
+                user_profile.avatar.delete()
             profile_form.save()
             return redirect(request.user.profile.get_personal_absolute_url())
         else:
@@ -33,7 +33,7 @@ def edit(request):
     else:
         profile_form = ProfileEditForm(instance=request.user.profile)
 
-    return render(request, 'contact/profile_page.html', {'profile_form': profile_form})
+    return render(request, 'contact/profile_page.html', {'profile_form': profile_form, 'profile': user_profile})
 
 
 @login_required
@@ -50,6 +50,7 @@ def personal_page(request, slug):
         msg = ChatMessage.objects.filter(thread=thread, is_readed=False).exclude(user=user_profile).count()
         total_msg += msg
     context = {
+        'posts' : user_profile.get_total_posts(),
         'msg_count': total_msg,
         'meals': meals,
         'meals_not_added': meals_not_added,
@@ -109,7 +110,7 @@ def add_dishes(request):
             profile.dishes.add(id)
             profile.save()
             meal.save()
-            context['count'] = request.user.profile.get_total_dishes()
+            context['count'] = request.user.profile.get_total_book()
         if request.is_ajax():
             return JsonResponse(context)
 
@@ -170,7 +171,7 @@ def invite_profiles_list_view(request):
     context = {
         'qs': qs
     }
-    return render(request, 'account/profile/to_invite_list.html', context)
+    return render(request, 'contact/to_invite_list.html', context)
 
 
 class UserProfileDetailView(DetailView):
@@ -194,8 +195,8 @@ class UserProfileDetailView(DetailView):
         context['rel_sender'] = [item.sender.user for item in rel_s]
         context['is_empty'] = False
         context['recipes'] = recipes
-        context['posts'] = 'self.get_object().get_total_posts()'
-        context['len_posts'] = 'True if len(self.get_object().get_total_posts()) > 0 else False'
+        context['posts'] = self.get_object().get_total_posts()
+        context['len_posts'] = True if len(self.get_object().get_total_posts()) > 0 else False
         return context
 
 

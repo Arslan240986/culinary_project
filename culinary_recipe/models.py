@@ -190,10 +190,10 @@ class Dish(models.Model):
         to_slug = self.slug
         if self.title != self.__title or self.slug == '':
             if self.title:
-                to_slug = make_slug(str(self.title))+get_random_code()
+                to_slug = make_slug(str(self.title))+"-"+get_random_code()
                 ex = Dish.objects.filter(slug=to_slug).exists()
                 while ex:
-                    to_slug = make_slug(to_slug)+get_random_code()
+                    to_slug = make_slug(to_slug)+"-"+get_random_code()
                     ex = Dish.objects.filter(slug=to_slug).exists()
             else:
                 to_slug = str(self.user)
@@ -204,7 +204,7 @@ class Dish(models.Model):
         return self.likes.count()
 
     def get_absolute_url(self):
-        return reverse('culinary_recipe:detail_view', args=[self.slug])
+        return reverse('culinary_recipe:detail_view', args=[self.slug, self.pk])
 
     def get_update_absolute_url(self):
         return reverse('culinary_recipe:update_meal', args=[self.slug])

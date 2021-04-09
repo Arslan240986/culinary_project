@@ -6,8 +6,8 @@
 {% block breadcrumbs %}
 <a class="section navbar_links_yummy black" href="#">Все ретцепты</a>
 {% endblock %}
-{% block classes %}
-<div class="thirteen wide column">
+    {% block classes %}
+    <div class="thirteen wide column">
     {% endblock classes %}
     {% block content %}
     <div class="ui header pl-10 font-oswald">
@@ -44,7 +44,7 @@
             {% endfor %}
             <div class="row">
                 <div class="center aligned sixteen wide column">
-                    <a class="link item" href="#">
+                    <a class="link item" href="{% url 'culinary_recipe:dishes' %}">
                         <div class="ui animated fade button my_button" tabindex="0">
                             <div class="visible content">Все рецепты</div>
                             <div class="hidden content">
@@ -79,7 +79,7 @@
 
         <div class="row">
             <div class="center aligned sixteen wide column">
-                <a class="link item" href="#">
+                <a class="link item" href="{% url 'culinary_post:culinary_post_view' %}">
                     <div class="ui animated fade button my_button" tabindex="0">
                         <div class="visible content">Все посты</div>
                         <div class="hidden content">

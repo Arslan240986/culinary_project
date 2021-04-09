@@ -1,46 +1,46 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Запрос на дружбу
+Запрос на дружбу
 {% endblock title %}
 
 {% block content %}
 
 
-    {% for obj in qs %}
-        <div class="ui segment mt-2">
-            <div class="ui stackable three column grid">
-                <div class="row">
-                    <div class="four wide column">
-                        <img src="{{ obj.avatar.url }}" alt="" class="m-2 ui small circular image">
-                    </div>
-                    <div class="six wide column">
-                        <h3>{{ obj.user }}</h3>
-                        <p>{{ obj.email }}</p>
-                    </div>
-                    <div class="six wide column">
-                        <a href=""><button class="mini ui primary button w-big mb-2">Просмотреть профиль</button></a>
-                        <form action="{% url 'contact:accept_invite' %}" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="profile_pk" value="{{ obj.pk }}">
-                            <button type="submit" class="mini ui positive basic button w-big mb-2">
-                                <i class="check icon"></i>Принять запрос
-                            </button>
-                        </form>
+{% for obj in qs %}
+<div class="ui segment mt-2">
+    <div class="ui stackable grid">
+        <div class="row">
+            <div class="four wide center aligned middle aligned column">
+                <img src="{{ obj.avatar.url }}" alt="" class="m-2 ui small circular image" style="display:inline !important; ">
+            </div>
+            <div class="four wide center aligned middle aligned column">
+                <h3>{{ obj.user }}</h3>
+                <p>{{ obj.email }}</p>
+            </div>
+            <div class="eight wide center aligned middle aligned column">
+                <a href=""><button class="mini ui primary button w-big mb-2 mb-10">Просмотреть профиль</button></a>
+                <form action="{% url 'contact:accept_invite' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="profile_pk" value="{{ obj.pk }}">
+                    <button type="submit" class="mini ui positive basic button w-big mb-2">
+                        <i class="check icon"></i>Принять запрос
+                    </button>
+                </form>
 
-                        <form action="{% url 'contact:reject_invite' %}" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="profile_pk" value="{{ obj.pk }}">
-                            <button type="submit" class="mini ui negative basic button w-big mb-2">
-                                <i class="red close icon"></i>Удалить запрос
-                            </button>
-                        </form>
-                    </div>
-                </div>
+                <form action="{% url 'contact:reject_invite' %}" method="post" class="mt-10">
+                    {% csrf_token %}
+                    <input type="hidden" name="profile_pk" value="{{ obj.pk }}">
+                    <button type="submit" class="mini ui negative basic button w-big mb-2">
+                        <i class="red close icon"></i>Удалить запрос
+                    </button>
+                </form>
             </div>
         </div>
-    {% empty %}
-        <h1>У вас пока нет запросов на длужбу</h1>
-    {% endfor %}
+    </div>
+</div>
+{% empty %}
+<h1>У вас пока нет запросов на длужбу</h1>
+{% endfor %}
 
 {% endblock content %}
