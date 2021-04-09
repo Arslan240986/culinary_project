@@ -8,6 +8,7 @@
 .idea/misc.xml
 .idea/modules.xml
 /culinary_project/prod_settings.py
+/culinary_project/local_settings.py
 
 static_project
 static_cdn/
