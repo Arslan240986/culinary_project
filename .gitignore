@@ -7,8 +7,8 @@
 .idea/inspectionProfiles/
 .idea/misc.xml
 .idea/modules.xml
-prod_settings.py
-local_settings.py
+src/culinary_project/prod_settings.py
+src/culinary_project/local_settings.py
 
 static_project
 static_cdn/
