@@ -1,7 +1,6 @@
 
 $(document).ready(function () {
     var prevScrollpos = window.pageYOffset;
-    var sub_nav = document.querySelector("#sub_navbar").offsetHeight + 5;
     var navbar = document.querySelector("#navbar").offsetHeight + 3;
     document.querySelector('.bread').style.marginTop = navbar +'px'
     // function to hide navbar
@@ -10,14 +9,15 @@ $(document).ready(function () {
         window.onmousewheel = function () {
             var currentScrollPos = window.pageYOffset;
             if (prevScrollpos > currentScrollPos) {
+                $(item).children('#sub_navbar').removeClass('top_show')
                 item.style.top = "0"
-                $(item).children('#sub_navbar').attr('style', 'margin-top: 75px !important;')
             } else if (currentScrollPos == 0) {
-                $(item).children('#sub_navbar').attr('style', 'margin-top: 75px !important;')
+                $(item).children('#sub_navbar').removeClass('top_show')
                 item.style.top = "0"
             } else if(prevScrollpos+5 < currentScrollPos) {
+                console.log('asd')
                 $('.ui.dropdown').dropdown('hide');
-                $(item).children('#sub_navbar').attr('style', 'margin-top: -75px !important;')
+                $(item).children('#sub_navbar').addClass('top_show')
                 item.style.top = '-150px';
             }
             prevScrollpos = currentScrollPos;
