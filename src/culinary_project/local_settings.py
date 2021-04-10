@@ -21,5 +21,5 @@ DATABASES = {
 }
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static_project',)
+    os.path.join(BASE_DIR, 'static',)
 ]
