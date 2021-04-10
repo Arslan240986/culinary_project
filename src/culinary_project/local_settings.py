@@ -9,16 +9,16 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1',]
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'culinary',
-        'USER': 'postgres',
-        'PASSWORD': '12345qw',
-        'HOST': '127.0.0.1',
-        'PORT': '5422',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'culinary',
+#         'USER': 'postgres',
+#         'PASSWORD': '12345qw',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5422',
+#     }
+# }
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static',)
