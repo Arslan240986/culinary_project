@@ -371,13 +371,13 @@ ul.collapse {
 .navbar_yummy_second{
     background-color: rgb(0, 0, 0, 0.5) !important;
     position: absolute !important;
-    margin-top: 75px !important;
+    top: 75px !important;
     z-index: 1 !important;
     width: 100% !important;
-    transition: margin-top 0.6s !important;
+    transition: top 0.6s !important;
 }
 .navbar_yummy_second.top_show{
-    margin-top: -76px !important;
+    top: -76px !important;
 }
 
 .navbar_links_yummy {
