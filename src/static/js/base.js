@@ -1,24 +1,16 @@
 var prevScrollpos = window.pageYOffset;
 var navbar = document.querySelector("#navbar")
 document.querySelector('.bread').style.marginTop = navbar.offsetHeight + 3 + 'px'
-// function to hide navbar
 function navbarHide() {
     console.log(navbar)
     window.onmousewheel = function () {
         var currentScrollPos = window.pageYOffset;
         if (prevScrollpos > currentScrollPos) {
             navbar.classList.remove("mystyle");
-            console.log(navbar)
-            // document.querySelector('.first_nav_block').removeClass('top_show')
-            // item.style.top = "0"
         } else if (currentScrollPos == 0) {
             navbar.classList.remove("mystyle");
-            // document.querySelector('.first_nav_block').removeClass('top_show')
-            // item.style.top = "0"
         } else if (prevScrollpos + 5 < currentScrollPos) {
             $('.ui.dropdown').dropdown('hide');
-            // document.querySelector('.first_nav_block').addClass('top_show')
-            // item.style.top = '-150px';
             navbar.classList.add("mystyle");
         }
         prevScrollpos = currentScrollPos;
@@ -31,7 +23,6 @@ $(document).ready(function () {
     $('.add_post_box_custom').attr('style', `top: ${50}px !important;`)
     $('.ui.dropdown.user_post').dropdown();
     $('.ui.dropdown').dropdown();
-    // $('.ui.floating.labeled.icon.dropdown').dropdown();
     $('.ui.accordion').accordion();
 
     // <!--   Add email for subcribe ajax response true or false     -->
