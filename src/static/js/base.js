@@ -1,26 +1,32 @@
-
-$(document).ready(function () {
-    var prevScrollpos = window.pageYOffset;
-    var navbar = document.querySelector("#navbar").offsetHeight + 3;
-    document.querySelector('.bread').style.marginTop = navbar +'px'
-    // function to hide navbar
-    function navbarHide(item){
-        window.onmousewheel = function () {
-            var currentScrollPos = window.pageYOffset;
-            if (prevScrollpos > currentScrollPos) {
-                $(item).removeClass('top_show')
-                // item.style.top = "0"
-            } else if (currentScrollPos == 0) {
-                $(item).removeClass('top_show')
-                // item.style.top = "0"
-            } else if(prevScrollpos+5 < currentScrollPos) {
-                $('.ui.dropdown').dropdown('hide');
-                $(item).addClass('top_show')
-                // item.style.top = '-150px';
-            }
-            prevScrollpos = currentScrollPos;
+var prevScrollpos = window.pageYOffset;
+var navbar = document.querySelector("#navbar")
+document.querySelector('.bread').style.marginTop = navbar.offsetHeight + 3 + 'px'
+// function to hide navbar
+function navbarHide() {
+    console.log(navbar)
+    window.onmousewheel = function () {
+        var currentScrollPos = window.pageYOffset;
+        if (prevScrollpos > currentScrollPos) {
+            navbar.classList.remove("mystyle");
+            console.log(navbar)
+            // document.querySelector('.first_nav_block').removeClass('top_show')
+            // item.style.top = "0"
+        } else if (currentScrollPos == 0) {
+            navbar.classList.remove("mystyle");
+            // document.querySelector('.first_nav_block').removeClass('top_show')
+            // item.style.top = "0"
+        } else if (prevScrollpos + 5 < currentScrollPos) {
+            $('.ui.dropdown').dropdown('hide');
+            // document.querySelector('.first_nav_block').addClass('top_show')
+            // item.style.top = '-150px';
+            navbar.classList.add("mystyle");
         }
+        prevScrollpos = currentScrollPos;
     }
+}
+navbarHide()
+$(document).ready(function () {
+
     navbarHide(document.querySelector("#navbar"))
     $('.add_post_box_custom').attr('style', `top: ${50}px !important;`)
     $('.ui.dropdown.user_post').dropdown();
@@ -94,8 +100,6 @@ $(document).ready(function () {
         $('.add_dropdown_box_button_ushefa').removeClass('labeled')
         $('.add_more_text_ushefa').remove()
         $('.add_dropdown_icon_ushefa').addClass('big')
-    } else {
-        navbarHide(document.querySelector("#navbar"))
     }
     $(window).resize(() => {
         if ($(window).width() <= 768) {
