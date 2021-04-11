@@ -5,25 +5,24 @@ $(document).ready(function () {
     document.querySelector('.bread').style.marginTop = navbar +'px'
     // function to hide navbar
     function navbarHide(item){
-        
         window.onmousewheel = function () {
             var currentScrollPos = window.pageYOffset;
             if (prevScrollpos > currentScrollPos) {
-                $(item).children('#sub_navbar').removeClass('top_show')
-                item.style.top = "0"
+                $(item).removeClass('top_show')
+                // item.style.top = "0"
             } else if (currentScrollPos == 0) {
-                $(item).children('#sub_navbar').removeClass('top_show')
-                item.style.top = "0"
+                $(item).removeClass('top_show')
+                // item.style.top = "0"
             } else if(prevScrollpos+5 < currentScrollPos) {
                 $('.ui.dropdown').dropdown('hide');
-                $(item).children('#sub_navbar').addClass('top_show')
-                item.style.top = '-150px';
+                $(item).addClass('top_show')
+                // item.style.top = '-150px';
             }
             prevScrollpos = currentScrollPos;
         }
     }
     navbarHide(document.querySelector("#navbar"))
-    $('.add_post_box_custom').attr('style', `top: ${$("#navbar").height() - 13}px !important;`)
+    $('.add_post_box_custom').attr('style', `top: ${50}px !important;`)
     $('.ui.dropdown.user_post').dropdown();
     $('.ui.dropdown').dropdown();
     // $('.ui.floating.labeled.icon.dropdown').dropdown();
@@ -90,9 +89,8 @@ $(document).ready(function () {
     })
     // this is add dropdown button adapgtive Jquery function 
     if ($(window).width() <= 768) {
-        document.querySelector('.bread').style.marginTop = navbar + navbar+'px'
+        // document.querySelector('.bread').style.marginTop = navbar + navbar+'px'
         // navbarHide(document.querySelector("#sub_navbar"))
-        $('#sub_navbar').removeClass('d_none')
         $('.add_dropdown_box_button_ushefa').removeClass('labeled')
         $('.add_more_text_ushefa').remove()
         $('.add_dropdown_icon_ushefa').addClass('big')
@@ -102,13 +100,11 @@ $(document).ready(function () {
     $(window).resize(() => {
         if ($(window).width() <= 768) {
             // navbarHide(document.querySelector("#sub_navbar"))
-            $('#sub_navbar').removeClass('d_none')
             $('.add_dropdown_box_button_ushefa').removeClass('labeled')
             $('.add_more_text_ushefa').remove()
             $('.add_dropdown_icon_ushefa').addClass('big')
         } else if ($(window).width() > 768 && document.contains(document.querySelector('.add_more_text_ushefa')) == false) {
             // navbarHide(document.querySelector("#navbar"))
-            $('#sub_navbar').addClass('d_none')
             $('.add_dropdown_box_button_ushefa').addClass('labeled')
             $('.add_dropdown_icon_ushefa').removeClass('big')
             $('.add_dropdown_box_button_ushefa').append('<span class="text add_more_text_ushefa">Добавить</span>')
@@ -118,8 +114,8 @@ $(document).ready(function () {
     $('.search_form_ushefa_icon').click(() => {
         $('.search_form_ushefa_icon').removeClass('display')
         $('.search_form_ushefa').removeClass('display')
-        $('.navbar_menu_container').children().each(element => {
-            $($('.navbar_menu_container').children()[element]).addClass('d_none')
+        $('.first_nav_block').children().each(element => {
+            $($('.first_nav_block').children()[element]).addClass('d_none')
         });
         var search_form = `<div class="item search_item_form width_100">
         <form action="/dishes/by_search/" class="mr-10 search_form_ushefa width_100" method="get" >
@@ -130,7 +126,7 @@ $(document).ready(function () {
                 </button>
             </div>
         </form><i class="close big white icon " onclick="closeSearch(this)"></i></div>`
-        $('.navbar_menu_container').append(search_form)
+        $('.first_nav_block').append(search_form)
     })
     // sidebar open close semantic ui
     $('.big.white.bars.icon').click(() => {
@@ -140,8 +136,8 @@ $(document).ready(function () {
 })
 function closeSearch(e) {
     $(e).parent().remove()
-    $('.navbar_menu_container').children().each(element => {
-        $($('.navbar_menu_container').children()[element]).removeClass('d_none')
+    $('.first_nav_block').children().each(element => {
+        $($('.first_nav_block').children()[element]).removeClass('d_none')
     });
     $('.search_form_ushefa_icon').addClass('display')
     $('.search_form_ushefa').addClass('display')

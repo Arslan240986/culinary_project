@@ -366,20 +366,21 @@ ul.collapse {
     z-index: 1 !important;
     width: 100% !important;
     transition: top 0.6s !important;
-    height: 75px !important;
+    /* height: 75px !important; */
+}
+.navbar_yummy.top_show{
+    top: -75px !important;
 }
 .navbar_yummy_second{
     background-color: rgb(0, 0, 0, 0.5) !important;
-    position: absolute !important;
-    top: 75px !important;
+    position: unset !important;
+    /* top: 75px !important; */
     z-index: 1 !important;
     width: 100% !important;
-    visibility: visible;
     transition: top 0.6s !important;
     transition: visibility 0.7s !important;
 }
 .navbar_yummy_second.top_show{
-    visibility: hidden;
     top: -76px !important;
 }
 
@@ -800,12 +801,17 @@ textarea {
 .search_form_ushefa_icon{
     display: none !important;       
 }
-
+.second_nav_block{
+    display: none !important;
+}
 @media only screen and (max-width: 768px) {
     /* .ui.container.navbar_menu_container{
         display: none !important;
     } */
-    
+    .second_nav_block{
+        display: flex !important;
+        padding: 3px !important;
+    }
     .big.white.bars.icon{
         display: block !important;
     }
@@ -829,6 +835,9 @@ textarea {
     }
     .navbar_yummy {
         top: 0 !important;
+    }
+    .navbar_yummy.top_show{
+        top: -55px !important;
     }
 }
 

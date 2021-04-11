@@ -6,233 +6,233 @@
 {% all_notification user.profile.id as notification %}
 {% new_messages_not user.profile.id as msg_notification %}
 {% endif%}
-<div id="navbar" class="ui borderless menu navbar_yummy">
-    <div class="item"><i class="big white bars icon"></i></div>
-    <div class="ui container navbar_menu_container">
-        <div class="item">
-            <a href="/" class="mr-10">
-                <img src="/static/image/yumy.png" width="50" height="25" alt="">
-            </a>
+<div id="navbar" class="ui top fixed inverted menu navbar_yummy" style="display: block !important;">
+    <div class="ui container first_nav_block" style="display: flex !important;">
+        <div class="item"><i class="big white bars icon"></i></div>
+        <div class=" navbar_menu_container" style="display: flex !important;">
+            <div class="item">
+                <a href="/" class="mr-10">
+                    <img src="/static/image/yumy.png" width="50" height="25" alt="">
+                </a>
 
-            <div class="ui pointing dropdown link item font-oswald my-2 mr-10 white nu_tam_tam" tabindex="0">
-                Рецепты
-                <i class="dropdown icon"></i>
-                <div class="menu bgc add_post_box_custom" tabindex="-1">
-                    {% get_categories as categories %}
-                    {% for category in categories %}
-                    <a class="item font-oswald" href="{{ category.get_absolute_url }}">
+                <div class="ui pointing dropdown link item font-oswald my-2 mr-10 white nu_tam_tam" tabindex="0">
+                    Рецепты
+                    <i class="dropdown icon"></i>
+                    <div class="menu bgc add_post_box_custom" tabindex="-1">
+                        {% get_categories as categories %}
+                        {% for category in categories %}
+                        <a class="item font-oswald" href="{{ category.get_absolute_url }}">
 
-                        <div class=" navbar_links_yummy">
-                            {{ category.name }}
-                        </div>
-                        {% if category.sub_category.all %}
-                        <div class="menu">
-                            {% for sub_category in category.sub_category.all %}
-                            <div class="item">{{sub_category.name}}</div>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                    </a>
+                            <div class=" navbar_links_yummy">
+                                {{ category.name }}
+                            </div>
+                            {% if category.sub_category.all %}
+                            <div class="menu">
+                                {% for sub_category in category.sub_category.all %}
+                                <div class="item">{{sub_category.name}}</div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </a>
 
 
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
+            <div class="item"><a class="p-2 navbar_links_yummy font-oswald"
+                                 href="{% url 'culinary_post:culinary_post_view' %}">Кулинарные посты</a></div>
         </div>
-        <div class="item"><a class="p-2 navbar_links_yummy font-oswald"
-                             href="{% url 'culinary_post:culinary_post_view' %}">Кулинарные посты</a></div>
-
         <div class="right menu">
-            <div class="item">
-                <i class="big white search link icon search_form_ushefa_icon display"></i>
-                <form action="{% url 'culinary_recipe:search_dishes' %}"
-                      class="ui icon input mr-10 search_form_ushefa display" method="get">
-                    <div class="ui action input">
-                        <input class=" font-oswald" type="search" placeholder="Введите слово" aria-label="Search"
-                               name="q">
-                        <button class="ui basic yellow button" type="submit">
-                            <i class="search link icon"></i>
-                        </button>
+                <div class="item">
+                    <i class="big white search link icon search_form_ushefa_icon display"></i>
+                    <form action="{% url 'culinary_recipe:search_dishes' %}"
+                          class="ui icon input mr-10 search_form_ushefa display" method="get">
+                        <div class="ui action input">
+                            <input class=" font-oswald" type="search" placeholder="Введите слово" aria-label="Search"
+                                   name="q">
+                            <button class="ui basic yellow button" type="submit">
+                                <i class="search link icon"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="add_dropdown_box_button_ushefa top ui floating labeled icon dropdown menu basic yellow button"
+                         tabindex="0">
+                        <i class="add icon add_dropdown_icon_ushefa"></i>
+                        <span class="text add_more_text_ushefa">Добавить</span>
+                        <div class="menu bgc transition hidden add_post_box_custom" tabindex="-1">
+                            <div class="item">
+                                <div class="ui buttons">
+                                    <a href="{% url 'culinary_post:culinary_post_add' %}" class="ui button add_post_icon">
+                                        Пост
+                                    </a>
+                                    <a href="{% url 'culinary_recipe:add_recipe' %}" class="ui button add_recipe_icon">
+                                        Рецепт
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </form>
-                <div class="add_dropdown_box_button_ushefa top ui floating labeled icon dropdown menu basic yellow button"
-                     tabindex="0">
-                    <i class="add icon add_dropdown_icon_ushefa"></i>
-                    <span class="text add_more_text_ushefa">Добавить</span>
-                    <div class="menu bgc transition hidden add_post_box_custom" tabindex="-1">
-                        <div class="item">
-                            <div class="ui buttons">
-                                <a href="{% url 'culinary_post:culinary_post_add' %}" class="ui button add_post_icon">
-                                    Пост
+                </div>
+                {% if user.is_authenticated %}
+                <div class="item centered_custom top">
+                    <span class="notification_number {% if notification > 0 %}visible{% endif %}"><small>{{ notification }}</small></span>
+                    <div class="ui right pointing scrolling dropdown user_post" tabindex="0">
+                        <img class="ui img-container avatar image"
+                             src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
+                             alt="avatar">
+                        <span class="text white">{{user.profile.first_name}}</span>
+                        <div class="menu transition hidden add_post_box_custom" tabindex="-1">
+                            <div class="divider"></div>
+                            <div class="item">
+                                <i class="file outline icon"></i>
+                                <a class="font-yanone black pt-10"
+                                   href="{{ user.profile.get_personal_absolute_url }}">Ваша страница</a>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item">
+                                <i class="user outline icon"></i>
+                                <a class="font-yanone black pt-10" href="{% url 'contact:my_invites_view' %}">Запрос на
+                                    дружбу
+                                    <span class="ui red label dish_book_count">{{ user.profile.get_total_friend_request }}</span>
                                 </a>
-                                <a href="{% url 'culinary_recipe:add_recipe' %}" class="ui button add_recipe_icon">
-                                    Рецепт
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item">
+                                <i class="chat outline icon custom_chat_icon"></i>
+                                <a class="font-yanone black pt-10"
+                                   href="{{user.profile.get_absolute_url_for_friends_view}}">Сообщения
+                                    <span class="ui red label dish_book_count">{{ msg_notification }}</span>
                                 </a>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item">
+                                <i class="users icon"></i>
+                                <a class="font-yanone black pt-10" href="{% url 'contact:all_profiles_view' %}">Все
+                                    пользователи</a>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item">
+                                <i class="search icon"></i>
+                                <a class="font-yanone black pt-10" href="{% url 'contact:invite_profiles_view' %}">Найти
+                                    друзей </a>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item">
+                                <i class="book icon"></i>
+                                <a class="font-yanone black pt-10"
+                                   href="{{ user.profile.get_dish_book_absolute_url }}">Кулинарная книга <span
+                                        class="ui teal label dish_book_count">{{ user.profile.get_total_book }}</span></a>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item">
+                                <i class="logout icon"></i>
+                                <a class="font-yanone black pt-10" href="{% url 'account_logout' %}">Выйти</a></div>
+
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="item centered_custom top">
+                    <i class="user big white icon img-container"></i>
+                    <a class="p-2 text-dark" href="{% url 'account_login' %}">
+                        <div class="text white">Войти</div>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+    </div>
+    <div class="ui container second_nav_block">
+            <div class="item">
+                <a href="/" class="mr-10">
+                    <img src="/static/image/yumy.png" width="50" height="25" alt="">
+                </a>
+            </div>
+
+            <div class="right menu">
+                {% if user.is_authenticated %}
+                <div class="item centered_custom">
+                    <span class="notification_number {% if notification > 0 %}visible{% endif %}"><small>{{ notification }}</small></span>
+                    <div class="user_post ui top right pointing scrolling dropdown user_post" tabindex="0">
+                        <img class="ui img-container avatar image"
+                             src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
+                             alt="avatar">
+                        <span class="text white">{{user.profile.first_name}}</span>
+
+                        <div class="menu transition hidden add_post_box_custom" tabindex="-1">
+                            <div class="divider"></div>
+                            <div class="item">
+                                <i class="file outline icon"></i>
+                                <a class="font-yanone black pt-10"
+                                   href="{{ user.profile.get_personal_absolute_url }}">Ваша страница</a>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item">
+                                <i class="user outline icon"></i>
+                                <a class="font-yanone black pt-10" href="{% url 'contact:my_invites_view' %}">Запрос на дружбу
+                                    <span class="ui red label dish_book_count">{{ user.profile.get_total_friend_request }}</span>
+                                </a>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item">
+                                <i class="chat outline icon custom_chat_icon"></i>
+                                <a class="font-yanone black pt-10" href="{{user.profile.get_absolute_url_for_friends_view}}">Сообщения
+                                    <span class="ui red label dish_book_count">{{ msg_notification }}</span>
+                                </a>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item">
+                                <i class="users icon"></i>
+                                <a class="font-yanone black pt-10" href="{% url 'contact:all_profiles_view' %}">Все
+                                    пользователи</a>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item">
+                                <i class="search icon"></i>
+                                <a class="font-yanone black pt-10" href="{% url 'contact:invite_profiles_view' %}">Найти
+                                    друзей </a>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item">
+                                <i class="book icon"></i>
+                                <a class="font-yanone black pt-10"
+                                   href="{{ user.profile.get_dish_book_absolute_url }}">Кулинарная книга <span
+                                        class="ui teal label dish_book_count">{{ user.profile.get_total_book }}</span></a>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item">
+                                <i class="logout icon"></i>
+                                <a class="font-yanone black pt-10" href="{% url 'account_logout' %}">Выйти</a></div>
+
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="item centered_custom">
+                    <i class="user big white icon img-container"></i>
+                    <a class="p-2 text-dark" href="{% url 'account_login' %}">
+                        <div class="text white">Войти</div>
+                    </a>
+                </div>
+                {% endif %}
+                <div class="item centered_custom">
+                    <div class="ui top right pointing dropdown " tabindex="0">
+                        <i class="add icon img_container big" style="display: block !important; margin: auto !important;"></i>
+                        <span class="text white">Добавить</span>
+                        <div class="menu bgc transition hidden add_post_box_custom" tabindex="-1">
+                            <div class="item">
+                                <div class="ui buttons">
+                                    <a href="{% url 'culinary_post:culinary_post_add' %}" class="ui button add_post_icon">
+                                        Пост
+                                    </a>
+                                    <a href="{% url 'culinary_recipe:add_recipe' %}" class="ui button add_recipe_icon">
+                                        Рецепт
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {% if user.is_authenticated %}
-            <div class="item centered_custom top">
-                <span class="notification_number {% if notification > 0 %}visible{% endif %}"><small>{{ notification }}</small></span>
-                <div class="ui right pointing scrolling dropdown user_post" tabindex="0">
-                    <img class="ui img-container avatar image"
-                         src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
-                         alt="avatar">
-                    <span class="text white">{{user.profile.first_name}}</span>
-                    <div class="menu transition hidden add_post_box_custom" tabindex="-1">
-                        <div class="divider"></div>
-                        <div class="item">
-                            <i class="file outline icon"></i>
-                            <a class="font-yanone black pt-10"
-                               href="{{ user.profile.get_personal_absolute_url }}">Ваша страница</a>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="item">
-                            <i class="user outline icon"></i>
-                            <a class="font-yanone black pt-10" href="{% url 'contact:my_invites_view' %}">Запрос на
-                                дружбу
-                                <span class="ui red label dish_book_count">{{ user.profile.get_total_friend_request }}</span>
-                            </a>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="item">
-                            <i class="chat outline icon custom_chat_icon"></i>
-                            <a class="font-yanone black pt-10"
-                               href="{{user.profile.get_absolute_url_for_friends_view}}">Сообщения
-                                <span class="ui red label dish_book_count">{{ msg_notification }}</span>
-                            </a>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="item">
-                            <i class="users icon"></i>
-                            <a class="font-yanone black pt-10" href="{% url 'contact:all_profiles_view' %}">Все
-                                пользователи</a>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="item">
-                            <i class="search icon"></i>
-                            <a class="font-yanone black pt-10" href="{% url 'contact:invite_profiles_view' %}">Найти
-                                друзей </a>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="item">
-                            <i class="book icon"></i>
-                            <a class="font-yanone black pt-10"
-                               href="{{ user.profile.get_dish_book_absolute_url }}">Кулинарная книга <span
-                                    class="ui teal label dish_book_count">{{ user.profile.get_total_book }}</span></a>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="item">
-                            <i class="logout icon"></i>
-                            <a class="font-yanone black pt-10" href="{% url 'account_logout' %}">Выйти</a></div>
-
-                    </div>
-                </div>
-            </div>
-            {% else %}
-            <div class="item centered_custom top">
-                <i class="user big white icon img-container"></i>
-                <a class="p-2 text-dark" href="{% url 'account_login' %}">
-                    <div class="text white">Войти</div>
-                </a>
-            </div>
-            {% endif %}
-        </div>
     </div>
-
-<div id="sub_navbar" class="ui borderless menu navbar_yummy_second d_none">
-    <div class="item">
-        <a href="/" class="mr-10">
-            <img src="/static/image/yumy.png" width="50" height="25" alt="">
-        </a>
-    </div>
-
-    <div class="right menu">
-        {% if user.is_authenticated %}
-        <div class="item centered_custom">
-            <span class="notification_number {% if notification > 0 %}visible{% endif %}"><small>{{ notification }}</small></span>
-            <div class="user_post ui top right pointing scrolling dropdown user_post" tabindex="0">
-                <img class="ui img-container avatar image"
-                     src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
-                     alt="avatar">
-                <span class="text white">{{user.profile.first_name}}</span>
-
-                <div class="menu transition hidden add_post_box_custom" tabindex="-1">
-                    <div class="divider"></div>
-                    <div class="item">
-                        <i class="file outline icon"></i>
-                        <a class="font-yanone black pt-10"
-                           href="{{ user.profile.get_personal_absolute_url }}">Ваша страница</a>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="item">
-                        <i class="user outline icon"></i>
-                        <a class="font-yanone black pt-10" href="{% url 'contact:my_invites_view' %}">Запрос на дружбу
-                            <span class="ui red label dish_book_count">{{ user.profile.get_total_friend_request }}</span>
-                        </a>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="item">
-                        <i class="chat outline icon custom_chat_icon"></i>
-                        <a class="font-yanone black pt-10" href="{{user.profile.get_absolute_url_for_friends_view}}">Сообщения
-                            <span class="ui red label dish_book_count">{{ msg_notification }}</span>
-                        </a>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="item">
-                        <i class="users icon"></i>
-                        <a class="font-yanone black pt-10" href="{% url 'contact:all_profiles_view' %}">Все
-                            пользователи</a>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="item">
-                        <i class="search icon"></i>
-                        <a class="font-yanone black pt-10" href="{% url 'contact:invite_profiles_view' %}">Найти
-                            друзей </a>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="item">
-                        <i class="book icon"></i>
-                        <a class="font-yanone black pt-10"
-                           href="{{ user.profile.get_dish_book_absolute_url }}">Кулинарная книга <span
-                                class="ui teal label dish_book_count">{{ user.profile.get_total_book }}</span></a>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="item">
-                        <i class="logout icon"></i>
-                        <a class="font-yanone black pt-10" href="{% url 'account_logout' %}">Выйти</a></div>
-
-                </div>
-            </div>
-        </div>
-        {% else %}
-        <div class="item centered_custom">
-            <i class="user big white icon img-container"></i>
-            <a class="p-2 text-dark" href="{% url 'account_login' %}">
-                <div class="text white">Войти</div>
-            </a>
-        </div>
-        {% endif %}
-        <div class="item centered_custom">
-            <div class="ui top right pointing dropdown " tabindex="0">
-                <i class="add icon img_container big" style="display: block !important; margin: auto !important;"></i>
-                <span class="text white">Добавить</span>
-                <div class="menu bgc transition hidden add_post_box_custom" tabindex="-1">
-                    <div class="item">
-                        <div class="ui buttons">
-                            <a href="{% url 'culinary_post:culinary_post_add' %}" class="ui button add_post_icon">
-                                Пост
-                            </a>
-                            <a href="{% url 'culinary_recipe:add_recipe' %}" class="ui button add_recipe_icon">
-                                Рецепт
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 </div>
