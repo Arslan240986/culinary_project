@@ -18,8 +18,6 @@ function navbarHide() {
 }
 navbarHide()
 $(document).ready(function () {
-
-    navbarHide(document.querySelector("#navbar"))
     $('.add_post_box_custom').attr('style', `top: ${50}px !important;`)
     $('.ui.dropdown.user_post').dropdown();
     $('.ui.dropdown').dropdown();
