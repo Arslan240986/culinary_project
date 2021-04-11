@@ -158,7 +158,7 @@ class Dish(models.Model):
     preparation_time_minute = models.PositiveSmallIntegerField(blank=True, null=True)
     cooking_time_hour = models.PositiveSmallIntegerField(verbose_name='Время готовки', blank=True, null=True)
     cooking_time_minute = models.PositiveSmallIntegerField(blank=True, null=True)
-    servings = models.SmallIntegerField(verbose_name='Количество порций', default='5')
+    servings = models.SmallIntegerField(verbose_name='Количество порций',)
     complexity = models.ForeignKey(Complexity, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Сложность приготовления')
     vegetarian = models.ForeignKey(Vegeterian, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Вегетарианство')
     technology = models.ManyToManyField(Technology, blank=True, verbose_name='Технология')
