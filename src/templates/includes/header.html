@@ -76,7 +76,7 @@
             {% if user.is_authenticated %}
             <div class="item centered_custom top">
                 <span class="notification_number {% if notification > 0 %}visible{% endif %}"><small>{{ notification }}</small></span>
-                <div class="ui simple dropdown user_post" tabindex="0">
+                <div class="ui right pointing scrolling dropdown user_post" tabindex="0">
                     <img class="ui img-container avatar image"
                          src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
                          alt="avatar">

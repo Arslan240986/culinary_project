@@ -8,7 +8,6 @@ from private_chat.models import Thread
 @receiver(post_save, sender=User)
 def post_save_create_profile(sender, instance, created, **kwargs):
     if created:
-        print(instance.username)
         profile = UserProfile.objects.create(user=instance, email=instance.email)
         if instance.username:
             profile.first_name = instance.username
