@@ -167,7 +167,6 @@ $(document).ready( () => {
             url: `${url}/${global_val_for_visibility_msg}/`,
             success: function (some) {
                 const new_data = some.new_data
-                console.log(new_data)
                 $('.get_another_number').addClass('d_none')
                 $('.ui.active.centered.inline.black.loader').removeClass(`d_none`)
                 setTimeout(function () {

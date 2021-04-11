@@ -6,7 +6,6 @@ $(document).ready(function () {
         $('#avatar_image_id').click(() => {
             $('#id_avatar').click()
             $('#id_avatar').change((e) => {
-                console.log()
             })
         })
 

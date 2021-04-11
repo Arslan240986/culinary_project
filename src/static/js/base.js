@@ -15,7 +15,6 @@ $(document).ready(function () {
                 $(item).children('#sub_navbar').removeClass('top_show')
                 item.style.top = "0"
             } else if(prevScrollpos+5 < currentScrollPos) {
-                console.log('asd')
                 $('.ui.dropdown').dropdown('hide');
                 $(item).children('#sub_navbar').addClass('top_show')
                 item.style.top = '-150px';
@@ -42,7 +41,6 @@ $(document).ready(function () {
             data: { 'email': email, 'csrfmiddlewaretoken': csrf },
             dataType: 'json',
             success: function (response) {
-                console.log(response.status)
                 if (response.status) {
                     if (document.contains(document.querySelector('.ui.positive.message'))) {
                         document.querySelector('.ui.positive.message').remove()

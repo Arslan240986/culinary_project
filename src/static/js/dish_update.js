@@ -73,7 +73,6 @@ $(document).ready(function () {
                 $(document).on('click', (event) => {
                     var targ = event.target //Элемент, на котором произошло событие
                     if ($(event.target).parent().attr('id') === list.attr('id')) {
-                        console.log(list.prev())
                         list.prev().val(targ.innerHTML);
                         list.addClass('d_none');
                     }else {
@@ -83,7 +82,6 @@ $(document).ready(function () {
                 });
                 $(e.target).keyup(() => {
                     var val = input.val().trim().toLowerCase();
-                    console.log(val)
                     if (val) {
                         var words = ingredients.filter(function (item) {
                             return item.toLowerCase().indexOf(val) === 0;
@@ -104,7 +102,6 @@ $(document).ready(function () {
                     }
                     return html;
                 }
-                console.log(response)
             },
 
             error: function (rs, e) {
