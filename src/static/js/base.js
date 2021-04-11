@@ -2,16 +2,16 @@ var prevScrollpos = window.pageYOffset;
 var navbar = document.querySelector("#navbar")
 document.querySelector('.bread').style.marginTop = navbar.offsetHeight + 3 + 'px'
 function navbarHide() {
-    console.log(navbar)
-    window.onmousewheel = function () {
+    window.onscroll = function () {
+        console.log(navbar)
         var currentScrollPos = window.pageYOffset;
         if (prevScrollpos > currentScrollPos) {
-            navbar.classList.remove("mystyle");
+            navbar.classList.remove("top_show");
         } else if (currentScrollPos == 0) {
-            navbar.classList.remove("mystyle");
+            navbar.classList.remove("top_show");
         } else if (prevScrollpos + 5 < currentScrollPos) {
             $('.ui.dropdown').dropdown('hide');
-            navbar.classList.add("mystyle");
+            navbar.classList.add("top_show");
         }
         prevScrollpos = currentScrollPos;
     }
