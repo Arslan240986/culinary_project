@@ -12,7 +12,7 @@
         <div class=" navbar_menu_container" style="display: flex !important;">
             <div class="item">
                 <a href="/" class="mr-10">
-                    <img src="/static/image/yumy.png" width="50" height="25" alt="">
+                    <img loading="lazy" src="/static/image/yumy.png" width="50" height="25" alt="">
                 </a>
 
                 <div class="ui pointing dropdown link item font-oswald my-2 mr-10 white nu_tam_tam" tabindex="0">
@@ -78,8 +78,8 @@
                 <div class="item centered_custom top">
                     <span class="notification_number {% if notification > 0 %}visible{% endif %}"><small>{{ notification }}</small></span>
                     <div class="ui right pointing scrolling dropdown user_post" tabindex="0">
-                        <img class="ui img-container avatar image"
-                             src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
+                        <img loading="lazy" class="ui img-container avatar image"
+                             src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}/static/image/avatar_man.png{% endif %}"
                              alt="avatar">
                         <span class="text white">{{user.profile.first_name}}</span>
                         <div class="menu transition hidden add_post_box_custom" tabindex="-1">
@@ -145,7 +145,7 @@
     <div class="ui container second_nav_block">
             <div class="item">
                 <a href="/" class="mr-10">
-                    <img src="/static/image/yumy.png" width="50" height="25" alt="">
+                    <img loading="lazy" src="/static/image/yumy.png" width="50" height="25" alt="">
                 </a>
             </div>
 
@@ -154,8 +154,8 @@
                 <div class="item centered_custom">
                     <span class="notification_number {% if notification > 0 %}visible{% endif %}"><small>{{ notification }}</small></span>
                     <div class="user_post ui top right pointing scrolling dropdown user_post" tabindex="0">
-                        <img class="ui img-container avatar image"
-                             src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
+                        <img loading="lazy"  class="ui img-container avatar image"
+                             src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}/static/image/avatar_man.png{% endif %}"
                              alt="avatar">
                         <span class="text white">{{user.profile.first_name}}</span>
 

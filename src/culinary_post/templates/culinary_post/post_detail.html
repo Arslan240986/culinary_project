@@ -28,7 +28,7 @@
     <div class="ui two right aligned column grid mx-10">
         <div class="right floated middle aligned eight wide column">
             <small>{{ post.created }}/{{ post.user }}</small>
-            <img class="ui avatar image"
+            <img loading="lazy" class="ui avatar image"
                 src="{% if post.user.profile.avatar %}{{ post.user.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}">
         </div>
     </div>
@@ -41,7 +41,7 @@
     </div>
 
     <div class="row">
-        <img class="ui fluid rounded image" src="{{ post.image.url }}" alt="{{ post.title }}">
+        <img loading="lazy" class="ui fluid rounded image" src="{{ post.image.url }}" alt="{{ post.title }}">
     </div>
 
     <div class="ui equal width grid p-10">
@@ -98,7 +98,7 @@
         {% recursetree post_comments %}
         <div class="comment custom_comment">
             <a class="avatar" href="#">
-                <img src="{% if node.author.avatar %}{{ node.author.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
+                <img loading="lazy" src="{% if node.author.avatar %}{{ node.author.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
                     alt="avatarka">
             </a>
             <div class="content">

@@ -16,7 +16,6 @@ def post_save_create_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Relationship)
 def post_save_accept_friend(sender, instance, created, **kwargs):
-    print('signals', instance)
     sender_ = instance.sender
     receiver_ = instance.receiver
     if instance.status == 'accepted':

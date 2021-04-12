@@ -30,7 +30,7 @@
         </div>
         <div class="right floated middle aligned eight wide column">
             <small>{{ meal.created }}/{{ meal.author }}</small>
-            <img class="ui avatar image"
+            <img loading="lazy" class="ui avatar image"
                 src="{% if meal.author.profile.avatar %}{{ meal.author.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}">
         </div>
     </div>
@@ -41,7 +41,7 @@
 
 
     <div class="row">
-        <img class="ui fluid rounded image" src="{{ meal.poster.url }}" alt="{{ meal.title }}">
+        <img loading="lazy" class="ui fluid rounded image" src="{{ meal.poster.url }}" alt="{{ meal.title }}">
     </div>
 
     <div class="ui equal width grid p-10">
@@ -101,7 +101,7 @@
             {% if step.image %}
             <div class="dish_poster img-fluid">
 
-                <img src="{{ step.image.url }}" class="dish_poster" alt="poster">
+                <img loading="lazy" loading="lazy" src="{{ step.image.url }}" class="dish_poster" alt="poster">
 
             </div>
             {% endif %}
@@ -186,7 +186,7 @@
         {% for meal in similar_meals %}
         <div class="five wide column">
             <div class="card">
-                <img class="img-thumbnail cat_image" src="{{ meal.poster.url }}" alt="Card image cap">
+                <img loading="lazy" class="img-thumbnail cat_image" src="{{ meal.poster.url }}" alt="Card image cap">
                 <div class="card-body">
                     <a class="ui link" href="{{meal.get_absolute_url}}"><p class="card-text">{{ meal.title }}</p></a>
                 </div>
@@ -210,7 +210,7 @@
         {% recursetree pag_comments %}
         <div class="comment custom_comment">
             <a class="avatar" href="#">
-                <img src="{% if node.author.profile.avatar %}{{ node.author.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
+                <img loading="lazy" src="{% if node.author.profile.avatar %}{{ node.author.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
                     alt="avatarka">
             </a>
             <div class="content">

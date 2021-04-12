@@ -29,7 +29,6 @@ def posts_add(request):
             instance.save()
             return redirect('culinary_post:culinary_post_view')
         else:
-            print(p_form.errors)
             context = {'p_form': p_form}
             return render(request, 'culinary_post/posts_add.html', context)
 
@@ -85,20 +84,15 @@ class CulinaryPostDetailView(HitCountDetailView):
         context = dict()
         try:
             upper = self.kwargs['number']
-            print(upper)
             if upper:
                 low = upper - 5
                 comments_number = list(reversed(comments.values('id', 'parent_id', 'author_id', 'created', 'text', 'level')))[low:upper]
-                print(comments_number[-1]['level'])
                 if not comments_number[-1]['level'] == 0:
                     while not comments_number[-1]['level'] == 0:
                         upper += 1
-                        print(upper)
-                        print(low)
                         comments_number = list(
                             reversed(comments.values('id', 'parent_id', 'author_id', 'created', 'text', 'level')))[
                                           low:upper]
-                        print(comments_number[-1])
                 for comment in comments_number:
                     date_time = str(comment['created']).split(' ')
                     date = date_time[0].split('-')

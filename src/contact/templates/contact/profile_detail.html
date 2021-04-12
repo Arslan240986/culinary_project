@@ -10,7 +10,7 @@
         <div class="six wide column">
             <div class=" row p-10">
                 <div class="column">
-                    <img src="{{object.avatar.url}}" alt="" class="ui rounded fluid image">
+                    <img loading="lazy" src="{{object.avatar.url}}" alt="" class="ui rounded fluid image">
                 </div>
             </div>
             {% ifnotequal request.user object.user %}
@@ -93,7 +93,7 @@
                     <tr>
                         <td>
                             <div class="dishe_images">
-                                <img class="user_image" src="{{ meal.poster.url }}" alt="{{ meal.title }}">
+                                <img loading="lazy" class="user_image" src="{{ meal.poster.url }}" alt="{{ meal.title }}">
                             </div>
                         </td>
                         <td>
@@ -124,7 +124,7 @@
                     <tr>
                         <td>
                             <div class="dishe_images">
-                                <img class="user_image"
+                                <img loading="lazy" class="user_image"
                                     src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'image/empty_image.jpg' %}{% endif %}"
                                     alt="{{ meal.title }}">
                             </div>

@@ -34,7 +34,7 @@
     {{form.poster.label_tag}}
     <div class="{% if form.poster.errors %}error{% endif %} field">
         <div class="ui medium image poster_image_div ">
-            <img id="poster_image_id" class="ui centered medium rounded image" src="{{ form.initial.poster.url }}">
+            <img loading="lazy" id="poster_image_id" class="ui centered medium rounded image" src="{{ form.initial.poster.url }}">
             <div class="form__add-img"></div>
         </div>
         <input class="d_none" type="file" name="poster" accept="image/*" required="" id="id_poster"
@@ -256,7 +256,7 @@
                                 {{ form.image.errors }}
                                 {{ form.image.label_tag }}
                                 <div class="ui medium image ">
-                                    <img id="instruction_image_id"
+                                    <img loading="lazy" id="instruction_image_id"
                                          class="ui centered small rounded image instruction_image_div"
                                          src="{% static  '/image/empty_image.jpeg' %}"
                                          onclick="clickImageFile(this)">

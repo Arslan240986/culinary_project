@@ -19,7 +19,6 @@ def send_subscribe(email):
 @app.task
 def send_success_subscribe():
     for contact in UserProfile.objects.all():
-        print(contact)
         send_mail(
             'dorogoy',
             'Dorogoy {} Vy dobavili udachno novy retcept'.format(contact.first_name),
