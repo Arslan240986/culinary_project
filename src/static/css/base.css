@@ -882,3 +882,12 @@ textarea {
     margin-right: 0 !important;
     margin-left: 10px !important;
 }
+.flex_center_middle{
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+.line{
+    border-top: 1px solid grey;
+}

@@ -1,9 +1,9 @@
+console.log($(window))
 var prevScrollpos = window.pageYOffset;
 var navbar = document.querySelector("#navbar")
 document.querySelector('.bread').style.marginTop = navbar.offsetHeight + 3 + 'px'
 function navbarHide() {
     window.onscroll = function () {
-        console.log(navbar)
         var currentScrollPos = window.pageYOffset;
         if (prevScrollpos > currentScrollPos) {
             navbar.classList.remove("top_show");

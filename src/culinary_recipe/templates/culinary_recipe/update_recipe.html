@@ -83,18 +83,21 @@
             {{form.vegetarian}}
         </div>
     </div>
-    <div class="ui stackable grid">
+    <div class="ui stackable grid m_right">
         <div class="four wide column">
             <div class="field">
                 {{form.preparation_time_hour.label_tag}}
-                <div class="fields">
-                    <div class="{% if form.preparation_time_hour.errors %}error{% endif %} three wide field">
-                        {{form.preparation_time_hour.errors}}
-                        {{form.preparation_time_hour}}
-                    </div>
-                    <div class="{% if form.preparation_time_minute.errors %}error{% endif %} three wide field">
-                        {{form.preparation_time_minute.errors}}
-                        {{form.preparation_time_minute}}
+                <div class="row">
+                    <div class="two fields ">
+
+                        <div class="{% if form.preparation_time_hour.errors %}error{% endif %} three wide field">
+                            {{form.preparation_time_hour.errors}}
+                            {{form.preparation_time_hour}}
+                        </div>
+                        <div class="{% if form.preparation_time_minute.errors %}error{% endif %} three wide field">
+                            {{form.preparation_time_minute.errors}}
+                            {{form.preparation_time_minute}}
+                        </div>
                     </div>
                 </div>
                 {{form.cooking_time_hour.label_tag}}
@@ -154,10 +157,10 @@
         <div class="twelve wide column">
             <fieldset>
                 <legend>Ингредиенты к ретцепту</legend>
-                <small>Используйте только те ингридиенты, которые предлагаются по мере ввода названия, или из <span
-                        class="red">Списка допустимых ингредиентов.</span>
-                    Если в нашем списке отсутствует необходимый ингредиент, обратитесь к администратору с просьбой
-                    добавить его.</small>
+                <small>Как минимум нужно добавить два ингредиента! Менше двух выявит ошибку и вы не сможете добавить
+                    ретцепт. <span
+                            class="red">Списка допустимых ингредиентов.</span>
+                </small>
                 {% if ingredient_form.non_form_errors %}
                 {% for error in ingredient_form.non_form_errors %}
                 <div class="ui negative message">
@@ -169,54 +172,61 @@
                 </div>
                 {% endfor %}
                 {% endif %}
-                <div>
+                {{ ingredient_form.management_form }}
+                {% for form in ingredient_form %}
+                {{ form.id }}
+                <div class="inline {{ ingredient_form.prefix }} ">
+                    <div class="line"></div>
                     <div class="fields">
-                        <table style="width: 100%">
-                            <thead>
-                                <tr>
-                                    <th class="mr-2">Ингредиент</th>
-                                    <th>Количество</th>
-                                    <th>Мера веса/объема</th>
-                                    <th>Примечание</th>
-                                </tr>
-                            </thead>
-                            {{ ingredient_form.management_form }}
-                            {% for form in ingredient_form %}
-                            <tbody class="dynamic-form inline {{ ingredient_form.prefix }} ">
-                                <tr>
-                                    <td class="mr-4">{{ form.name.errors }}</td>
-                                    <td class="{% if form.quantity.errors %}error {% endif%}field" style="width: 25px;">
-                                        {{ form.quantity.errors }}</td>
-                                    <td>{{ form.measure.errors }}</td>
-                                    <td>{{ form.note.errors }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="ingredient_name_td mr-4" data-href="{% url 'culinary_recipe:get_ingredient_lists' %}">
-                                        {{ form.name }}
-                                        <div class="d_none" id="autocomplete_list"></div>
-                                    </td>
-                                    <td class="{% if form.quantity.errors %}error {% endif%}field" style="width: 25px;">
-                                        {{ form.quantity }}</td>
-                                    <td>{{ form.measure }}</td>
-                                    <td>{{ form.note }}</td>
-                                    <td class="deleteButton">
-                                        {{ form.DELETE }}
-                                        {{ form.id }}
-                                        {{ form.ORDER }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                            {% endfor %}
-                        </table>
+                        <div class="field">
+                            <div class="field">
+                                <div class="fields">
+                                    <div class="{% if form.name.errors %}error {% endif%}field">
+                                        {{ form.name.errors }}
+                                        {{ form.name.label_tag }}
+                                        <div class="ingredient_name_td mr-4"
+                                             data-href="{% url 'culinary_recipe:get_ingredient_lists' %}">
+                                            {{ form.name }}
+                                            <div class="d_none" id="autocomplete_list"></div>
+                                        </div>
+                                    </div>
+                                    <div class="four wide {% if form.quantity.errors %}error {% endif%}field">
+                                        {{ form.quantity.errors }}
+                                        {{ form.quantity.label_tag }}
+                                        {{ form.quantity }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="fields">
+                                    <div class="{% if form.measure.errors %}error {% endif%}field">
+                                        {{ form.measure.errors }}
+                                        {{ form.measure.label_tag }}
+                                        {{ form.measure }}
+                                    </div>
+                                    <div class="twelve wide {% if form.note.errors %}error {% endif%}field">
+                                        {{ form.note.errors }}
+                                        {{ form.note.label_tag }}
+                                        {{ form.note }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="two wide field flex_center_middle">
+                            <div class="deleteButton"></div>
+                        </div>
                     </div>
                 </div>
+                {% endfor %}
+
             </fieldset>
             <fieldset>
                 <legend>Пошаговый рецепт</legend>
                 <small class="ml-4">
                     Для описания процесса приготовления блюда Вы можете воспользоваться пошаговым рецептом,
                     видеорецептом или
-                    объединить 2 этих способа. В пошаговом рецепте процесс приготовления разбивается на шаги, которые Вы
+                    объединить 2 этих способа. В пошаговом рецепте процесс приготовления разбивается на шаги,
+                    которые Вы
                     описываете отдельно, сопровождая каждый шаг отдельной фотографией, сделанной в процессе
                     приготовления.
                 </small>
@@ -230,68 +240,52 @@
                 </div>
                 {% endfor %}
                 {% endif %}
-                <div>
-                    <table style="width: 100%">
-                        {{ instruction_form.management_form }}
-                        {% for form in instruction_form %}
-                        <tbody class="dynamic-form inline {{ instruction_form.prefix }}">
-                            <tr>
-                                <td>{{ form.description.errors }}</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    {{ form.description.label_tag }}
-                                </td>
-                                <td>
-                                    {{ form.description }}
-                                </td>
-                                <td class="addButton">
-                                    {{ form.DELETE }}
-                                    {{ form.id }}
-                                    {{ form.ORDER }}
-                                </td>
-                            </tr>
-                            <tr class="row">
-                                <td>{{ form.image.errors }}</td>
-                            </tr>
-                            <tr class="row">
-                                <td>
-                                    {{ form.image.label_tag }}
-                                </td>
-                                <td>
-                                    <div class="ui medium image ">
-                                        <img id="instruction_image_id"
-                                            class="ui centered small rounded image instruction_image_div"
-                                            src="{% if form.initial.image %}{{ form.initial.image.url }}{% else %}{% static  '/image/empty_image.jpeg' %} {% endif %}"
-                                            onclick="clickImageFile(this)">
-                                        <input class="d_none" type="file" name="step_set-{{forloop.counter0}}-image"
-                                            accept="image/*" id="id_step_set-{{forloop.counter0}}-image"
-                                            onchange="readURLInstrcution(this)">
-                                        <div class="form__add-img-instr"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                        {% endfor %}
+                {{ instruction_form.management_form }}
+                {% for form in instruction_form %}
+                {{ form.id }}
+                <div class="inline {{ instruction_form.prefix }}">
+                    <div class="line"></div>
+                    <div class="fields">
+                        <div class="field">
+                            <div class="{% if form.name.errors %}error {% endif%}field">
+                                {{ form.description.errors }}
+                                {{ form.description.label_tag }}
+                                {{ form.description }}
+                            </div>
+                            <div class="{% if form.image.errors %}error {% endif%}field">
+                                {{ form.image.errors }}
+                                {{ form.image.label_tag }}
+                                <div class="ui medium image ">
+                                    <img id="instruction_image_id"
+                                         class="ui centered small rounded image instruction_image_div"
+                                         src="{% static  '/image/empty_image.jpeg' %}"
+                                         onclick="clickImageFile(this)">
+                                    <input class="d_none" type="file" name="step_set-0-image" accept="image/*"
+                                           id="id_step_set-0-image" onchange="readURLInstrcution(this)">
+                                    <div class="form__add-img-instr"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="two wide field flex_center_middle">
+                            <div class="description_deleteButton"></div>
+                        </div>
+                    </div>
 
-                    </table>
                 </div>
-
-            </fieldset>
-        </div>
+                {% endfor %}
+        </fieldset>
     </div>
-    <div class="row">
-        <div class="ui segment">
-            <div class="field">
+
+    <div class="field">
+        <div class="ui fluid segment">
                 <div class="ui toggle checkbox">
                     {{form.draft.label_tag}}
                     {{form.draft}}
                 </div>
-            </div>
         </div>
     </div>
     <div class="row mt-10">
-        <button type="submit" class="btn_custom ui fluid positive button">Обновить</button>
+        <button type="submit" class="btn_custom ui fluid basic inverted green button">Опубликовать</button>
     </div>
 </form>
 
@@ -309,18 +303,18 @@ $(document).ready(function(){
 <!--Inline formset add line and remove-->
     $(".inline.{{ ingredient_form.prefix }}").formset({
         prefix: "{{ ingredient_form.prefix }}",
-        deleteText: '<i class="ui times circle red icon"></i>',
+        deleteText: '<i class="ui big times circle red icon"></i>',
         deleteContainerClass: 'deleteButton',
         deleteCssClass: 'delete-row text-danger ingredient_delete_btn',
-        addCssClass: 'ui basic positive button',
+        addCssClass: 'ui inverted green button',
         formCssClass: 'ingredients__form',
     })
     $(".inline.{{ instruction_form.prefix }}").formset({
         prefix: "{{ instruction_form.prefix }}",
-        deleteText: '<i class="ui times circle red icon"></i>',
-        deleteContainerClass: 'addButton',
+        deleteText: '<i class="ui big times circle red icon"></i>',
+        deleteContainerClass: 'description_deleteButton',
         deleteCssClass: 'delete-row text-danger steps_delete_btn',
-        addCssClass: 'ui basic positive button',
+        addCssClass: 'ui inverted green button',
         formCssClass: 'steps__form',
     })
 
