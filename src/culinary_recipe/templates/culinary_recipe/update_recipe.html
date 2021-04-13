@@ -34,11 +34,12 @@
     {{form.poster.label_tag}}
     <div class="{% if form.poster.errors %}error{% endif %} field">
         <div class="ui medium image poster_image_div ">
-            <img loading="lazy" id="poster_image_id" class="ui centered medium rounded image" src="{{ form.initial.poster.url }}">
+            <img loading="lazy" id="poster_image_id" class="ui centered medium rounded image"
+                 src="{{ form.initial.poster.url }}">
             <div class="form__add-img"></div>
         </div>
         <input class="d_none" type="file" name="poster" accept="image/*" required="" id="id_poster"
-            onchange="readURL(this)">
+               onchange="readURL(this)">
         {{form.poster.errors}}
         <div class="ui message">
             <ul class="list">
@@ -53,7 +54,7 @@
     <div class="fields">
         <div class="{% if form.category.errors %}error{% endif %} field">
             <div class="recipe_box_category"
-                data-href-template="{% url 'culinary_recipe:get_ajax_response_category' %}">
+                 data-href-template="{% url 'culinary_recipe:get_ajax_response_category' %}">
                 {{form.category.label_tag}}
                 {{form.category}}
             </div>
@@ -152,6 +153,11 @@
             <div class="{% if form.device.errors %}error {% endif %}fields">
                 {{ form.device.errors }}
                 {{ form.device }}
+            </div>
+            {{form.occasion.label_tag}}
+            <div class="{% if form.occasion.errors %}error{% endif %} field">
+                {{form.occasion.errors}}
+                {{form.occasion}}
             </div>
         </div>
         <div class="twelve wide column">
@@ -273,15 +279,15 @@
 
                 </div>
                 {% endfor %}
-        </fieldset>
+            </fieldset>
+        </div>
     </div>
-
     <div class="field">
         <div class="ui fluid segment">
-                <div class="ui toggle checkbox">
-                    {{form.draft.label_tag}}
-                    {{form.draft}}
-                </div>
+            <div class="ui toggle checkbox">
+                {{form.draft.label_tag}}
+                {{form.draft}}
+            </div>
         </div>
     </div>
     <div class="row mt-10">
@@ -301,22 +307,22 @@
 {% block javascript %}
 $(document).ready(function(){
 <!--Inline formset add line and remove-->
-    $(".inline.{{ ingredient_form.prefix }}").formset({
-        prefix: "{{ ingredient_form.prefix }}",
-        deleteText: '<i class="ui big times circle red icon"></i>',
-        deleteContainerClass: 'deleteButton',
-        deleteCssClass: 'delete-row text-danger ingredient_delete_btn',
-        addCssClass: 'ui inverted green button',
-        formCssClass: 'ingredients__form',
-    })
-    $(".inline.{{ instruction_form.prefix }}").formset({
-        prefix: "{{ instruction_form.prefix }}",
-        deleteText: '<i class="ui big times circle red icon"></i>',
-        deleteContainerClass: 'description_deleteButton',
-        deleteCssClass: 'delete-row text-danger steps_delete_btn',
-        addCssClass: 'ui inverted green button',
-        formCssClass: 'steps__form',
-    })
+$(".inline.{{ ingredient_form.prefix }}").formset({
+prefix: "{{ ingredient_form.prefix }}",
+deleteText: '<i class="ui big times circle red icon"></i>',
+deleteContainerClass: 'deleteButton',
+deleteCssClass: 'delete-row text-danger ingredient_delete_btn',
+addCssClass: 'ui inverted green button',
+formCssClass: 'ingredients__form',
+})
+$(".inline.{{ instruction_form.prefix }}").formset({
+prefix: "{{ instruction_form.prefix }}",
+deleteText: '<i class="ui big times circle red icon"></i>',
+deleteContainerClass: 'description_deleteButton',
+deleteCssClass: 'delete-row text-danger steps_delete_btn',
+addCssClass: 'ui inverted green button',
+formCssClass: 'steps__form',
+})
 
 })
 

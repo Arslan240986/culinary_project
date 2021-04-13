@@ -101,7 +101,7 @@
             {% if step.image %}
             <div class="dish_poster img-fluid">
 
-                <img loading="lazy" loading="lazy" src="{{ step.image.url }}" class="dish_poster" alt="poster">
+                <img loading="lazy" src="{{ step.image.url }}" class="dish_poster" alt="poster">
 
             </div>
             {% endif %}
@@ -133,7 +133,7 @@
             <p>
                 <small class="text-muted">{% if meal.vegetarian %}{{ meal.vegetarian }}{% endif %}</small>
             </p>
-            {% if meal.technology %}
+            {% if meal.technology.all %}
             <p class="ui block grey header">Технология</p>
             <p>
                 {% for technology in meal.technology.all %}
@@ -141,7 +141,15 @@
                 {% endfor %}
             </p>
             {% endif %}
-            {% if meal.device %}
+            {% if meal.occasion.all %}
+            <p class="ui block grey header">Повод</p>
+            <p>
+                {% for occasion in meal.occasion.all %}
+                <small class="text-muted">{{occasion}}{% if not forloop.last %}, {% endif %}</small>
+                {% endfor %}
+            </p>
+            {% endif %}
+            {% if meal.device.all %}
             <p class="ui block grey header">Устройтво</p>
             <p>
                 {% for device in meal.device.all %}

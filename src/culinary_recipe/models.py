@@ -162,7 +162,7 @@ class Dish(models.Model):
     complexity = models.ForeignKey(Complexity, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Сложность приготовления')
     vegetarian = models.ForeignKey(Vegeterian, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Вегетарианство')
     technology = models.ManyToManyField(Technology, blank=True, verbose_name='Технология')
-    Occasion = models.ManyToManyField(Occasion, blank=True, verbose_name='Повод')
+    occasion = models.ManyToManyField(Occasion, blank=True, verbose_name='Повод')
     device = models.ManyToManyField(Device, blank=True, verbose_name='Устройтво')
     calorie = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Калория')
     protein = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Протеин')
