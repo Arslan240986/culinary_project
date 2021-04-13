@@ -120,7 +120,7 @@ STATIC_URL = '/static/'
 
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static_cdn', 'media_root')
+MEDIA_ROOT = os.path.join(os.path.join(BASE_DIR), 'static_cdn', 'media_root')
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'ushefaRu.com'
