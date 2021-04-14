@@ -258,7 +258,7 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
              context['instruction_form'] = InstructionFormSet(self.request.POST, self.request.FILES, instance=self.object)
          else:
              if not self.request.user == self.object.author:
-                 context['error_message'] = "Ты не можеш изменять ретцепт чужих пользователей"
+                 context['error_message'] = "Ты не можешь изменять рецепты чужих пользователей"
              else:
                 context['form'] = DishForm(instance=self.object)
                 context['ingredient_form'] = IngredientFormSet(instance=self.object)
