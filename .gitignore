@@ -17,3 +17,9 @@ src/culinary_recipe/migrations/0010_auto_20210413_0715.py
 src/culinary_recipe/migrations/__pycache__/0010_auto_20210413_0715.cpython-37.pyc
 static_cdn/static_root/
 /src/static_cdn/
+/src/culinary_recipe/migrations/
+/src/contact/migrations/
+/src/contact/migrations/
+/src/culinary_post/migrations/
+/src/culinary_recipe/migrations/
+/src/private_chat/migrations/
