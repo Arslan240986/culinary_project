@@ -84,14 +84,20 @@ class Search(ListView):
         return context
 
 
-class MealDetailView(HitCountDetailView):
+from hitcount.models import HitCount
+from hitcount.views import HitCountMixin
+
+
+class MealDetailView(DetailView):
     """Вывод деталей рецепта"""
     model = Dish
-    count_hit = True
     template_name = 'culinary_recipe/meal_detail.html'
 
     def get(self, request, *args, **kwargs):
+        print(self.kwargs)
         meal = get_object_or_404(Dish, slug=self.kwargs.get('slug'), id=self.kwargs.get('pk'))
+        hit_count = HitCount.objects.get_for_object(meal)
+        hit_count_response = HitCountMixin.hit_count(request, hit_count)
         meal_ings_list = set(meal.ingredient_set.all().values_list('name', flat=True))
         similar_meals = Dish.objects.filter(ingredient__name__in=meal_ings_list, moderator=True, draft=False).exclude(id=self.kwargs.get('pk'))[:3]
         form = DishCommentForm()
@@ -136,6 +142,7 @@ class MealDetailView(HitCountDetailView):
             else:
                 meal.dish_added = False
         context = {'meal': meal,
+                   'hit': hit_count_response,
                    'form': form,
                    'pag_comments': new_comments,
                    'similar_meals': similar_meals,

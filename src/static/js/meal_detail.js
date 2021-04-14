@@ -116,8 +116,8 @@ function addComment(id) {
             <input type="hidden" name="csrfmiddlewaretoken" value="${csrf_for_comments}">
             <textarea name="text" cols="40" rows="2" maxlength="5000" required="" id="id_text"></textarea>
             <input type="hidden" name="parent" value="${id}">
-            <div class="ui two buttons">\<button onclick="removeCommentForm()" class="ui basic secondary button mt-10">Закрыть</button>
-            <button type="submit" class="ui basic positive button mt-10 child_comment_buttons">ДОБАВИТЬ КОММЕНТАРИЙ</button></div></form>`);
+            <div class="ui two buttons">\<button onclick="removeCommentForm()" class="ui inverted red button mt-10">Закрыть</button>
+            <button type="submit" class="ui inverted green button mt-10 child_comment_buttons">ДОБАВИТЬ КОММЕНТАРИЙ</button></div></form>`);
     $('.child_comment_buttons').click(function (e) {
         e.preventDefault();
         let text = $('textarea[id=id_text]').val()
@@ -184,7 +184,7 @@ $(document).ready( () => {
                                                         ${post.text}
                                                         </div>
                                                         <div id="${post.id}" class="actions">
-                                                            <a class="ui basic mini positive button" onclick="addComment(${post.id})">Ответить</a>
+                                                            <a class="ui inverted green mini button" onclick="addComment(${post.id})">Ответить</a>
                                                         </div>
                                                     </div> `
                                                                             
