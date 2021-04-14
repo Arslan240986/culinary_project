@@ -11,7 +11,7 @@ culinary_project/prod_settings.py
 culinary_project/local_settings.py
 
 static_project
-static_cdn/
+culinary_project/static_cdn/
 static_cdn/media_root
 src/culinary_recipe/migrations/0010_auto_20210413_0715.py
 src/culinary_recipe/migrations/__pycache__/0010_auto_20210413_0715.cpython-37.pyc
