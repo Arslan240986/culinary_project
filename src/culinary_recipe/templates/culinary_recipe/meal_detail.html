@@ -44,9 +44,9 @@
         <img loading="lazy" class="ui fluid rounded image" src="{{ meal.poster.url }}" alt="{{ meal.title }}">
     </div>
 
-    <div class="ui equal width grid p-10">
+    <div class="ui equal stackable width grid p-10">
         <div class="equal width row">
-            <div class="column">
+            <div class="column p-0">
                 <div class="ui grid p-10">
                     <div class="inline column row">
                         {% get_hit_count for meal as count %}
@@ -66,10 +66,10 @@
                     </div>
                 </div>
             </div>
-            <div class="right aligned column">
+            <div class="right aligned column p-0">
                 {% if user != meal.author and user.is_authenticated %}
                 <div class="subscribe_div_add {% if meal.dish_added %}active{% endif%}">
-                    <form class="need_change m-4" action="{% url 'contact:add_dishes_to_book' %}" method="post"
+                    <form class="need_change " action="{% url 'contact:add_dishes_to_book' %}" method="post"
                         name="add_dishes_to_book" id="add_dishes_to_book">
                         {% csrf_token %}
                         <input type="hidden" class="meal_id" value="{{ meal.id }}">

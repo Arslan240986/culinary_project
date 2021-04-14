@@ -35,7 +35,7 @@ GENDERS = [
 
 
 def get_profile_image_filepath(self, fileName):
-    return f'users/{self.pk}/{"profile_image.png"}'
+    return f'users/{self.pk}/{fileName}'
 
 
 class UserProfile(models.Model):

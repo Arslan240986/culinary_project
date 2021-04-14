@@ -842,6 +842,9 @@ textarea {
     .child_comment_buttons{
         font-size: 0.6rem !important;
     }
+    .p-0{
+        padding: 0rem, 0rem !important;
+    }
 }
 
 .ushefa_modal{
