@@ -73,17 +73,10 @@ class DishForm(forms.ModelForm):
 
         }
 
-from djangoformsetjs.utils import formset_media_js
-
 class IngredientForm(forms.ModelForm):
     quantity = forms.DecimalField(error_messages={'invalid': 'это поле только для числового значения'},
                                   max_digits=1000, decimal_places=2, label_suffix="*",
                                   label="hernya"),
-
-    class Media(object):
-        js = formset_media_js + (
-            # Other form media here
-        )
 
     class Meta:
         model = Ingredient
