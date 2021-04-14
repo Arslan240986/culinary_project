@@ -839,6 +839,9 @@ textarea {
     .navbar_yummy.top_show{
         top: -55px !important;
     }
+    .child_comment_buttons{
+        font-size: 0.6rem !important;
+    }
 }
 
 .ushefa_modal{
@@ -896,4 +899,7 @@ textarea {
 }
 .f-color{
     color: rgb(57, 250, 19) !important;
+}
+.d-inline{
+    display: inline !important;
 }

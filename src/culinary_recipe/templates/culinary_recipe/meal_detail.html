@@ -261,7 +261,7 @@
 <button class="cmt_btn ui fluid button mb-4">Показать / Скрыть коментарии</button>
 <div class="comment-box">
     <div class="comment">
-        <div class="ui fluid button get_another_number" data-href-template="{{meal.get_absolute_url }}">Открыть сообшения</div>
+        <div class="ui fluid button get_another_number {% if not load_more %}d_none{% endif %}" data-href-template="{{meal.get_absolute_url }}">Открыть сообшения</div>
         <div class="ui active centered inline black loader d_none"></div>
     </div>
     <div class="ui threaded comments">

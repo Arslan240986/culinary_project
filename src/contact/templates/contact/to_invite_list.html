@@ -13,10 +13,11 @@
     {% for obj in qs %}
 
         <div class="ui segment mt-2">
-            <div class="ui grid">
+            <div class="ui stackable grid">
                 <div class="row">
                     <div class="four wide center aligned middle aligned column">
-                        <img loading="lazy" class="ui small circular image" src="{{ obj.avatar.url }}" alt="">
+                        <img loading="lazy" class="ui small circular image d-inline"
+                             src="{{ obj.avatar.url }}" alt="">
                     </div>
                     <div class="four wide center aligned middle aligned column">
                         <h3>{{ obj.user }}</h3>
@@ -24,7 +25,7 @@
                     </div>
                     <div class="eight wide center aligned middle aligned column">
                         <a href="{{ obj.get_absolute_url_for_friends }}">
-                            <button class="mini ui primary button w-big">
+                            <button class="mini ui primary button w-big mb-10">
                                 Просмотреть профиль
                             </button>
                         </a>

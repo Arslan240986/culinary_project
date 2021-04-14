@@ -138,7 +138,8 @@ class MealDetailView(HitCountDetailView):
         context = {'meal': meal,
                    'form': form,
                    'pag_comments': new_comments,
-                   'similar_meals': similar_meals
+                   'similar_meals': similar_meals,
+                   'load_more': False if len(new_comments) >= comment_size else True,
                    }
         return render(request, self.template_name, context)
 
