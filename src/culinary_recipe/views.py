@@ -215,7 +215,6 @@ class DishCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        print('files', self.request.FILES)
         ingredient_form = IngredientFormSet(self.request.POST)
         instruction_form = InstructionFormSet(self.request.POST, self.request.FILES)
         if form.is_valid() and ingredient_form.is_valid() and instruction_form.is_valid():
@@ -254,7 +253,6 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
          self.object = self.get_object()
          context = super(DishUpdateView, self).get_context_data(**kwargs)
          if self.request.POST:
-             print('files', self.request.POST)
              context['form'] = DishForm(self.request.POST, self.request.FILES, instance=self.object)
              context['ingredient_form'] = IngredientFormSet(self.request.POST, instance=self.object)
              context['instruction_form'] = InstructionFormSet(self.request.POST, self.request.FILES, instance=self.object)
@@ -342,9 +340,6 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
     def form_invalid(self, form, ingredient_form, instruction_form):
         messages.error(self.request, 'Исправте ниже указанные ошибки')
-        print('f ', form.errors)
-        print('in', ingredient_form.errors)
-        print('ins ', instruction_form.errors)
         return self.render_to_response(
             self.get_context_data(form=form,
                                   ingredient_form=ingredient_form,
