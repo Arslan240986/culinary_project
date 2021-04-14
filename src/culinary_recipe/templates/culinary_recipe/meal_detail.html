@@ -280,7 +280,7 @@
                     {{ node.text }}
                 </div>
                 {% if node.level < 2 %} <div id="{{node.id}}" class="actions">
-                    <a class="ui basic mini positive button" onclick="addComment({{ node.id }})">Ответить</a>
+                    <a class="ui inverted green mini button" onclick="addComment({{ node.id }})">Ответить</a>
             </div>
             {% endif %}
         </div>
@@ -304,7 +304,7 @@
     {% csrf_token %}
     {{ form }}
     <input type="hidden" name="parent" id="contactparent" value="">
-    <button type="submit" class="ui fluid basic positive button mt-10 comment_button">ДОБАВИТЬ КОММЕНТАРИЙ</button>
+    <button type="submit" class="ui fluid inverted green button mt-10 comment_button">ДОБАВИТЬ КОММЕНТАРИЙ</button>
 </form>
 {{status}}
 <!-- Form for reviews -->

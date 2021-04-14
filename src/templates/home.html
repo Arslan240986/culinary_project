@@ -94,9 +94,13 @@
     <hr>
     <h3 class="pl-10 font-oswald">Национальные кухни</h3>
     <div class="country_block my-4">
+
         {% for country in countries %}
+        <span class="flag">
         <a class="button_link text-muted {% if forloop.first %}pl-10{% endif %}" href="#">{{ country.name }}</a>
+        </span>
         {% endfor %}
+
     </div>
 
     {% endblock %}
