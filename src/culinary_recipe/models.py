@@ -274,6 +274,7 @@ class Ingredient(models.Model):
         return f'{self.name}-{self.meal}'
 
     class Meta:
+        ordering = ['id']
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
 
@@ -288,6 +289,7 @@ class Step(models.Model):
         return f'{self.pk} - {self.meal.title}'
 
     class Meta:
+        ordering = ['id']
         verbose_name = 'Пошаговый рецепт'
         verbose_name_plural = 'Пошаговый рецепты'
 

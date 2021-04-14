@@ -282,7 +282,7 @@ ul.collapse {
 
 .dish_poster {
     width: 100%;
-    object-fit: cover;
+    object-fit: fill;
     max-height: 30rem;
 }
 
@@ -352,7 +352,7 @@ ul.collapse {
 }
 
 .body_yummy {
-    background-image: url('/static/image/back-pick2.jpg') !important;
+    background-image: url('/static/image/bg1.png') !important;
     background-attachment: fixed;
 }
 
@@ -890,4 +890,10 @@ textarea {
 }
 .line{
     border-top: 1px solid grey;
+}
+.text-muted{
+    font-size: 1.5rem !important;
+}
+.f-color{
+    color: rgb(57, 250, 19) !important;
 }

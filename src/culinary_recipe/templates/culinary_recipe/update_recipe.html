@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load formset_tags %}
 <!-- Bread crumbs -->
 {% block breadcrumbs %}
 <div class="active section">Обновить рецепт</div>
@@ -18,6 +18,7 @@
     {% endfor %}
 </div>
 {% endif %}
+
 <form action="." method="post" enctype="multipart/form-data" class="ui equal width form textearea" novalidate>
     {% csrf_token %}
     <h4 class="ui ui teal dividing header font-oswald">Добавить рецепт</h4>
@@ -180,7 +181,6 @@
                 {% endif %}
                 {{ ingredient_form.management_form }}
                 {% for form in ingredient_form %}
-                {{ form.id }}
                 <div class="inline {{ ingredient_form.prefix }} ">
                     <div class="line"></div>
                     <div class="fields">
@@ -219,7 +219,10 @@
                             </div>
                         </div>
                         <div class="two wide field flex_center_middle">
-                            <div class="deleteButton"></div>
+                            <div class="deleteButton">
+                                {{ form.DELETE }}
+                                {{ form.id }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -248,7 +251,6 @@
                 {% endif %}
                 {{ instruction_form.management_form }}
                 {% for form in instruction_form %}
-                {{ form.id }}
                 <div class="inline {{ instruction_form.prefix }}">
                     <div class="line"></div>
                     <div class="fields">
@@ -264,16 +266,19 @@
                                 <div class="ui medium image ">
                                     <img loading="lazy" id="instruction_image_id"
                                          class="ui centered small rounded image instruction_image_div"
-                                         src="{% static  '/image/empty_image.jpeg' %}"
+                                         src="{% if form.initial.image %}{{ form.initial.image.url }}{% else %}{% static  '/image/empty_image.jpeg' %}{% endif %}"
                                          onclick="clickImageFile(this)">
-                                    <input class="d_none" type="file" name="step_set-0-image" accept="image/*"
-                                           id="id_step_set-0-image" onchange="readURLInstrcution(this)">
+                                    <input class="d_none" type="file" name="step_set-{{forloop.counter0}}-image" accept="image/*"
+                                           id="id_step_set-{{forloop.counter0}}-image" onchange="readURLInstrcution(this)">
                                     <div class="form__add-img-instr"></div>
                                 </div>
                             </div>
                         </div>
                         <div class="two wide field flex_center_middle">
-                            <div class="description_deleteButton"></div>
+                            <div class="description_deleteButton">
+                                {{ form.DELETE }}
+                                {{ form.id }}
+                            </div>
                         </div>
                     </div>
 
@@ -291,7 +296,7 @@
         </div>
     </div>
     <div class="row mt-10">
-        <button type="submit" class="btn_custom ui fluid basic inverted green button">Опубликовать</button>
+        <button type="submit" class="btn_custom ui fluid inverted green button">Опубликовать</button>
     </div>
 </form>
 

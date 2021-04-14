@@ -112,77 +112,127 @@
 
         </div>
         <div class="four wide column">
-            <h5 class="ui block grey header"> Время подготовки</h5>
-            <p><small class="text-muted">
-                    {% if meal.preparation_time_hour %}{{ meal.preparation_time_hour }}{% endif %} <smaal>ч</smaal> /
-                    {% if meal.preparation_time_minute %}{{ meal.preparation_time_minute }}{% endif %} <smaal>мин
-                    </smaal>
+            <p class="ui grey header"> Время подготовки</p>
+            <p><small class="font-oswald text-muted pl-10">
+                {% if meal.preparation_time_hour or meal.preparation_time_minute %}
+                    {% if meal.preparation_time_hour %}{{ meal.preparation_time_hour }}{% else %}0{% endif %} <smal>ч</smal> /
+                    {% if meal.preparation_time_minute %}{{ meal.preparation_time_minute }}{% else %}0{% endif %} <smal>мин
+                {% else %}
+                Не указан
+                {% endif %}
+                    </smal>
                 </small>
             </p>
-            <p class="ui block grey header">Время готовки</p>
-            <p><small class="text-muted">
-                    {% if meal.cooking_time_hour %}{{ meal.cooking_time_hour }}{% endif %} <smaal>ч</smaal> /
-                    {% if meal.cooking_time_minute %}{{ meal.cooking_time_minute }}{% endif %} <smaal>мин</smaal>
+            <p class="ui grey header">Время готовки</p>
+            <p><small class="font-oswald text-muted pl-10">
+                {% if meal.cooking_time_hour or meal.cooking_time_minute %}
+                    {% if meal.cooking_time_hour %}{{ meal.cooking_time_hour }}{% else %}0{% endif %} <smal>ч</smal> /
+                    {% if meal.cooking_time_minute %}{{ meal.cooking_time_minute }}{% else %}0{% endif %} <smal>мин</smal>
+                {% else %}
+                Не указан
+                {% endif %}
                 </small>
             </p>
-            <p class="ui block grey header">Количество порций</p>
+            <p class="ui grey header">Количество порций</p>
             <p>
-                <small class="text-muted">{% if meal.servings %}{{ meal.servings }}{% endif %}</small>
+                <small class="font-oswald text-muted pl-10">
+                    {% if meal.servings %}
+                    {{ meal.servings }}
+                    {% else %}
+                    Не указан
+                    {% endif %}
+                </small>
             </p>
-            <p class="ui block grey header">Вегетарианское</p>
+            <p class="ui grey header">Вегетарианское</p>
             <p>
-                <small class="text-muted">{% if meal.vegetarian %}{{ meal.vegetarian }}{% endif %}</small>
+                <small class="font-oswald text-muted pl-10">
+                    {% if meal.vegetarian %}
+                    {{ meal.vegetarian }}
+                    {% else %}
+                    Не указан
+                    {% endif %}
+                </small>
             </p>
-            {% if meal.technology.all %}
-            <p class="ui block grey header">Технология</p>
+            <p class="ui  grey header">Технология</p>
             <p>
                 {% for technology in meal.technology.all %}
-                <small class="text-muted">{{technology}}{% if not forloop.last %}, {% endif %}</small>
+                <small class="font-oswald text-muted pl-10">
+                    {{technology}}
+                    {% if not forloop.last %}, {% endif %}
+                </small>
+                {% empty %}
+                <small class="font-oswald text-muted pl-10">
+                    Не указан
+                </small>
                 {% endfor %}
             </p>
-            {% endif %}
-            {% if meal.occasion.all %}
-            <p class="ui block grey header">Повод</p>
+            <p class="ui grey header">Повод</p>
             <p>
                 {% for occasion in meal.occasion.all %}
-                <small class="text-muted">{{occasion}}{% if not forloop.last %}, {% endif %}</small>
+                <small class="font-oswald text-muted pl-10">
+                    {{occasion}}
+                    {% if not forloop.last %},
+                    {% endif %}
+                </small>
+                {% empty %}
+                <small class="font-oswald text-muted pl-10">
+                    Не указан
+                </small>
                 {% endfor %}
             </p>
-            {% endif %}
-            {% if meal.device.all %}
-            <p class="ui block grey header">Устройтво</p>
+            <p class="ui grey header">Устройтво</p>
             <p>
                 {% for device in meal.device.all %}
-                <small class="text-muted">{{device}}{% if not forloop.last %}, {% endif %}</small>
+                <small class="font-oswald text-muted pl-10">
+                    {{device}}
+                    {% if not forloop.last %},
+                    {% endif %}
+                </small>
+                {% empty %}
+                <small class="font-oswald text-muted pl-10">
+                    Не указан
+                </small>
                 {% endfor %}
             </p>
-            {% endif %}
-            {% if meal.calorie %}
-            <p class="ui block grey header">Калории</p>
+            <p class="ui grey header">Калории</p>
             <p>
-                <small class="text-muted">{{meal.calorie}}</small>
+                <small class="font-oswald text-muted pl-10">
+                    {% if meal.calorie %}
+                        {{meal.calorie}}
+                    {% else %}
+                        Не указан
+                    {% endif %}
+                </small>
             </p>
-            {% endif %}
-            {% if meal.protein %}
-            <p class="ui block grey header">Протеин</p>
-            <p>
-                <small class="text-muted">{{meal.protein}}</small>
-            </p>
-            {% endif %}
-            {% if meal.fat %}
-            <p class="ui block grey header">Жиры</p>
-            <p>
-                <small class="text-muted">{{meal.fat}}</small>
-            </p>
-            {% endif %}
-            {% if meal.carbohydrate %}
-            <p class="ui block grey header">Углеводы</p>
-            <p>
-                <small class="text-muted">{{meal.carbohydrate}}</small>
-            </p>
-            {% endif %}
-        </div>
 
+
+            <p class="ui grey header">Протеин</p>
+            <p><small class="font-oswald text-muted pl-10">
+                    {% if meal.protein %}
+                        {{meal.protein}}
+                    {% else %}
+                        Не указан
+                    {% endif %}
+            </small></p>
+
+            <p class="ui grey header">Жиры</p>
+            <p><small class="font-oswald text-muted pl-10">
+                {% if meal.fat %}
+                    {{meal.fat}}
+                {% else %}
+                    Не указан
+                {% endif %}
+            </small></p>
+
+            <p class="ui grey header">Углеводы</p>
+            <p><small class="font-oswald text-muted pl-10">
+                {% if meal.carbohydrate %}
+                    {{meal.carbohydrate}}
+                {% else %}
+                    Не указан
+                {% endif %}
+            </small></p>
+        </div>
     </div>
 </div>
 <!--Similar recipe views -->

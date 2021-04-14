@@ -73,11 +73,17 @@ class DishForm(forms.ModelForm):
 
         }
 
+from djangoformsetjs.utils import formset_media_js
 
 class IngredientForm(forms.ModelForm):
     quantity = forms.DecimalField(error_messages={'invalid': 'это поле только для числового значения'},
                                   max_digits=1000, decimal_places=2, label_suffix="*",
                                   label="hernya"),
+
+    class Media(object):
+        js = formset_media_js + (
+            # Other form media here
+        )
 
     class Meta:
         model = Ingredient
@@ -100,7 +106,7 @@ class BaseArticleFormSet(BaseInlineFormSet):
 IngredientFormSet = inlineformset_factory(Dish, Ingredient, IngredientForm, formset=BaseArticleFormSet,
                                           extra=0, min_num=2, validate_min=True, can_delete=True, can_order=True)
 
-InstructionFormSet = inlineformset_factory(Dish, Step, formset=BaseArticleFormSet,
+InstructionFormSet = inlineformset_factory(Dish, Step,
                                            fields=('description',
                                                    'image'),
                                            can_delete=True, can_order=True,
