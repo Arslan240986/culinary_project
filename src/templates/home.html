@@ -97,7 +97,7 @@
 
         {% for country in countries %}
             <span class="flag">
-                <a class="button_link text-muted {% if forloop.first %}pl-10{% endif %}" href="#">
+                <a class="button_link text-muted {% if forloop.first %}pl-10{% endif %}" href="{{country.get_absolute_url}}">
                     {{ country.name }}
                     {% if not forloop.last %},{% endif %}
                 </a>

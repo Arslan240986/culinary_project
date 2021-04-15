@@ -21,7 +21,7 @@ class Country(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('culinary_recipe:by_country', args=[self.slug])
+        return reverse('culinary_recipe:by_country', args=[self.slug, self.pk])
 
     class Meta:
         verbose_name = 'Страна'

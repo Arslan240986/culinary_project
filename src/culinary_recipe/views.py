@@ -73,8 +73,8 @@ class GetItems(View):
 
 class DishByCountry(View):
     """Вывод блюд по Странам"""
-    def get(self, request, slug):
-        country = get_object_or_404(Country, slug=slug)
+    def get(self, request, slug, pk):
+        country = get_object_or_404(Country, slug=slug, id=pk)
         meals = Dish.objects.filter(country=country)
         return render(request, 'culinary_recipe/dishes_list.html', {'meals': meals, 'country': country})
 
