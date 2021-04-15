@@ -96,9 +96,12 @@
     <div class="country_block my-4">
 
         {% for country in countries %}
-        <span class="flag">
-        <a class="button_link text-muted {% if forloop.first %}pl-10{% endif %}" href="#">{{ country.name }}</a>
-        </span>
+            <span class="flag">
+                <a class="button_link text-muted {% if forloop.first %}pl-10{% endif %}" href="#">
+                    {{ country.name }}
+                    {% if not forloop.last %},{% endif %}
+                </a>
+            </span>
         {% endfor %}
 
     </div>

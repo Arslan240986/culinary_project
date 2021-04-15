@@ -24,10 +24,20 @@ class CategoryViewList(ListView):
     model = Category
     template_name = 'home.html'
     context_object_name = 'categories'
-    extra_context = {
-        'countries': Country.objects.all(),
-        'posts': CulinaryPost.objects.all().order_by('-created')[:6],
-    }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        country = Country.objects.all()
+        has_dish_country = []
+        for con in country:
+            if con.dish_set.all():
+                has_dish_country.append(con)
+                print(con)
+        context['countries'] = has_dish_country
+        context['posts'] = CulinaryPost.objects.all().order_by('-created')[:6]
+        return context
+
+
 
 
 def get_sub_category(request, slug):
