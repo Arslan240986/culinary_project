@@ -19,7 +19,6 @@ def new_messages_not(*args):
 
 @register.simple_tag()
 def all_notification(*args):
-    print(args)
     profile = UserProfile.objects.get(id=args[0])
     threads = Thread.objects.by_user(profile)
     total_msg = 0

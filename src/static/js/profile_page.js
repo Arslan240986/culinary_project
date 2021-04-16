@@ -10,15 +10,11 @@ $(document).ready(function () {
         })
 
     })
-    var options = $.extend({},
-        $.datepicker.regional["ru"], {
-        dateFormat: "dd.mm.yy",
-        changeMonth: true,
-        changeYear: true,
-        highlightWeek: true,
-    }
-    );
-    $('.date_input').datepicker(options);
+    $.datetimepicker.setLocale('ru');
+    $('.date_input').datetimepicker({
+        timepicker:false,
+        format:'d.m.Y'
+    });
 
 })
 

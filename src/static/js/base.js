@@ -1,4 +1,3 @@
-console.log($(window))
 var prevScrollpos = window.pageYOffset;
 var navbar = document.querySelector("#navbar")
 document.querySelector('.bread').style.marginTop = navbar.offsetHeight + 3 + 'px'
@@ -124,6 +123,14 @@ $(document).ready(function () {
     // sidebar open close semantic ui
     $('.big.white.bars.icon').click(() => {
         $('.ui.basic.modal.ushefa_modal').modal('show');
+    })
+    // links to children achours on personal dropdown lists
+    $('.centered_custom').click((e)=>{
+        $(e.target).children('.dropdown').click()
+    })
+    $('.personal_drop_list').on('click', (e)=>{
+        e.stopPropagation();
+        e.target.querySelector('a').click()
     })
 
 })

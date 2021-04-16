@@ -868,6 +868,7 @@ textarea {
     border: 1px solid white !important;
     border-radius: 3px !important;
     margin-right: 5px !important;
+    cursor: pointer !important;
 }
   .img-container{
     margin: auto !important;

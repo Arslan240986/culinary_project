@@ -32,7 +32,6 @@ class CategoryViewList(ListView):
         for con in country:
             if con.dish_set.all():
                 has_dish_country.append(con)
-                print(con)
         context['countries'] = has_dish_country
         context['posts'] = CulinaryPost.objects.all().order_by('-created')[:6]
         return context
