@@ -158,12 +158,12 @@ if(lazy_images.length>0){
 
 window.addEventListener('scroll', lazyScroll)
 
-async function lazyScroll(){
+function lazyScroll(){
     if(document.querySelectorAll('img[data-src]').length>0){
         lazyScrollCheck()
     }
 }
-async function lazyScrollCheck(){
+function lazyScrollCheck(){
     let imgIndex = lazyImagesPosition.findIndex(
         item => pageYOffset > item - windowHieght
     );
