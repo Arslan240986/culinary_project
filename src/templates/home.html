@@ -25,7 +25,9 @@
                         <span class="font-s-20 badge badge-secondary pl-10">{{ category.name }}</span>
                     </a>
                 </h6>
-                <img loading="lazy" class="img-thumbnail cat_image" src="{{ category.poster.url }}" alt="{{ category.name }}">
+                <div class="page_image loading_gif">
+                    <img loading="lazy" src="/static/image/2.png" data-src="{{ category.poster.url }}" alt="{{ category.name }}">
+                </div>
                 {% if category.sub_category.all %}
                 {% for child in category.sub_category.all %}
                 <a class="button_link" href="{{ child.get_absolute_url }}">
@@ -69,7 +71,9 @@
                 </a>
             </h6>
             {% if post.image %}
-            <img loading="lazy" class="img-thumbnail cat_image" src="{{ post.image.url }}" alt="{{ post.title }}">
+            <div class="page_image loading_gif">
+                <img src="/static/image/2.png" data-src="{{ post.image.url }}" alt="{{ post.title }}">
+            </div>
             {% endif %}
             <div class="content">
                 {{ post.content|truncatewords:"20"}}

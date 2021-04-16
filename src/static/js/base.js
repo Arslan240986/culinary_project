@@ -142,3 +142,37 @@ function closeSearch(e) {
     $('.search_form_ushefa_icon').addClass('display')
     $('.search_form_ushefa').addClass('display')
 }
+
+// lazy load js 
+const lazy_images = document.querySelectorAll('img[data-src]')
+const windowHieght = document.documentElement.clientHeight
+let = lazyImagesPosition = []
+if(lazy_images.length>0){
+    lazy_images.forEach(img => {
+        if(img.dataset.src){
+            lazyImagesPosition.push(img.getBoundingClientRect().top + pageYOffset)
+            lazyScrollCheck()
+        }
+    })
+}
+
+window.addEventListener('scroll', lazyScroll)
+
+async function lazyScroll(){
+    if(document.querySelectorAll('img[data-src]').length>0){
+        lazyScrollCheck()
+    }
+}
+async function lazyScrollCheck(){
+    let imgIndex = lazyImagesPosition.findIndex(
+        item => pageYOffset > item - windowHieght
+    );
+    if (imgIndex >= 0){
+        if(lazy_images[imgIndex].dataset.src){
+            lazy_images[imgIndex].src = lazy_images[imgIndex].dataset.src
+            lazy_images[imgIndex].classList.add('width')
+            lazy_images[imgIndex].removeAttribute('data-src')
+        }
+        delete lazyImagesPosition[imgIndex]
+    }
+}
