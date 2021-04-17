@@ -846,7 +846,6 @@ textarea {
     left: auto !important;
     bottom: auto !important;
     right: auto !important;
-    
 }
 .ushefa_according_title{
     text-align: center;
@@ -903,7 +902,7 @@ textarea {
 .page_image{
     position: relative;
     padding: 0px 0px 90% 0px !important;
-    background: url('/static/image/load.gif') center / 100% no-repeat !important;
+    background: url('/static/image/load2.gif') center / 100% no-repeat !important;
     border-radius: 1rem !important
 }
 .page_image img{
@@ -918,4 +917,8 @@ textarea {
 .width{
     width: 100% !important;
     height: 100% !important;
+}
+.over-flow{
+    overflow-y: scroll !important;
+    max-height: 500px;
 }
