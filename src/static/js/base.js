@@ -171,7 +171,7 @@ function lazyScrollCheck(){
         if(lazy_images[imgIndex].dataset.src){
             lazy_images[imgIndex].src = lazy_images[imgIndex].dataset.src
             lazy_images[imgIndex].classList.add('width')
-            lazy_images[imgIndex].parentElement.classList.remove('page_image')
+            lazy_images[imgIndex].parentElement.classList.remove('loading_gif')
             lazy_images[imgIndex].removeAttribute('data-src')
         }
         delete lazyImagesPosition[imgIndex]

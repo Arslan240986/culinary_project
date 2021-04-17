@@ -25,7 +25,7 @@
                         <span class="font-s-20 badge badge-secondary pl-10">{{ category.name }}</span>
                     </a>
                 </h6>
-                <div class="page_image">
+                <div class="page_image loading_gif">
                     <img src="/static/image/2.png" data-src="{{ category.poster.url }}" alt="{{ category.name }}">
                 </div>
                 {% if category.sub_category.all %}
@@ -71,7 +71,7 @@
                 </a>
             </h6>
             {% if post.image %}
-            <div class="page_image">
+            <div class="page_image loading_gif">
                 <img src="/static/image/2.png" data-src="{{ post.image.url }}" alt="{{ post.title }}">
             </div>
             {% endif %}

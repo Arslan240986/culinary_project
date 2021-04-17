@@ -41,7 +41,7 @@
 
 
     <div class="row">
-        <div class="page_image">
+        <div class="page_image loading_gif">
             <img data-src="{{ meal.poster.url }}" src="/static/image/1x1.png" alt="{{ meal.title }}">
         </div>
     </div>
@@ -101,10 +101,8 @@
             {% for step in meal.step_set.all %}
             <p class="steps_counter font-oswald">Шаг {{ forloop.counter }}</p>
             {% if step.image %}
-            <div class="dish_poster img-fluid">
-                <div class="page_image">
-                    <img data-src="{{ step.image.url }}" src="/static/image/1x1.png" class="dish_poster" alt="poster">
-                </div>
+            <div class="page_image loading_gif">
+                <img data-src="{{ step.image.url }}" src="/static/image/1x1.png" alt="poster">
             </div>
             {% endif %}
             <p class="steps_descriptions p-10">
@@ -246,7 +244,7 @@
         {% for meal in similar_meals %}
         <div class="five wide column">
             <div class="card">
-                <div class="page_image">
+                <div class="page_image loading_gif">
                     <img data-src="{{ meal.poster.url }}" src="/static/image/1x1.png" alt="Card image cap">
                 </div>
                 <div class="card-body">
