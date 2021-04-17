@@ -903,10 +903,10 @@ textarea {
     position: relative;
     padding: 0px 0px 90% 0px !important;
     border-radius: 1rem !important;
-    background-color: white !important;
 }
 .page_image.loading_gif{
     background: url('/static/image/load2.gif') center / 25% no-repeat !important;
+    background-color: white !important;
 }
 .page_image img{
     position: absolute !important;
