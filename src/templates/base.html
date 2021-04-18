@@ -6,7 +6,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <title>{% block title %}У-шефа{% endblock title %}</title>
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--    google-fonts-Oswald-->
     <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
     <!--    google-fonts-Lobster-->
@@ -103,17 +103,17 @@
 {% include 'includes/footer.html' %}
 
 
-<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery.min.js' %}"></script>
 
     <!--datepicker js-->
-<script type="text/javascript" src="{% static 'datetimepicker-master/build/jquery.datetimepicker.full.min.js' %}"></script>
+<script src="{% static 'datetimepicker-master/build/jquery.datetimepicker.full.min.js' %}"></script>
 
 <!--    JQuery formset-->
-<script async type="text/javascript" src="{% static 'js/jquery.formset.js' %}"></script>
+<script src="{% static 'js/jquery.formset.js' %}"></script>
 <!--Semantik Ui Js-->
-<script async type="text/javascript" src="{% static 'Semantic_UI/semantic.min.js' %}"></script>
+<script src="{% static 'Semantic_UI/semantic.min.js' %}"></script>
 <!--  custom js -->
-<script async type="text/javascript" src="{% static 'js/base.js' %}"></script>
+<script src="{% static 'js/base.js' %}"></script>
 
 {% block jscdn %}
 
