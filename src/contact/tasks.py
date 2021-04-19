@@ -7,7 +7,7 @@ from .models import UserProfile
 @app.task
 def send_subscribe(email):
     subject = 'dorogoy'
-    message = 'Vy podpisalis na rassylku receptov na sayte Yummy'
+    message = 'Vy podpisalis na rassylku receptov na sayte У-шефа'
 
     mail_sent = send_mail(subject,
                           message,
