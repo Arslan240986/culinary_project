@@ -15,11 +15,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@300&display=swap" rel="stylesheet">
 
-    <link type="text/css" href="{% static 'datetimepicker-master/jquery.datetimepicker.css' %}">
-    <link type="text/css" href="{% static 'Semantic_UI/semantic.min.css' %}">
-    <link type="text/css" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'datetimepicker-master/jquery.datetimepicker.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'Semantic_UI/semantic.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
     {% block cdn %}
     {% endblock cdn %}
+
 
 </head>
 
@@ -103,17 +104,17 @@
 {% include 'includes/footer.html' %}
 
 
-<script src="{% static 'js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
 
     <!--datepicker js-->
-<script src="{% static 'datetimepicker-master/build/jquery.datetimepicker.full.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'datetimepicker-master/build/jquery.datetimepicker.full.min.js' %}"></script>
 
 <!--    JQuery formset-->
-<script src="{% static 'js/jquery.formset.js' %}"></script>
+<script async type="text/javascript" src="{% static 'js/jquery.formset.js' %}"></script>
 <!--Semantik Ui Js-->
-<script src="{% static 'Semantic_UI/semantic.min.js' %}"></script>
+<script async type="text/javascript" src="{% static 'Semantic_UI/semantic.min.js' %}"></script>
 <!--  custom js -->
-<script src="{% static 'js/base.js' %}"></script>
+<script async type="text/javascript" src="{% static 'js/base.js' %}"></script>
 
 {% block jscdn %}
 
