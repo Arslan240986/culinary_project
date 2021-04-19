@@ -15,7 +15,7 @@ from .models import Dish, Country, Category, SubCategory, DishLike, Ingredient, 
 from culinary_post.models import CulinaryPost
 from .forms import DishCommentForm, DishForm, IngredientFormSet, InstructionFormSet
 from .utils import getMonth
-# from .tasks import comment_add
+from .tasks import comment_add
 from contact.models import UserProfile
 
 
