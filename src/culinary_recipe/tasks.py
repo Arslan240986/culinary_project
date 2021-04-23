@@ -2,14 +2,16 @@ from culinary_project.celery import app
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from .models import DishComment, Dish
+from culinary_project import settings
 
 
 @app.task
-def comment_add(meal_id, user_id):
+def comment_add(**kwargs):
     """Задача отправки email-уведомлений при успешном оформлении заказа."""
-    dish = Dish.objects.get(id=meal_id)
-    user = User.objects.get(id=user_id)
-    subject = f'Пользователь: {user} добавиль коммент'
-    message = f'Пользователь: {user.profile.first_name} добавиль коммент на {dish.title} рецепт.'
-    mail_sent = send_mail(subject, message, 'ushefa1ru@gmail.com.com', ['arslan092486gmail.com'])
+    comments = DishComment.objects.all().filter(status=True)
+    subject = f'Дорогой модератор у вас {kwargs["comments"]} не проверенных комментариев пожалуйста проверте их в скором времени'
+    message = ''
+    for comment in comments:
+        message += f'(Пользователь: {comment.author.profile.first_name} добавиль коммент на {comment.meal.title} рецепт. коммент {comment.text}) ,'
+    mail_sent = send_mail(subject, message, settings.EMAIL_HOST_USER, ['arslan092486gmail.com'])
     return mail_sent

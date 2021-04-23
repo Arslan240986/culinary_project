@@ -1,13 +1,14 @@
 from culinary_project.celery import app
+from django.contrib.auth.models import User
 from django.core.mail import send_mail
-from culinary_recipe.models import Dish
-from .models import UserProfile
+
+from culinary_project import settings
 
 
 @app.task
 def send_subscribe(email):
-    subject = 'dorogoy'
-    message = 'Vy podpisalis na rassylku receptov na sayte У-шефа'
+    subject = 'Подписка на рассылку'
+    message = 'Вы успешно подписались на рассылку на сайте У-шефа'
 
     mail_sent = send_mail(subject,
                           message,
@@ -17,13 +18,13 @@ def send_subscribe(email):
 
 
 @app.task
-def send_success_subscribe():
-    for contact in UserProfile.objects.all():
-        send_mail(
-            'dorogoy',
-            'Dorogoy {} Vy dobavili udachno novy retcept'.format(contact.first_name),
-            'admin@myshop.com',
-            [contact.email],
-            fail_silently=False
-        )
+def send_success_subscribe(**kwargs):
+    author = User.objects.get(id=kwargs['author'])
+    send_mail(
+        'Успешно пройдена проверка',
+        f'Дорогой {author.profile.first_name} Ваш рецепт {kwargs["title"]} упешно прошла проверку и добавлен на сайт',
+        settings.EMAIL_HOST_USER,
+        [author.profile.email],
+        fail_silently=False
+    )
 

@@ -4,6 +4,20 @@ from .models import UserProfile, Relationship
 from django.contrib.auth.models import User
 from private_chat.models import Thread
 
+from culinary_recipe.models import Dish
+
+from .tasks import send_success_subscribe
+
+
+@receiver(post_save, sender=Dish)
+def send_email_that_pass_moderator_culinary_dish(sender, instance, **kwargs):
+    print('se ', kwargs)
+    if instance.moderator:
+        author = instance.author.id
+        title = instance.title
+        send_success_subscribe.delay(author=author, title=title)
+
+
 
 @receiver(post_save, sender=User)
 def post_save_create_profile(sender, instance, created, **kwargs):
