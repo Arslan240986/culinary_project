@@ -4,6 +4,8 @@ from django.core.mail import send_mail
 
 from culinary_project import settings
 
+from contact.models import UserProfile
+
 
 @app.task
 def send_subscribe(email):
@@ -27,4 +29,19 @@ def send_success_subscribe(**kwargs):
         [author.profile.email],
         fail_silently=False
     )
+
+
+@app.task
+def notice_about_new_messages(**kwargs):
+    sender = UserProfile.objects.get(id=kwargs['sender'])
+    receiver = UserProfile.objects.get(id=kwargs['receiver'])
+    print(kwargs)
+    mail_sent = send_mail(
+        'Успешно пройдена проверка',
+        f'Дорогой {receiver.first_name} Вам  {sender.first_name} на сайте У-шефа отправил сообшения для прочтения пройдите пожалуйста по ссылке\n https://ushefa.ru{receiver.get_absolute_url_for_friends_view()}',
+        settings.EMAIL_HOST_USER,
+        [receiver.email],
+        fail_silently=False
+    )
+    return mail_sent
 

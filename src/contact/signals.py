@@ -2,16 +2,15 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from .models import UserProfile, Relationship
 from django.contrib.auth.models import User
-from private_chat.models import Thread
+from private_chat.models import Thread, ChatMessage
 
 from culinary_recipe.models import Dish
 
-from .tasks import send_success_subscribe
+from .tasks import send_success_subscribe, notice_about_new_messages
 
 
 @receiver(post_save, sender=Dish)
 def send_email_that_pass_moderator_culinary_dish(sender, instance, **kwargs):
-    print('se ', kwargs)
     if instance.moderator:
         author = instance.author.id
         title = instance.title
@@ -54,6 +53,14 @@ def pre_delete_remove_from_friends(sender, instance, **kwargs):
     sender.save()
     receiver.save()
 
+
+@receiver(post_save, sender=ChatMessage)
+def new_message_send_to_celery(sender, instance, **kwargs):
+    # When user get new message celery get command to send email
+    message = instance.message
+    receiver = instance.thread.second.id
+    sender = instance.thread.first.id
+    notice_about_new_messages.delay(message=message, receiver=receiver, sender=sender)
 
 # @receiver(post_save)
 # def social_login_fname_lname_profilepic(sociallogin, user, **kwargs):
