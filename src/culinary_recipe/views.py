@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
@@ -26,7 +26,7 @@ class CategoryViewList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        country = Country.objects.all()
+        country = Country.objects.annotate(cnt=Count('dish'))
         has_dish_country = []
         for con in country:
             if con.dish_set.all():
@@ -102,7 +102,7 @@ class MealDetailView(DetailView):
     template_name = 'culinary_recipe/meal_detail.html'
 
     def get(self, request, *args, **kwargs):
-        print(self.kwargs)
+        print('aaaa>', self.get_slug_field)
         meal = get_object_or_404(Dish, slug=self.kwargs.get('slug'), id=self.kwargs.get('pk'))
         hit_count = HitCount.objects.get_for_object(meal)
         hit_count_response = HitCountMixin.hit_count(request, hit_count)
@@ -285,8 +285,10 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
+
         ingredient_form = IngredientFormSet(self.request.POST)
         instruction_form = InstructionFormSet(self.request.POST, self.request.FILES)
+        print(form.changed_data)
         ingredient_id = ''
         for item, value in self.request.POST.items():
             if 'on' in value:
@@ -313,7 +315,7 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
                 except:
                     pass
         # Deleting old image from data when adding new one
-        if self.request.FILES:
+        if self.request.FILES and 'poster' in form.changed_data:
             for files in list(self.request.FILES):
                 if files == 'poster':
                     self.object.poster.delete()
@@ -332,6 +334,7 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
                 except:
                     pass
         if form.is_valid() and ingredient_form.is_valid() and instruction_form.is_valid():
+
             return self.form_valid(form)
         else:
             return self.form_invalid(form, ingredient_form, instruction_form)

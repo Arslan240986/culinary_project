@@ -137,29 +137,20 @@
             <p class="ui grey header">Количество порций</p>
             <p>
                 <small class="font-oswald text-muted pl-10">
-                    {% if meal.servings %}
-                    {{ meal.servings }}
-                    {% else %}
-                    Не указан
-                    {% endif %}
+                    {{ meal.servings|default:'Не указан' }}
                 </small>
             </p>
             <p class="ui grey header">Вегетарианское</p>
             <p>
                 <small class="font-oswald text-muted pl-10">
-                    {% if meal.vegetarian %}
-                    {{ meal.vegetarian }}
-                    {% else %}
-                    Не указан
-                    {% endif %}
+                    {{ meal.vegetarian|default:'Не указан' }}
                 </small>
             </p>
             <p class="ui  grey header">Технология</p>
             <p>
                 {% for technology in meal.technology.all %}
                 <small class="font-oswald text-muted pl-10">
-                    {{technology}}
-                    {% if not forloop.last %}, {% endif %}
+                    {{ technology }}{% if not forloop.last %}, {% endif %}
                 </small>
                 {% empty %}
                 <small class="font-oswald text-muted pl-10">
@@ -171,9 +162,7 @@
             <p>
                 {% for occasion in meal.occasion.all %}
                 <small class="font-oswald text-muted pl-10">
-                    {{occasion}}
-                    {% if not forloop.last %},
-                    {% endif %}
+                    {{ occasion }}{% if not forloop.last %},{% endif %}
                 </small>
                 {% empty %}
                 <small class="font-oswald text-muted pl-10">
@@ -185,9 +174,7 @@
             <p>
                 {% for device in meal.device.all %}
                 <small class="font-oswald text-muted pl-10">
-                    {{device}}
-                    {% if not forloop.last %},
-                    {% endif %}
+                    {{ device }}{% if not forloop.last %},{% endif %}
                 </small>
                 {% empty %}
                 <small class="font-oswald text-muted pl-10">
@@ -198,40 +185,24 @@
             <p class="ui grey header">Калории</p>
             <p>
                 <small class="font-oswald text-muted pl-10">
-                    {% if meal.calorie %}
-                        {{meal.calorie}}
-                    {% else %}
-                        Не указан
-                    {% endif %}
+                        {{meal.calorie|default:'Не указан'}}
                 </small>
             </p>
 
 
             <p class="ui grey header">Протеин</p>
             <p><small class="font-oswald text-muted pl-10">
-                    {% if meal.protein %}
-                        {{meal.protein}}
-                    {% else %}
-                        Не указан
-                    {% endif %}
+                        {{meal.protein|default:'Не указан'}}
             </small></p>
 
             <p class="ui grey header">Жиры</p>
             <p><small class="font-oswald text-muted pl-10">
-                {% if meal.fat %}
-                    {{meal.fat}}
-                {% else %}
-                    Не указан
-                {% endif %}
+                    {{meal.fat|default:'Не указан'}}
             </small></p>
 
             <p class="ui grey header">Углеводы</p>
             <p><small class="font-oswald text-muted pl-10">
-                {% if meal.carbohydrate %}
-                    {{meal.carbohydrate}}
-                {% else %}
-                    Не указан
-                {% endif %}
+                    {{meal.carbohydrate|default:'Не указан'}}
             </small></p>
         </div>
     </div>
