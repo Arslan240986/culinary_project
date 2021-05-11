@@ -1,21 +1,38 @@
+from PIL import Image
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q, Count
-from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 
 from django.views.generic.base import View
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
-from hitcount.views import HitCountDetailView
+from hitcount.models import HitCount
+from hitcount.views import HitCountMixin
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .models import Dish, Country, Category, SubCategory, DishLike, Ingredient, Step
 from culinary_post.models import CulinaryPost
 from .forms import DishCommentForm, DishForm, IngredientFormSet, InstructionFormSet
 from .utils import getMonth
 from contact.models import UserProfile
+
+
+def watermark_photo(input_image_path,
+                    output_image_path,
+                    watermark_image_path,
+                    position):
+    base_image = Image.open(input_image_path)
+    watermark = Image.open(watermark_image_path)
+    width, height = base_image.size
+    transparent = Image.new('RGB', (width, height), (0,0,0,0))
+    transparent.paste(base_image, (0,0))
+    transparent.paste(watermark, position, mask=watermark)
+    transparent.save(f'{settings.MEDIA_ROOT}/{output_image_path}')
 
 
 class CategoryViewList(ListView):
@@ -34,8 +51,6 @@ class CategoryViewList(ListView):
         context['countries'] = has_dish_country
         context['posts'] = CulinaryPost.objects.all().order_by('-created')[:6]
         return context
-
-
 
 
 def get_sub_category(request, slug):
@@ -57,7 +72,7 @@ class GetItems(View):
         if slug:
             meal = meal.filter(sub_category__slug=slug, moderator=True, draft=False)
             category_name = get_object_or_404(SubCategory, slug=slug)
-        paginator = Paginator(meal, 2)
+        paginator = Paginator(meal, 10)
 
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
@@ -72,6 +87,7 @@ class GetItems(View):
 class DishByCountry(View):
     """Вывод блюд по Странам"""
     def get(self, request, slug, pk):
+        # countr = Country.objects.prefetch_related('dish_set').get(slug=slug, id=pk)
         country = get_object_or_404(Country, slug=slug, id=pk)
         meals = Dish.objects.filter(country=country)
         return render(request, 'culinary_recipe/dishes_list.html', {'meals': meals, 'country': country})
@@ -90,10 +106,6 @@ class Search(ListView):
         context = super().get_context_data(*args, **kwargs)
         context['meals'] = self.get_queryset()
         return context
-
-
-from hitcount.models import HitCount
-from hitcount.views import HitCountMixin
 
 
 class MealDetailView(DetailView):
@@ -247,6 +259,9 @@ class DishCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         ingredient_form.save()
         instruction_form.instance = self.object
         instruction_form.save()
+        watermark_photo(form.instance.poster, str(form.instance.poster), 'static/image/yumy2.png', position=(10, 10))
+        for steps_image in instruction_form:
+            watermark_photo(steps_image.instance.image, str(steps_image.instance.image), 'static/image/yumy2.png', position=(10, 10))
         if form.instance.draft:
             return HttpResponseRedirect(user.profile.get_personal_absolute_url())
         messages.success(self.request, 'Спасибо за участие! Ваш рецепт будет добавлен на сайт после прохождения модерации.')

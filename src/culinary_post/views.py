@@ -14,6 +14,7 @@ from hitcount.views import HitCountDetailView
 from .models import CulinaryPost, PostLike
 from .forms import CulinaryPostModelForm, PostCommentModelForm
 from culinary_recipe.utils import getMonth
+from culinary_recipe.views import watermark_photo
 
 
 @login_required
@@ -27,6 +28,7 @@ def posts_add(request):
             instance = p_form.save(commit=False)
             instance.author = profile
             instance.save()
+            watermark_photo(instance.image, str(instance.image), 'static/image/yumy2.png', position=(10, 10))
             return redirect('culinary_post:culinary_post_view')
         else:
             context = {'p_form': p_form}
