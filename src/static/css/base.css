@@ -229,7 +229,7 @@ ul.collapse {
     /* text-align: center; */
     max-width: 1900px !important;
     margin: auto !important;
-    height:auto !important;    
+    height:auto !important;
 }
 
 .line_vertical {
@@ -765,7 +765,7 @@ textarea {
     padding: 3px !important;
     cursor: pointer !important;
 }
-.add_recipe_icon::before{    
+.add_recipe_icon::before{
     content: "";
     display: block;
     width: 55px;
@@ -776,7 +776,7 @@ textarea {
     background-repeat: no-repeat;
     background-size: contain;
 }
-.add_post_icon::before{    
+.add_post_icon::before{
     content: "";
     display: block;
     width: 55px;
@@ -792,7 +792,7 @@ textarea {
     display: none !important;
 }
 .search_form_ushefa_icon{
-    display: none !important;       
+    display: none !important;
 }
 .second_nav_block{
     display: none !important;
@@ -812,7 +812,7 @@ textarea {
         display: none !important;
     }
     .search_form_ushefa_icon.display{
-        display: block !important;       
+        display: block !important;
     }
     .add_more_text_ushefa{
         display: none !important;
@@ -886,6 +886,7 @@ textarea {
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
+    float: right !important;
 }
 .line{
     border-top: 1px solid grey;
@@ -924,4 +925,13 @@ textarea {
 .over-flow{
     overflow-y: scroll !important;
     max-height: 500px;
+}
+.empty-form{
+    display: none !important;
+}
+.ingredient_block{
+    border: 1px solid gray;
+    padding: 10px !important;
+    border-radius: 5px !important;
+    margin-bottom: 10px !important ;
 }

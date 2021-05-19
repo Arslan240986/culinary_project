@@ -123,16 +123,10 @@ IngredientNestedFormSet = nestedformset_factory(
         extra=0,
         min_num=1,
         validate_min=True,
-        error_messages={
-                        'missing_management_form': 'hernyaaaaa',
-        }
     ),
     extra=0,
     min_num=1,
     validate_min=True,
-    error_messages={
-            'missing_management_form': 'hernyaaaaa',
-    }
 )
 
 
