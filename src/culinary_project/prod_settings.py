@@ -22,7 +22,7 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'culinary',
+#         'NAME': 'culinary_rewrite',
 #         'USER': 'postgres',
 #         'PASSWORD': '12345qw',
 #         'HOST': '127.0.0.1',

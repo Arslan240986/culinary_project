@@ -21,3 +21,4 @@ static_cdn/static_root/
 /src/contact/migrations/
 /src/culinary_post/migrations/
 /src/private_chat/migrations/
+/.vscode/

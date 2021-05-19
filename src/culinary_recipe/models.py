@@ -210,13 +210,16 @@ class Dish(models.Model):
     def get_update_absolute_url(self):
         return reverse('culinary_recipe:update_meal', args=[self.slug])
 
+    # def get_update_try_absolute_url(self):
+    #     return reverse('culinary_recipe:update_try_meal', args=[self.slug])
+
     def get_delete_absolute_url(self):
         return reverse('culinary_recipe:delete_meal', args=[self.pk])
 
     def get_ingredients(self, slug):
-        ingredients = [x for x in self.ingredient_set.all()]
-        if slug in ingredients:
-            return self
+        # ingredients = [x for x in self.ingredienttitle.ingredientlist_set.all()]
+        # if slug in ingredients:
+        return self
 
     def get_comments(self):
         return self.comments.all()
@@ -261,17 +264,28 @@ class Measure(models.Model):
         verbose_name = 'Мера веса/объема'
 
 
-class Ingredient(models.Model):
-    """Ингредиент"""
+class IngredientTitle(models.Model):
+    name = models.CharField(max_length=250, verbose_name='Заголовок ингредиента')
     meal = models.ForeignKey(Dish, verbose_name='Блюдо', on_delete=models.CASCADE, null=True)
-    name = models.CharField(verbose_name='Название', max_length=25, blank=True)
-    quantity = models.DecimalField(max_digits=1000, decimal_places=2,
-                                   verbose_name='Количество', blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Заголовок ингредиента'
+        verbose_name_plural = 'Заголовок ингредиентов'
+
+
+class IngredientList(models.Model):
+    """Ингредиент"""
+    title = models.ForeignKey(IngredientTitle, verbose_name='Заголовок ингредиента', on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField( verbose_name='Название', max_length=25)
+    quantity = models.CharField(max_length=150, verbose_name='Количество', blank=True)
     measure = models.ForeignKey(Measure, verbose_name='Мера веса/объема', on_delete=models.SET_NULL, null=True, blank=True)
     note = models.TextField(verbose_name='Примечание', null=True, blank=True)
 
     def __str__(self):
-        return f'{self.name}-{self.meal}'
+        return f'{self.name}-{self.title}'
 
     class Meta:
         ordering = ['id']

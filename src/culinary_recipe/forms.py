@@ -1,8 +1,13 @@
 from django import forms
 from django.forms import HiddenInput, BaseInlineFormSet
 from django.forms.formsets import BaseFormSet
-from django.forms.models import inlineformset_factory
-from .models import DishComment, Dish, Category, Step, Ingredient, SubCategory, Technology
+from django.core.exceptions import NON_FIELD_ERRORS
+from nested_formset import nestedformset_factory
+
+from .models import (DishComment, Dish, Category,
+                     Step, IngredientList, SubCategory,
+                     Technology, IngredientTitle)
+from django.forms.models import BaseInlineFormSet, inlineformset_factory
 
 
 class DishCommentForm(forms.ModelForm):
@@ -13,6 +18,12 @@ class DishCommentForm(forms.ModelForm):
         widgets = {
             'text': forms.Textarea(attrs={'rows': 2})
         }
+
+
+class IngredientTitleForm(forms.ModelForm):
+    class Meta:
+        model = IngredientTitle
+        fields = ('name',)
 
 
 class StepsForm(forms.ModelForm):
@@ -73,13 +84,11 @@ class DishForm(forms.ModelForm):
 
         }
 
+
 class IngredientForm(forms.ModelForm):
-    quantity = forms.DecimalField(error_messages={'invalid': 'это поле только для числового значения'},
-                                  max_digits=1000, decimal_places=2, label_suffix="*",
-                                  label="hernya"),
 
     class Meta:
-        model = Ingredient
+        model = IngredientList
         fields = ('name', 'quantity', 'measure', 'note',)
         widgets = {
             'note': forms.Textarea(attrs={'cols': 6, 'rows': 3,
@@ -92,16 +101,43 @@ class IngredientForm(forms.ModelForm):
         }
 
 
-class BaseArticleFormSet(BaseInlineFormSet):
-    ordering_widget = HiddenInput
+IngredientNestedFormSetCreate = nestedformset_factory(
+    Dish,
+    IngredientTitle,
+    nested_formset=inlineformset_factory(
+        IngredientTitle,
+        IngredientList,
+        form=IngredientForm,
+        extra=1,
+    ),
+    extra=0,
+)
 
+IngredientNestedFormSet = nestedformset_factory(
+    Dish,
+    IngredientTitle,
+    nested_formset=inlineformset_factory(
+        IngredientTitle,
+        IngredientList,
+        form=IngredientForm,
+        extra=0,
+        min_num=1,
+        validate_min=True,
+        error_messages={
+                        'missing_management_form': 'hernyaaaaa',
+        }
+    ),
+    extra=0,
+    min_num=1,
+    validate_min=True,
+    error_messages={
+            'missing_management_form': 'hernyaaaaa',
+    }
+)
 
-IngredientFormSet = inlineformset_factory(Dish, Ingredient, IngredientForm, formset=BaseArticleFormSet,
-                                          extra=0, min_num=2, validate_min=True, can_delete=True, can_order=True)
 
 InstructionFormSet = inlineformset_factory(Dish, Step,
-                                           fields=('description',
-                                                   'image'),
+                                           fields=('description', 'image'),
                                            can_delete=True, can_order=True,
                                            extra=0, min_num=1, validate_min=True,
                                            widgets={

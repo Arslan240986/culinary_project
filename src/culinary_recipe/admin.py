@@ -3,10 +3,10 @@ from django.utils.safestring import mark_safe
 from mptt.admin import MPTTModelAdmin
 
 from .models import (Country, Category, Step,
-                     Dish, Ingredient, Measure,
+                     Dish, IngredientList, Measure,
                      DishComment, SubCategory,
                      Device, Occasion, Technology, DishLike,
-                     Complexity, Vegeterian)
+                     Complexity, Vegeterian, IngredientTitle)
 
 
 @admin.register(Device)
@@ -20,17 +20,19 @@ class OccasionAdmin(admin.ModelAdmin):
 
 
 @admin.register(Complexity)
-class OccasionAdmin(admin.ModelAdmin):
+class ComplexityAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
 @admin.register(Vegeterian)
-class OccasionAdmin(admin.ModelAdmin):
+class VegeterianAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
+
 
 @admin.register(Technology)
 class TechnologyAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
+
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
@@ -66,14 +68,11 @@ class StepsInlines(admin.TabularInline):
     get_image.short_description = 'Изображение'
 
 
-class IngrediengtsInlines(admin.TabularInline):
-    model = Ingredient
+class IngredientInlines(admin.TabularInline):
+    model = IngredientTitle
 
-    def get_image(self, obj):
-        return mark_safe(f"<img src={obj.image.url}, width='100' height='100'>")
-
-    get_image.short_description = 'Изображение'
     extra = 1
+    fields = ('meal', 'name',)
 
 
 @admin.register(Dish)
@@ -82,7 +81,7 @@ class MealAdmin(admin.ModelAdmin):
     list_filter = ('category', 'sub_category')
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ('title', 'category__name',)
-    inlines = [StepsInlines, IngrediengtsInlines, ReviewInlines, ]
+    inlines = [StepsInlines, IngredientInlines, ReviewInlines, ]
     save_on_top = True
     save_as = True
     list_editable = ('draft', 'moderator')
@@ -115,10 +114,16 @@ class MealAdmin(admin.ModelAdmin):
         return mark_safe(f'<img src={obj.poster.url}, width="100" height="100"')
 
 
-@admin.register(Ingredient)
+@admin.register(IngredientTitle)
+class IngredientTitleAdmin(admin.ModelAdmin):
+    fields = ('name', 'meal',)
+    list_display = ('name','meal',)
+
+
+@admin.register(IngredientList)
 class IngredientAdmin(admin.ModelAdmin):
     fields = ('name', 'quantity', 'measure', 'note',)
-    list_display = ('id', 'name', 'quantity', 'measure', 'note',)
+    list_display = ('title','id', 'name', 'quantity', 'measure', 'note',)
 
 
 admin.site.register(Measure)
