@@ -44,12 +44,12 @@ $(document).ready(function () {
         $('.form__add-img').css({ 'display': 'none' })
     })
     $('.instruction_image_div').mouseover((e) => {
-        $(e.target).siblings('.form__add-img-instr').css({ 'display': 'block', })
+        $(e.target).next().next('div.form__add-img-instr').css({ 'display': 'block', })
     })
     $('.instruction_image_div').mouseout((e) => {
-        $(e.target).siblings('.form__add-img-instr').css({ 'display': 'none', })
+        $(e.target).next().next('div.form__add-img-instr').css({ 'display': 'none', })
     })
-    // shows list of ingredients when user focus on input 
+    // shows list of ingredients when user focus on input
 
     $('.form-control.dish_ingredient_name').on('focus', (e) => {
         var ch = document.getElementById('id_ingredient_set-0-name')
@@ -105,7 +105,24 @@ $(document).ready(function () {
             },
         });
     })
+    // Show on temporary window image which was selected
+    $('.instruction_image_div').click((e)=>{
+        var next_elemn_div = $(e.target).next()
+        var hiden_inputload_image_instractuin = next_elemn_div.children('input[type=file]')
+        hiden_inputload_image_instractuin.click()
 
+        hiden_inputload_image_instractuin.change((e)=>{
+            if ($(e.target).prop('files') && $(e.target).prop('files')[0]) {
+                previousImage = next_elemn_div.prev()
+                var reader = new FileReader()
+                reader.onload = function (e) {
+                    var image = e.target.result
+                    previousImage.attr({'src': image})
+                }
+                reader.readAsDataURL($(e.target).prop('files')[0])
+            }
+        })
+    })
 })
 // function that sets d_none class on autocomplete popups windows when blur input
 function ClearAutoCompleteWindows() {
@@ -120,29 +137,13 @@ function ClearAutoCompleteWindows() {
 }
 //<!--Show image on temporary window-->
 function readURL(input) {
+
     if (input.files && input.files[0]) {
         var reader = new FileReader()
         reader.onload = function (e) {
             var image = e.target.result
             var imageField = document.getElementById('poster_image_id')
             imageField.src = image
-        }
-        reader.readAsDataURL(input.files[0])
-    }
-}
-
-//<!--open file selector instruction image-->
-function clickImageFile(input) {
-    input.nextElementSibling.click()
-}
-//<!--Show instruction image on temporary window-->
-function readURLInstrcution(input) {
-    if (input.files && input.files[0]) {
-        previousImage = input.previousElementSibling
-        var reader = new FileReader()
-        reader.onload = function (e) {
-            var image = e.target.result
-            previousImage.src = image
         }
         reader.readAsDataURL(input.files[0])
     }
