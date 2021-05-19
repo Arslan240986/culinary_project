@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    console.log($(window))
     //<!--        Semantic ui checkbox and dropdown -->
     $('.max.example ui.normal.dropdown').dropdown({ maxSelections: 3 });
     $('.my_dropdown').dropdown();
