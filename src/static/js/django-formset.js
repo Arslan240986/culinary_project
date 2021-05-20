@@ -19,8 +19,6 @@ var __hasProp = {}.hasOwnProperty,
   $.fn.djangoFormset.Formset = (function() {
     function Formset(base, options) {
       var deletedForms, forms, inputName, placeholderPos;
-      // console.log('this')
-      // console.log(this)
       this.opts = $.extend({}, $.fn.djangoFormset.defaultOptions, options);
       if (base.length === 0) {
         throw new FormsetError("Empty selector.");
