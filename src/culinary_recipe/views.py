@@ -263,7 +263,8 @@ class DishCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         instruction_form.save()
         watermark_photo(form.instance.poster, str(form.instance.poster), 'static/image/yumy2.png', position=(10, 10))
         for steps_image in instruction_form:
-            watermark_photo(steps_image.instance.image, str(steps_image.instance.image), 'static/image/yumy2.png', position=(10, 10))
+            if steps_image.instance.image:
+                watermark_photo(steps_image.instance.image, str(steps_image.instance.image), 'static/image/yumy2.png', position=(10, 10))
         if form.instance.draft:
             return HttpResponseRedirect(user.profile.get_personal_absolute_url())
         messages.success(self.request, 'Спасибо за участие! Ваш рецепт будет добавлен на сайт после прохождения модерации.')
@@ -325,8 +326,9 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             watermark_photo(base_form.instance.poster, str(base_form.instance.poster), 'static/image/yumy2.png',
                             position=(10, 10))
             for steps_image in instruction_form:
-                watermark_photo(steps_image.instance.image, str(steps_image.instance.image), 'static/image/yumy2.png',
-                                position=(10, 10))
+                if steps_image.instance.image:
+                    watermark_photo(steps_image.instance.image, str(steps_image.instance.image), 'static/image/yumy2.png',
+                                    position=(10, 10))
             if base_form.instance.draft:
                 return HttpResponseRedirect(user.profile.get_personal_absolute_url())
             messages.success(self.request,'Спасибо за участие! Ваш рецепт будет добавлен на сайт после прохождения модерации.')

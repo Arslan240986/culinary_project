@@ -90,14 +90,14 @@
             {% for ingredient_title in meal.ingredienttitle_set.all %}
             <h4 class="ui block grey header font-oswald">{{ ingredient_title.name }}</h4>
             <ul class="ingredients_ul mb-4">
+                {% for ingredient in ingredient_title.ingredientlist_set.all %}
                 <li class="ingredints_li">
-                    {% for ingredient in ingredient_title.ingredientlist_set.all %}
                     <span>
-                        {{ ingredient.name }} - {{ ingredient.quantity }} {{ ingredient.measure }}
+                        {{ ingredient.name }} - {% if ingredient.quantity %}{{ ingredient.quantity }}{% endif %} {% if ingredient.measure %}{{ ingredient.measure }}{% endif %}
                         {% if ingredient.note %}({{ingredient.note}}){% endif %}
                     </span>
-                    {% endfor %}
                 </li>
+                {% endfor %}
             </ul>
             {% endfor %}
             <h4 class="font-oswald ui block grey header">ПОШАГОВЫЙ РЕЦЕПТ ПРИГОТОВЛЕНИЯ</h4>

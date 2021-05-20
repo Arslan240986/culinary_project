@@ -199,8 +199,7 @@
                                         <div class="fields">
                                             <div class="field">
                                                 {{ ingredient_title_form.empty_form.nested.empty_form.name.label_tag }}
-                                                <div class="ingredient_name_td mr-4"
-                                                     data-href="{% url 'culinary_recipe:get_ingredient_lists' %}">
+                                                <div class="ingredient_name_td mr-4" data-href="{% url 'culinary_recipe:get_ingredient_lists' %}">
                                                     {{ ingredient_title_form.empty_form.nested.empty_form.name }}
                                                     <div class="d_none" id="autocomplete_list"></div>
                                                 </div>
@@ -305,7 +304,16 @@
                 </div>
 
                 {{ inner_ingredient_title_form.nested.management_form }}
-
+                    {% if inner_ingredient_title_form.nested.non_form_errors %}
+                        {% for error in inner_ingredient_title_form.nested.non_form_errors %}
+                            <div class="ui negative message">
+                                <i class="close icon"></i>
+                                <div class="header">
+                                    {{ error }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 <div class="ingredient_block">
                     <div class="empty-form">
                         <div class="nested_ingredient_form">
@@ -348,20 +356,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="nested_ingredient_form">
-                    {% if inner_ingredient_title_form.nested.non_form_errors %}
-                        {% for error in inner_ingredient_title_form.nested.non_form_errors %}
-                            <div class="ui negative message">
-                                <i class="close icon"></i>
-                                <div class="header">
-                                    {{ error }}
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
                         {{ inner_ingredient_title_form.nested.name.errors }}
                     {% for nested_ingredient_form in inner_ingredient_title_form.nested %}
-
+                        <div class="nested_ingredient_form">
                         <div class="fields">
                             <div class="field">
                                 <div class="field">
@@ -403,9 +400,9 @@
                                 {{ nested_ingredient_form.title }}
                             </div>
                         </div>
-
+                    </div>
                     {% endfor %}
-                        </div>
+
                     <button type="button" class="ui inverted green button" data-action="add-inner-ingredient-form">
                         Добавить ингредиент
                     </button>
@@ -541,7 +538,7 @@
 
 {% block javascript %}
 
-    var outerFormset = $("fieldset.ingredient_form_set").not('.actions')
+    var outerFormset = $("fieldset.ingredient_form_set").not('.flex_center_middle')
     .djangoFormset({
         on: {
             formInitialized: function(event, form) {
@@ -551,7 +548,6 @@
                 var innerFormset = innerFormsetElem.children('div').djangoFormset({
                     deleteButtonText: '<i class="ui big times circle red icon"></i>',
                 });
-
                 innerFormsetElem.on('click', '[data-action=add-inner-ingredient-form]', function(event) {
                     innerFormset.addForm();
                 });
