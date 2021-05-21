@@ -125,11 +125,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_cdn/', 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static_cdn', 'media')
 
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'ushefaru@gmail.com'
-EMAIL_HOST_PASSWORD = 'arslan240986'
-EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_HOST_USER = 'noreply@ushefa.ru'
+EMAIL_HOST_PASSWORD = 'pooPoTRu320)'
+EMAIL_PORT = 465
 EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 
 
 
