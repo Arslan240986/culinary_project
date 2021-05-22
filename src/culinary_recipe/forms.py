@@ -81,6 +81,7 @@ class DishForm(forms.ModelForm):
                                               'placeholder': 'Не выбрано'}),
             'vegetarian': forms.Select(attrs={'class': "ui fluid dropdown",
                                               'placeholder': 'Не выбрано'}),
+            'advice': forms.Textarea(attrs={'class': 'form-control', 'rows': 5})
 
         }
 

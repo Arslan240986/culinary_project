@@ -517,6 +517,11 @@
             </fieldset>
         </div>
     </div>
+    <div class="{% if form.advice.errors %}error{% endif %} field m-2">
+        {{ form.advice.errors }}
+        {{ form.advice.label_tag }}
+        {{ form.advice }}
+    </div>
     <div class="field">
         <div class="ui fluid segment">
             <div class="ui toggle checkbox">

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load socialaccount%}
 {% load i18n %}
 
 {% block title %}{% trans "Signup" %}{% endblock %}
@@ -54,8 +54,8 @@
             <p>или</p>
             <p>Войдите с одного из вашего аккаунта</p>
                 {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-            <a href="#">
-                <i class="ui facebook large icon"></i>
+            <a href="{% provider_login_url 'google' %}">
+                <i class="ui google large icon"></i>
             </a>
         </div>
     </div>
