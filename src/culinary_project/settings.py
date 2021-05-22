@@ -151,7 +151,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 
 # Allauth settings
-LOGIN_REDIRECT_URL = 'contact:user_profile'
+LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'account_login'
 LOGOUT_URL = 'account_logout'
 SITE_ID = 1
