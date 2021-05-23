@@ -126,10 +126,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_cdn/', 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static_cdn', 'media')
 
-EMAIL_HOST = 'smtp.mail.ru'
-EMAIL_HOST_USER = 'noreply@ushefa.ru'
-EMAIL_HOST_PASSWORD = 'pooPoTRu320)'
-EMAIL_PORT = 465
+EMAIL_HOST = 'smtp.send-box.ru'
+EMAIL_HOST_USER = 'sendbox@ushefa.ru'
+EMAIL_HOST_PASSWORD = 'nNGLmenXoKfqsQ'
+EMAIL_PORT = 2525
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 

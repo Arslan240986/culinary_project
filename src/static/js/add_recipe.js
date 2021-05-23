@@ -1,8 +1,4 @@
 $(document).ready(function () {
-    //<!--        Semantic ui checkbox and dropdown -->
-    $('.max.example ui.normal.dropdown').dropdown({ maxSelections: 3 });
-    $('.my_dropdown').dropdown();
-    $('.ui.toggle.checkbox').checkbox();
     //        <!--Dependence dropdown-->
     $('#id_category').change(function (e) {
         event.preventDefault();
@@ -123,6 +119,10 @@ $(document).ready(function () {
             }
         })
     })
+    //<!--        Semantic ui checkbox and dropdown -->
+    $('.max.example ui.normal.dropdown').dropdown({ maxSelections: 3 });
+    $('.my_dropdown').dropdown();
+    $('.ui.toggle.checkbox').checkbox();
 })
 // function that sets d_none class on autocomplete popups windows when blur input
 function ClearAutoCompleteWindows() {

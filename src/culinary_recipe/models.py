@@ -135,7 +135,7 @@ class Vegeterian(models.Model):
 
 
 def get_poster_image_filepath(self, fileName):
-    return f'meal/{self.slug}/poster/{fileName}'
+    return f'meal/{self.slug[0:30]}/poster/{fileName}'
 
 
 def get_steps_image_filepath(self, fileName):
@@ -144,7 +144,7 @@ def get_steps_image_filepath(self, fileName):
 
 class Dish(models.Model):
     """Блюдо"""
-    title = models.CharField(verbose_name='Название', max_length=200)
+    title = models.CharField(verbose_name='Название', max_length=700)
     slug = models.SlugField(max_length=300, unique=True, verbose_name='Поле для урл')
     description = models.TextField(verbose_name='Описание')
     poster = models.ImageField('Постер', upload_to=get_poster_image_filepath)
