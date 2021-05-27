@@ -55,7 +55,7 @@ class CategoryViewList(ListView):
 
 def get_sub_category(request, slug):
     category = get_object_or_404(Category, slug=slug)
-    sub_category = SubCategory.objects.filter(category=category)
+    sub_category = SubCategory.objects.filter(category=category).annotate(cnt=Count('dish'))
     context = {
         'sub_categories': sub_category,
         'category': category

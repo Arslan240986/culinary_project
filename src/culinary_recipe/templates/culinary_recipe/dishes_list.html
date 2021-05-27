@@ -43,8 +43,10 @@
         </small>
         <p class="description">{{ meal.description }}</p>
         <small class="card-text ">Ингредиенты:
-            {% for ings in meal.ingredient_set.all %}
-            <span >{{ ings.name }}{% if not forloop.last %},{% endif %}</span>
+            {% for ingredient_title in meal.ingredienttitle_set.all %}
+                {% for ingredient in ingredient_title.ingredientlist_set.all %}
+                    {{ ingredient.name }},
+                {% endfor %}
             {% endfor %}
         </small>
     </div>

@@ -15,13 +15,12 @@
                     {{ category.name }}
                 </a>
             </div>
-
             <div class="middle aligned content" id="{{ category.slug }}">
                 {% for sub_category in category.sub_category.all %}
                 <p class="accordion transition visible" style="display: block !important;">
                     <a href="{{ sub_category.get_absolute_url }}"
                        class="navbar_links_yummy font-oswald font-oswald black pl-20">
-                        {{sub_category.name}}
+                        {{sub_category.name}} : {{ sub_category.dish_set.all.count }}
                     </a>
                 </p>
                 {% endfor %}

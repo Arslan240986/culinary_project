@@ -14,31 +14,6 @@
                 <a href="/" class="mr-10">
                     <img loading="lazy" src="/static/image/logo_header.png" alt="">
                 </a>
-
-                <div class="ui pointing dropdown link item font-oswald my-2 mr-10 white nu_tam_tam" tabindex="0">
-                    Рецепты
-                    <i class="dropdown icon"></i>
-                    <div class="menu bgc add_post_box_custom" tabindex="-1">
-                        {% get_categories as categories %}
-                        {% for category in categories %}
-                        <a class="item font-oswald" href="{{ category.get_absolute_url }}">
-
-                            <div class=" navbar_links_yummy">
-                                {{ category.name }}
-                            </div>
-                            {% if category.sub_category.all %}
-                            <div class="menu">
-                                {% for sub_category in category.sub_category.all %}
-                                <div class="item">{{sub_category.name}}</div>
-                                {% endfor %}
-                            </div>
-                            {% endif %}
-                        </a>
-
-
-                        {% endfor %}
-                    </div>
-                </div>
             </div>
             <div class="item"><a class="p-2 navbar_links_yummy font-oswald"
                                  href="{% url 'culinary_post:culinary_post_view' %}">Кулинарные посты</a></div>
@@ -84,50 +59,43 @@
                         <span class="text white">{{user.profile.first_name}}</span>
                         <div class="menu transition hidden add_post_box_custom" tabindex="-1">
                             <div class="divider"></div>
-                            <div class="item personal_drop_list">
-                                <i class="file outline icon"></i>
-                                <a class="font-yanone black pt-10"
-                                   href="{{ user.profile.get_personal_absolute_url }}">Ваша страница</a>
-                            </div>
+                            <a class="item font-yanone black pt-10"
+                                   href="{{ user.profile.get_personal_absolute_url }}" >
+                                <i class="file outline icon"></i>Ваша страница
+                            </a>
                             <div class="divider"></div>
-                            <div class="item personal_drop_list">
+                            <a class="item font-yanone black pt-10" href="{% url 'contact:my_invites_view' %}">
                                 <i class="user outline icon"></i>
-                                <a class="font-yanone black pt-10" href="{% url 'contact:my_invites_view' %}">Запрос на
+                                Запрос на
                                     дружбу
                                     <span class="ui red label ">{{ user.profile.get_total_friend_request }}</span>
-                                </a>
-                            </div>
+                            </a>
                             <div class="divider"></div>
-                            <div class="item personal_drop_list">
+                            <a class="item font-yanone black pt-10"
+                                   href="{{user.profile.get_absolute_url_for_friends_view}}">
                                 <i class="chat outline icon custom_chat_icon"></i>
-                                <a class="font-yanone black pt-10"
-                                   href="{{user.profile.get_absolute_url_for_friends_view}}">Сообщения
+                                Сообщения
                                     <span class="ui red label ">{{ msg_notification }}</span>
-                                </a>
-                            </div>
+                            </a>
                             <div class="divider"></div>
-                            <div class="item personal_drop_list">
+                            <a class="item font-yanone black pt-10" href="{% url 'contact:all_profiles_view' %}">
                                 <i class="users icon"></i>
-                                <a class="font-yanone black pt-10" href="{% url 'contact:all_profiles_view' %}">Все
-                                    пользователи</a>
-                            </div>
+                                Все пользователи
+                            </a>
                             <div class="divider"></div>
-                            <div class="item personal_drop_list">
+                            <a class="item font-yanone black pt-10" href="{% url 'contact:invite_profiles_view' %}">
                                 <i class="search icon"></i>
-                                <a class="font-yanone black pt-10" href="{% url 'contact:invite_profiles_view' %}">Найти
-                                    друзей </a>
-                            </div>
+                                Найти друзей
+                            </a>
                             <div class="divider"></div>
-                            <div class="item personal_drop_list">
-                                <i class="book icon"></i>
-                                <a class="font-yanone black pt-10"
-                                   href="{{ user.profile.get_dish_book_absolute_url }}">Кулинарная книга <span
-                                        class="ui teal label dish_book_count">{{ user.profile.get_total_book }}</span></a>
-                            </div>
+                            <a class="item font-yanone black pt-10" href="{{ user.profile.get_dish_book_absolute_url }}">
+                                <i class="book icon"></i>Кулинарная книга
+                                <span class="ui teal label dish_book_count">{{ user.profile.get_total_book }}</span>
+                            </a>
                             <div class="divider"></div>
-                            <div class="item personal_drop_list">
-                                <i class="logout icon"></i>
-                                <a class="font-yanone black pt-10" href="{% url 'account_logout' %}">Выйти</a></div>
+                            <a class="item font-yanone black pt-10" href="{% url 'account_logout' %}">
+                                <i class="logout icon"></i> Выйти
+                            </a>
 
                         </div>
                     </div>

@@ -39,11 +39,14 @@
         <h1 class="font-lobster p-10">{{ meal.title }}</h1>
     </div>
 
-
     <div class="row">
         <div class="page_image loading_gif">
-            <img data-src="{{ meal.poster.url }}" src="/static/image/1x1.png" alt="{{ meal.title }}">
+            <img class="d_none" data-src="{{ meal.poster.url }}" src="/static/image/1x1.png" alt="{{ meal.title }}">
         </div>
+    </div>
+
+    <div class="dish_row">
+        <h1 class="font-lobster p-10">{{ meal.description }}</h1>
     </div>
 
     <div class="ui equal stackable width grid p-10">

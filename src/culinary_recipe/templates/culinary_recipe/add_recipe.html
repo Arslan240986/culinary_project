@@ -542,11 +542,10 @@
 {% endblock side %}
 
 {% block jscdn %}
-<script type="text/javascript" src="{% static 'js/add_recipe.js' %}"></script>
+<script async type="text/javascript" src="{% static 'js/add_recipe.js' %}"></script>
 {% endblock jscdn %}
 
 {% block javascript %}
-
     var outerFormset = $("fieldset.ingredient_form_set").not('.ui.negative.message')
     .djangoFormset({
         on: {

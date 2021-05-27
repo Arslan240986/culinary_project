@@ -1,3 +1,4 @@
+"use strict"
 var prevScrollpos = window.pageYOffset;
 var navbar = document.querySelector("#navbar")
 document.querySelector('.bread').style.marginTop = navbar.offsetHeight + 3 + 'px'
@@ -128,11 +129,6 @@ $(document).ready(function () {
     $('.centered_custom').click((e)=>{
         $(e.target).children('.dropdown').click()
     })
-    $('.personal_drop_list').on('click', (e)=>{
-        e.stopPropagation();
-        e.target.querySelector('a').click()
-    })
-
 })
 function closeSearch(e) {
     $(e).parent().remove()
@@ -146,16 +142,18 @@ function closeSearch(e) {
 // lazy load js 
 const lazy_images = document.querySelectorAll('img[data-src]')
 const windowHieght = document.documentElement.clientHeight
-let = lazyImagesPosition = []
+let lazyImagesPosition = []
+
 if(lazy_images.length>0){
     lazy_images.forEach(img => {
         if(img.dataset.src){
+            console.log(img)
             lazyImagesPosition.push(img.getBoundingClientRect().top + pageYOffset)
-            lazyScrollCheck()
+            // lazyScrollCheck()
         }
     })
 }
-
+console.log(lazyImagesPosition)
 window.addEventListener('scroll', lazyScroll)
 
 function lazyScroll(){
@@ -169,12 +167,19 @@ function lazyScrollCheck(){
     );
     if (imgIndex >= 0){
         if(lazy_images[imgIndex].dataset.src){
-            lazy_images[imgIndex].src = lazy_images[imgIndex].dataset.src
-            lazy_images[imgIndex].classList.add('width')
-            lazy_images[imgIndex].parentElement.classList.remove('loading_gif')
-            lazy_images[imgIndex].removeAttribute('data-src')
-            lazy_images[imgIndex].classList.remove('d_none')
+            // console.log(lazy_images[imgIndex].dataset.src)
+            setTimeout(()=>{
+                lazy_images[imgIndex].src = lazy_images[imgIndex].dataset.src
+                lazy_images[imgIndex].parentElement.classList.remove('padding')
+                lazy_images[imgIndex].classList.add('width')
+                lazy_images[imgIndex].removeAttribute('data-src')
+                lazy_images[imgIndex].classList.remove('d_none')
+                lazy_images[imgIndex].parentElement.classList.remove('loading_gif')
+            },1000)
         }
         delete lazyImagesPosition[imgIndex]
     }
+}
+if($(document).ready()){
+    console.log('as')
 }
