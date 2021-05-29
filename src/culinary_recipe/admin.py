@@ -108,6 +108,9 @@ class MealAdmin(admin.ModelAdmin):
         (None, {
             'fields': (('calorie', 'protein', 'fat', 'carbohydrate'),)
         }),
+        (None, {
+            'fields': (('advice'),)
+        }),
     )
 
     def get_image(self, obj):

@@ -41,12 +41,12 @@
 
     <div class="row">
         <div class="page_image loading_gif">
-            <img class="d_none" data-src="{{ meal.poster.url }}" src="/static/image/1x1.png" alt="{{ meal.title }}">
+            <img data-src="{{ meal.poster.url }}" src="/static/image/1x1.png" alt="{{ meal.title }}">
         </div>
     </div>
 
     <div class="dish_row">
-        <span class="p-10">{{ meal.description }}</span>
+        <span class="p-10">{{ meal.description|safe }}</span>
     </div>
 
     <div class="ui equal stackable width grid p-10">
@@ -111,19 +111,17 @@
             </p>
             {% if step.image %}
                 <div class="page_image loading_gif">
-                    <img class="d_none" data-src="{{ step.image.url }}" src="/static/image/1x1.png">
+                    <img data-src="{{ step.image.url }}" src="/static/image/1x1.png">
                 </div>
             {% endif %}
             {% endfor %}
-            <div>
-                <p class="meal_advice_field">
-                    {{meal.advice}}
-                </p>
+            <div class="meal_advice_field">
+                {{meal.advice|safe}}
             </div>
 
         </div>
         <div class="four wide column">
-            <p class="ui grey header"> Время подготовки</p>
+            <p class="ui grey header prepare_time"> Время подготовки</p>
             <p><small class="font-oswald text-muted pl-10">
                 {% if meal.preparation_time_hour or meal.preparation_time_minute %}
                     {% if meal.preparation_time_hour %}{{ meal.preparation_time_hour }}{% else %}0{% endif %} <smal>ч</smal> /
@@ -227,7 +225,7 @@
         <div class="five wide column">
             <div class="card">
                 <div class="page_image loading_gif">
-                    <img class="d_none"  data-src="{{ meal.poster.url }}" src="/static/image/1x1.png" alt="{{ meal.poster}}">
+                    <img  data-src="{{ meal.poster.url }}" src="/static/image/1x1.png" alt="{{ meal.poster}}">
                 </div>
                 <div class="card-body">
                     <a class="ui link" href="{{meal.get_absolute_url}}"><p class="card-text">{{ meal.title }}</p></a>

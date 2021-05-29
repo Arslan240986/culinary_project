@@ -29,6 +29,7 @@
     {{form.description.label_tag}}
     <div class="{% if form.description.errors %}error{% endif %} field">
         {{form.description.errors}}
+        {{ form.media }}
         {{form.description}}
     </div>
     {{form.poster.label_tag}}
@@ -514,9 +515,10 @@
             </fieldset>
         </div>
     </div>
-    <div class="{% if form.advice.errors %}error{% endif %} field m-2">
+    <div class="{% if form.advice.errors %}error{% endif %} field m-2 over_flow">
         {{ form.advice.errors }}
         {{ form.advice.label_tag }}
+        {{ form.media }}
         {{ form.advice }}
     </div>
     <div class="field">

@@ -680,7 +680,9 @@ textarea {
     overflow: auto !important;
     height: 300px !important;
 }
-
+.over_flow{
+    overflow-x: auto !important;
+}
 .align-self-flex-end {
     align-self: flex-end !important;
 }
@@ -947,7 +949,7 @@ textarea {
 
 .preload{
     position: fixed !important;
-    background-color: white !important;
+    background-color: hsl(0, 0%, 90%) !important;
     top: 0px !important;
     width: 100% !important;
     height: 100% !important;
@@ -963,6 +965,6 @@ textarea {
     top: 30% !important;
     background-image: url('/static/image/animate.gif') !important;
     background-repeat: no-repeat !important;
-    background-size: inherit !important;
+    background-size: cover !important;
     z-index: 999999 !important;
 }

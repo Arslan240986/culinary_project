@@ -1,7 +1,5 @@
 from django import forms
-from django.forms import HiddenInput, BaseInlineFormSet
-from django.forms.formsets import BaseFormSet
-from django.core.exceptions import NON_FIELD_ERRORS
+from ckeditor.widgets import CKEditorWidget
 from nested_formset import nestedformset_factory
 
 from .models import (DishComment, Dish, Category,
@@ -81,8 +79,6 @@ class DishForm(forms.ModelForm):
                                               'placeholder': 'Не выбрано'}),
             'vegetarian': forms.Select(attrs={'class': "ui fluid dropdown",
                                               'placeholder': 'Не выбрано'}),
-            'advice': forms.Textarea(attrs={'class': 'form-control', 'rows': 5})
-
         }
 
 

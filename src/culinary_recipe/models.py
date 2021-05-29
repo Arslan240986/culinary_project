@@ -2,8 +2,9 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
-from django.utils.text import slugify
+from ckeditor.fields import RichTextField
 from .utils import make_slug
+
 import uuid
 
 
@@ -146,7 +147,7 @@ class Dish(models.Model):
     """Блюдо"""
     title = models.CharField(verbose_name='Название', max_length=700)
     slug = models.SlugField(max_length=300, unique=True, verbose_name='Поле для урл')
-    description = models.TextField(verbose_name='Описание')
+    description = RichTextField(verbose_name='Описание')
     poster = models.ImageField('Постер', upload_to=get_poster_image_filepath)
     category = models.ForeignKey(Category, verbose_name='Категория',
                                  on_delete=models.SET_NULL, null=True)
@@ -172,7 +173,7 @@ class Dish(models.Model):
                                related_name='dish', null=True)
     draft = models.BooleanField(verbose_name='Черновик', default=False)
     moderator = models.BooleanField(verbose_name='Модератор', default=False)
-    advice = models.TextField(verbose_name="Полезные советы", blank=True)
+    advice = RichTextField(verbose_name="Полезные советы", blank=True,)
     likes = models.ManyToManyField(User, verbose_name='Лайк', related_name='meal_likes')
     is_liked = models.BooleanField(default=False)
     dish_added = models.BooleanField(default=False)

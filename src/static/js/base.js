@@ -147,13 +147,12 @@ let lazyImagesPosition = []
 if(lazy_images.length>0){
     lazy_images.forEach(img => {
         if(img.dataset.src){
-            console.log(img)
             lazyImagesPosition.push(img.getBoundingClientRect().top + pageYOffset)
-            // lazyScrollCheck()
+            lazyScrollCheck()
         }
     })
 }
-console.log(lazyImagesPosition)
+
 window.addEventListener('scroll', lazyScroll)
 
 function lazyScroll(){
@@ -167,7 +166,6 @@ function lazyScrollCheck(){
     );
     if (imgIndex >= 0){
         if(lazy_images[imgIndex].dataset.src){
-            // console.log(lazy_images[imgIndex].dataset.src)
             setTimeout(()=>{
                 lazy_images[imgIndex].src = lazy_images[imgIndex].dataset.src
                 lazy_images[imgIndex].parentElement.classList.remove('padding')
@@ -179,7 +177,4 @@ function lazyScrollCheck(){
         }
         delete lazyImagesPosition[imgIndex]
     }
-}
-if($(document).ready()){
-    console.log('as')
 }
