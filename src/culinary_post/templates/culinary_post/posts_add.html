@@ -10,8 +10,33 @@
     <form action="{% url 'culinary_post:culinary_post_add' %}" method="post" class="ui form"
         enctype="multipart/form-data">
         {% csrf_token %}
-        {{p_form}}
-        <button type="submit" class="ui button positive mt-10">Опубликликовать</button>
+            {{ p_form.errors }}
+            {{ p_form.title.label_tag }}
+            <div class="{% if p_form.title.errors %}error{% endif %} field">
+
+                {{ p_form.title }}
+            </div>
+            {{p_form.image.label_tag}}
+            <div class="{% if p_form.image.errors %}error{% endif %} field">
+                <div class="ui medium image poster_image_div ">
+                    <img loading="lazy" id="poster_image_id" class="ui centered medium rounded image"
+                         src="{% static  '/image/empty_image.jpeg' %}">
+                    <div class="form__add-img"></div>
+                </div>
+                <input class="d_none" type="file" name="image" accept="image/*" required="" id="id_poster"
+                       onchange="readURL(this)">
+                {{p_form.image.errors}}
+            </div>
+        {{p_form.content.errors}}
+        {{p_form.content.label_tag}}
+        <div class="{% if p_form.content.errors %}error{% endif %} field">
+            {{p_form.media}}
+            {{p_form.content}}
+        </div>
+        <button type="submit" class="ui fluid inverted green button mt-10">Опубликликовать</button>
     </form>
 </div>
 {% endblock content %}
+{% block jscdn %}
+<script async type="text/javascript" src="{% static 'js/add_recipe.js' %}"></script>
+{% endblock jscdn %}

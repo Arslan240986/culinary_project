@@ -44,8 +44,12 @@
                 {% endif %}
             </div>
             {% endfor %}
-            <div class="row">
-                <div class="center aligned sixteen wide column">
+
+        </div>
+
+    </div>
+        <div class="row p-10">
+                <div class="justify_center">
                     <a class="link item" href="{% url 'culinary_recipe:dishes' %}">
                         <div class="ui animated fade button my_button" tabindex="0">
                             <div class="visible content">Все рецепты</div>
@@ -56,9 +60,6 @@
                     </a>
                 </div>
             </div>
-        </div>
-
-    </div>
     <hr>
 
     <div class="ui header pl-10 font-oswald">Кулинарные посты и новости</div>
@@ -76,13 +77,14 @@
             </div>
             {% endif %}
             <div class="content">
-                {{ post.content|truncatewords:"20"}}
+                {{ post.content|safe|truncatewords:"5"}}
             </div>
         </div>
         {% endfor %}
 
-        <div class="row">
-            <div class="center aligned sixteen wide column">
+    </div>
+        <div class="row p-10">
+            <div class="justify_center">
                 <a class="link item" href="{% url 'culinary_post:culinary_post_view' %}">
                     <div class="ui animated fade button my_button" tabindex="0">
                         <div class="visible content">Все посты</div>
@@ -93,8 +95,6 @@
                 </a>
             </div>
         </div>
-
-    </div>
     <hr>
     <h3 class="pl-10 font-oswald">Национальные кухни</h3>
     <div class="country_block my-4">

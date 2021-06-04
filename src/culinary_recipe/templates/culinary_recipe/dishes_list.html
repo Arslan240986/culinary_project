@@ -41,7 +41,7 @@
             <a class="button_link " href="{{ meal.category.get_absolute_url }}">{{ meal.category }}</a>
             <a class="button_link " href="{{ meal.sub_category.get_absolute_url }}">{{ meal.sub_category.name }}</a>
         </small>
-        <p class="description">{{ meal.description }}</p>
+        <p class="description">{{ meal.description|safe|truncatewords:"100" }}</p>
         <small class="card-text ">Ингредиенты:
             {% for ingredient_title in meal.ingredienttitle_set.all %}
                 {% for ingredient in ingredient_title.ingredientlist_set.all %}

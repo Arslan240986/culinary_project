@@ -26,6 +26,7 @@ def watermark_photo(input_image_path,
                     output_image_path,
                     watermark_image_path,
                     position):
+    print('ishledi')
     base_image = Image.open(input_image_path)
     watermark = Image.open(watermark_image_path)
     width, height = base_image.size
@@ -163,7 +164,6 @@ class MealDetailView(DetailView):
             else:
                 meal.dish_added = False
         context = {'meal': meal,
-                   'hit': hit_count_response,
                    'form': form,
                    'pag_comments': new_comments,
                    'similar_meals': similar_meals,
@@ -230,7 +230,6 @@ class DishCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def get(self, request, *args, **kwargs):
         self.object = None
         form_class = self.get_form_class()
-        print('aaa ', form_class)
         form = self.get_form(form_class)
         ingredient_title_form = IngredientNestedFormSet()
         instruction_form = InstructionFormSet()
@@ -271,9 +270,6 @@ class DishCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form, ingredient_title_form, instruction_form):
-        print('a ', form.errors)
-        print('b ', ingredient_title_form.non_form_errors())
-        print('c ', instruction_form.errors)
         return self.render_to_response(
             self.get_context_data(form=form, ingredient_title_form=ingredient_title_form,
                                   instruction_form=instruction_form)
@@ -304,6 +300,7 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form_class = self.get_form_class()
+        print(self.request.FILES)
         form = self.get_form(form_class)
         ingredient_nested_form = IngredientNestedFormSet(self.request.POST, instance=self.object)
         instruction_form = InstructionFormSet(self.request.POST, self.request.FILES, instance=self.object)
@@ -323,12 +320,17 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             base_form.save()
             ingredient_nested_form.save()
             instruction_form.save()
-            watermark_photo(base_form.instance.poster, str(base_form.instance.poster), 'static/image/yumy2.png',
-                            position=(10, 10))
-            for steps_image in instruction_form:
-                if steps_image.instance.image:
-                    watermark_photo(steps_image.instance.image, str(steps_image.instance.image), 'static/image/yumy2.png',
+            if self.request.FILES:
+                if 'poster' in self.request.FILES:
+                    watermark_photo(base_form.instance.poster, str(base_form.instance.poster), 'static/image/yumy2.png',
                                     position=(10, 10))
+
+                for value, items in self.request.FILES.items():
+                    if 'step' in value:
+                        for steps_image in instruction_form:
+                            if steps_image.instance.image:
+                                watermark_photo(steps_image.instance.image, str(steps_image.instance.image), 'static/image/yumy2.png',
+                                        position=(10, 10))
             if base_form.instance.draft:
                 return HttpResponseRedirect(user.profile.get_personal_absolute_url())
             messages.success(self.request,'Спасибо за участие! Ваш рецепт будет добавлен на сайт после прохождения модерации.')
@@ -337,9 +339,6 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return self.render_to_response(self)
 
     def form_invalid(self, form, ingredient_nested_form, instruction_form):
-        print('a ', form.errors)
-        print('b ', ingredient_nested_form.non_form_errors())
-        print('c ', instruction_form.errors)
         messages.error(self.request, 'Исправте ниже указанные ошибки')
         return self.render_to_response(
             self.get_context_data(form=form,

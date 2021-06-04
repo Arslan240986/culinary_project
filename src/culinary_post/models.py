@@ -1,3 +1,4 @@
+from ckeditor.fields import RichTextField
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from contact.models import UserProfile
@@ -15,8 +16,8 @@ def validate_max_len(val):
 class CulinaryPost(models.Model):
     title = models.CharField(max_length=1000, verbose_name="Загаловок", blank=True,
                              validators=[validate_max_len], help_text='Заголовок должен быть минимуи 10 символов')
-    content = models.TextField(verbose_name='Описания')
-    image = models.ImageField(verbose_name='Фотография', upload_to='posts', blank=True)
+    content = RichTextField(verbose_name='Описания')
+    image = models.ImageField(verbose_name='Фотография', upload_to='posts', blank=True, null=True)
     liked = models.ManyToManyField(UserProfile, blank=True, related_name='post_likes')
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

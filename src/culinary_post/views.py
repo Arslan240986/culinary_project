@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import DeleteView, UpdateView
@@ -9,7 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from contact.models import UserProfile
-from hitcount.views import HitCountDetailView
+from hitcount.models import HitCount
+from hitcount.views import HitCountDetailView, HitCountMixin
 
 from .models import CulinaryPost, PostLike
 from .forms import CulinaryPostModelForm, PostCommentModelForm
@@ -74,12 +75,13 @@ class AddCommentToPost(View):
 
 class CulinaryPostDetailView(HitCountDetailView):
     model = CulinaryPost
-    count_hit = True
     template_name = 'culinary_post/post_detail.html'
     context_object_name = 'post'
 
     def get(self, request, *args, **kwargs):
         post = self.get_object()
+        hit_count = HitCount.objects.get_for_object(post)
+        hit_count_response = HitCountMixin.hit_count(request, hit_count)
         form = PostCommentModelForm()
         comments = post.post_comments.all().filter(status=True)
         comment_size = len(comments)
@@ -159,7 +161,6 @@ def like_unlike_post(request):
 class CulinaryPostDeleteView(LoginRequiredMixin, DeleteView):
     model = CulinaryPost
     template_name = 'culinary_post/post_delete.html'
-    success_url = reverse_lazy('culinary_post:culinary_post_view')
 
     def get_object(self, *args, **kwargs):
         pk = self.kwargs.get('pk')
@@ -174,12 +175,19 @@ class CulinaryPostUpdateView(LoginRequiredMixin, UpdateView):
     model = CulinaryPost
     form_class = CulinaryPostModelForm
     template_name = 'culinary_post/post_update.html'
-    success_url = reverse_lazy('culinary_post:culinary_post_view')
+
+    def post(self, request, *args, **kwargs):
+        print(request.POST)
 
     def form_valid(self, form):
         profile = get_object_or_404(UserProfile, user=self.request.user)
         if form.instance.author == profile:
-            return super().form_valid(form)
+            instance = form.save(commit=False)
+            instance.save()
+            if 'image' in self.request.FILES:
+                watermark_photo(instance.image, str(instance.image), 'static/image/yumy2.png', position=(10, 10))
+            messages.success(self.request, 'Спасибо за участие! Ваш пост будет добавлен на сайт после прохождения модерации.')
+            return HttpResponseRedirect(self.get_success_url())
         else:
             form.add_error(None, "Вы не являетесь автором данного поста ")
             return super().form_invalid(form)
