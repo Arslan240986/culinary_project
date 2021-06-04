@@ -59,7 +59,7 @@ class DishForm(forms.ModelForm):
             'preparation_time_minute': forms.NumberInput(attrs={'placeholder': 'минуты'}),
             'cooking_time_hour': forms.NumberInput(attrs={'placeholder': 'часы'}),
             'cooking_time_minute': forms.NumberInput(attrs={'placeholder': 'минуты'}),
-            'servings': forms.CharField(attrs={'style': 'width: 100%;'}),
+            'servings': forms.TextInput(attrs={'style': 'width: 100%;'}),
             'technology': forms.SelectMultiple(attrs={'multiple':"",
                                                       'class':"ui fluid dropdown",
                                                       'placeholder': 'Не выбрано'}),
