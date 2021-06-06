@@ -1,0 +1,300 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mptt_tags %}
+{% load hitcount_tags %}
+
+{% block title %}{{ meal.title }}{% endblock title %}
+
+
+{% block breadcrumbs %}
+<a class="section navbar_links_yummy black" href="{{ meal.category.get_absolute_url }}">{{meal.category.name}}</a>
+<i class="right chevron icon divider black"></i>
+<a class="section navbar_links_yummy black"
+    href="{{ meal.sub_category.get_absolute_url }}">{{meal.sub_category.name}}</a>
+{% endblock breadcrumbs %}
+{% block content %}
+{% if messages %}
+
+{% for message in messages %}
+<div class="ui info message">
+    <i class="close icon"></i>
+    <div class="header">
+        {{ message }}
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+<div class="dish_detail">
+    <div class="ui two right aligned column grid mx-10">
+        <div class="left aligned middle aligned eight wide column">{{ meal.category }} / {{ meal.sub_category.name }}
+        </div>
+        <div class="right floated middle aligned eight wide column">
+            <small>{{ meal.created }}/{{ meal.author }}</small>
+            <img loading="lazy" class="ui avatar image"
+                src="{% if meal.author.profile.avatar %}{{ meal.author.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}">
+        </div>
+    </div>
+
+    <div class="dish_row">
+        <h1 class="font-lobster p-10">{{ meal.title }}</h1>
+    </div>
+
+    <div class="row">
+        <div class="page_image loading_gif">
+            <img data-src="{{ meal.poster.url }}" src="/static/image/1x1.png" alt="{{ meal.title }}">
+        </div>
+    </div>
+
+    <div class="dish_row">
+        <span class="p-10">{{ meal.description|safe }}</span>
+    </div>
+
+    <div class="ui equal stackable width grid p-10">
+        <div class="equal width row">
+            <div class="column p-0">
+                <div class="ui grid p-10">
+                    <div class="inline column row">
+                        {% get_hit_count for meal as count %}
+                        <i class="ui eye big yellow icon main_point" aria-hidden="true"></i><small
+                            class="mr-5 font-s-20 c-black">{{count}}{{ hitcount.hit_counted }}{{ hitcount.pk }}</small>
+                        <a href="#dishComments">
+                            <i class='ui comment outline big yellow icon main_point'></i><small
+                                class="mr-5 font-s-20 c-black">
+                                {{ meal.get_total_comments}}</small>
+                        </a>
+                        <form action="{% url 'culinary_recipe:likes_meal' %}" method="post" id="like_form" name="like">
+                            {% csrf_token %}
+                            <i type="submit" id="like" value="{{ meal.id }}"
+                                class='ui thumbs{% if meal.is_liked %} down {% else %} up {% endif %}outline big yellow icon main_point icon'></i>
+                            <span class="result_book mr-5 font-s-20 c-black">{{ meal.get_total_likes }}</span>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--    add to culinary book forms        -->
+            {% if user != meal.author and user.is_authenticated %}
+                <div class="right aligned column p-0">
+                    <div class="subscribe_div_add {% if meal.dish_added %}active{% endif%}">
+                        <form class="need_change " action="{% url 'contact:add_dishes_to_book' %}" method="post"
+                            name="add_dishes_to_book" id="add_dishes_to_book">
+                            {% csrf_token %}
+                            <input type="hidden" class="meal_id" value="{{ meal.id }}">
+                            <input type="submit" class="add_dishes subscribe_form_btn subscribe_link font-oswald result"
+                                value="{% if meal.dish_added %}в кулинарнй книге{% else %}в мою кулинарную книгу{% endif %}">
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="ui stackable two column grid">
+        <div class="twelve wide column">
+            {% for ingredient_title in meal.ingredienttitle_set.all %}
+            <h4 class="ui block grey header font-oswald">{{ ingredient_title.name }}</h4>
+            <ul class="ingredients_ul mb-4">
+                {% for ingredient in ingredient_title.ingredientlist_set.all %}
+                <li class="ingredints_li">
+                    <span>
+                        {{ ingredient.name }} - {% if ingredient.quantity %}{{ ingredient.quantity }}{% endif %} {% if ingredient.measure %}{{ ingredient.measure }}{% endif %}
+                        {% if ingredient.note %}({{ingredient.note}}){% endif %}
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endfor %}
+            <h4 class="font-oswald ui block grey header">ПОШАГОВЫЙ РЕЦЕПТ ПРИГОТОВЛЕНИЯ</h4>
+            {% for step in meal.step_set.all %}
+            <div class="steps_counter font-oswald mt-10">Шаг {{ forloop.counter }}</div>
+            <p class="steps_descriptions p-10">
+                {{ step.description }}
+            </p>
+            {% if step.image %}
+                <div class="page_image loading_gif">
+                    <img data-src="{{ step.image.url }}" src="/static/image/1x1.png">
+                </div>
+            {% endif %}
+            {% endfor %}
+            <div class="meal_advice_field">
+                {{meal.advice|safe}}
+            </div>
+
+        </div>
+        <div class="four wide column">
+            <p class="ui grey header prepare_time"> Время подготовки</p>
+            <p><small class="font-oswald text-muted pl-10">
+                {% if meal.preparation_time_hour or meal.preparation_time_minute %}
+                    {% if meal.preparation_time_hour %}{{ meal.preparation_time_hour }}{% else %}0{% endif %} <smal>ч</smal> /
+                    {% if meal.preparation_time_minute %}{{ meal.preparation_time_minute }}{% else %}0{% endif %} <smal>мин
+                {% else %}
+                Не указан
+                {% endif %}
+                    </smal>
+                </small>
+            </p>
+            <p class="ui grey header">Время готовки</p>
+            <p><small class="font-oswald text-muted pl-10">
+                {% if meal.cooking_time_hour or meal.cooking_time_minute %}
+                    {% if meal.cooking_time_hour %}{{ meal.cooking_time_hour }}{% else %}0{% endif %} <smal>ч</smal> /
+                    {% if meal.cooking_time_minute %}{{ meal.cooking_time_minute }}{% else %}0{% endif %} <smal>мин</smal>
+                {% else %}
+                Не указан
+                {% endif %}
+                </small>
+            </p>
+            <p class="ui grey header">Количество порций</p>
+            <p>
+                <small class="font-oswald text-muted pl-10">
+                    {{ meal.servings|default:'Не указан' }}
+                </small>
+            </p>
+            <p class="ui grey header">Вегетарианское</p>
+            <p>
+                <small class="font-oswald text-muted pl-10">
+                    {{ meal.vegetarian|default:'Не указан' }}
+                </small>
+            </p>
+            <p class="ui  grey header">Технология</p>
+            <p>
+                {% for technology in meal.technology.all %}
+                <small class="font-oswald text-muted pl-10">
+                    {{ technology }}{% if not forloop.last %}, {% endif %}
+                </small>
+                {% empty %}
+                <small class="font-oswald text-muted pl-10">
+                    Не указан
+                </small>
+                {% endfor %}
+            </p>
+            <p class="ui grey header">Повод</p>
+            <p>
+                {% for occasion in meal.occasion.all %}
+                <small class="font-oswald text-muted pl-10">
+                    {{ occasion }}{% if not forloop.last %},{% endif %}
+                </small>
+                {% empty %}
+                <small class="font-oswald text-muted pl-10">
+                    Не указан
+                </small>
+                {% endfor %}
+            </p>
+            <p class="ui grey header">Устройтво</p>
+            <p>
+                {% for device in meal.device.all %}
+                <small class="font-oswald text-muted pl-10">
+                    {{ device }}{% if not forloop.last %},{% endif %}
+                </small>
+                {% empty %}
+                <small class="font-oswald text-muted pl-10">
+                    Не указан
+                </small>
+                {% endfor %}
+            </p>
+            <p class="ui grey header">Калории</p>
+            <p>
+                <small class="font-oswald text-muted pl-10">
+                        {{meal.calorie|default:'Не указан'}}
+                </small>
+            </p>
+
+
+            <p class="ui grey header">Протеин</p>
+            <p><small class="font-oswald text-muted pl-10">
+                        {{meal.protein|default:'Не указан'}}
+            </small></p>
+
+            <p class="ui grey header">Жиры</p>
+            <p><small class="font-oswald text-muted pl-10">
+                    {{meal.fat|default:'Не указан'}}
+            </small></p>
+
+            <p class="ui grey header">Углеводы</p>
+            <p><small class="font-oswald text-muted pl-10">
+                    {{meal.carbohydrate|default:'Не указан'}}
+            </small></p>
+        </div>
+    </div>
+</div>
+<!--Similar recipe views -->
+<hr>
+{% if similar_meals %}
+<h4 class="font-lobster p-10">Похожие рецепты</h4>
+<div class="ui stackable centered three column grid">
+    <div class="row">
+        {% for meal in similar_meals %}
+        <div class="five wide column">
+            <div class="card">
+                <div class="page_image loading_gif">
+                    <img  data-src="{{ meal.poster.url }}" src="/static/image/1x1.png" alt="{{ meal.poster}}">
+                </div>
+                <div class="card-body">
+                    <a class="ui link" href="{{meal.get_absolute_url}}"><p class="card-text">{{ meal.title }}</p></a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+<!-- Show comments -->
+<hr>
+{% if pag_comments %}
+<h3 id="dishComments" class="ui header">Коментарии</h3>
+<button class="cmt_btn ui fluid button mb-4">Показать / Скрыть коментарии</button>
+<div class="comment-box">
+    <div class="comment">
+        <div class="ui fluid button get_another_number {% if not load_more %}d_none{% endif %}" data-href-template="{{meal.get_absolute_url }}">Открыть сообшения</div>
+        <div class="ui active centered inline black loader d_none"></div>
+    </div>
+    <div class="ui threaded comments">
+        {% recursetree pag_comments %}
+        <div class="comment custom_comment">
+            <a class="avatar" href="#">
+                <img loading="lazy" src="{% if node.author.profile.avatar %}{{ node.author.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
+                    alt="avatarka">
+            </a>
+            <div class="content">
+                <a class="author" href="{{node.author.profile.get_user_profile_detail_absolute_url}}">{{ node.author.profile.first_name }}</a>
+                <div class="metadata">
+                    <span class="date">{{ node.created }}</span>
+                </div>
+                <div class="text">
+                    {{ node.text }}
+                </div>
+                {% if node.level < 2 %} <div id="{{node.id}}" class="actions">
+                    <a class="ui inverted green mini button" onclick="addComment({{ node.id }})">Ответить</a>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if not node.is_leaf_node %}
+        <div class="comments">
+            {{children}}
+        </div>
+        {% endif %}
+    </div>
+    {% endrecursetree %}
+</div>
+</div>
+{% else %}
+<h3 id="dishComments" class="ui header">Пока нет комментариев</h3>
+{% endif %}
+<!-- Form for reviews -->
+
+<form action="{% url 'culinary_recipe:add_review' meal.id %}" method="post" class="ui form input_background formReview"
+    id="formReview">
+    {% csrf_token %}
+    {{ form }}
+    <input type="hidden" name="parent" id="contactparent" value="">
+    <button type="submit" class="ui fluid inverted green button mt-10 comment_button">ДОБАВИТЬ КОММЕНТАРИЙ</button>
+</form>
+{{status}}
+<!-- Form for reviews -->
+
+
+{% endblock content %}
+
+{% block jscdn %}
+    <!--Like and add dish to culinary book action Js cdn-->
+    <script type="text/javascript" src="{% static 'js/meal_detail.js' %}"></script>
+{% endblock jscdn %}

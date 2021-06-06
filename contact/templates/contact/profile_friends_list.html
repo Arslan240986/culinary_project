@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Ваши друзья
+{% endblock title %}
+
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+    <div class="ui info message">
+        <i class="close icon"></i>
+        <div class="header">
+            {{ message }}
+        </div>
+    </div>
+{% endfor %}
+{% endif %}
+<div class="ui message">
+    <div class="header">Ваши друзья</div>
+</div>
+{% for obj, value in friends.items %}
+<div class="ui segment mt-2">
+    <div class="ui stackable grid">
+        <div class="row">
+            <div class="four wide center aligned middle aligned column">
+                <img loading="lazy" class="ui small circular image" src="{{ obj.avatar.url }}" alt=""
+                    style="display:inline !important; ">
+            </div>
+            <div class="four wide center aligned middle aligned column">
+                <h3>{{ obj.first_name }}</h3>
+                <p>{{ obj.email }}</p>
+            </div>
+            <div class="eight wide center aligned middle aligned column">
+                <div class="row">
+                    <a href="{{ obj.get_absolute_url_for_friends }}">
+                        <button class="mini ui primary button w-big mb-10">
+                            Просмотреть профиль
+                        </button>
+                    </a>
+                </div>
+                <div class="row">
+                    <!--                            <a href="{{obj.get_privet_messages_absolute_url}}">-->
+                    <button datatype="{{obj.slug}}" id="modal-btn-private-message"
+                        class="mini ui positive basic button w-big">
+                        <!--                                    <button class="mini ui positive basic button w-big">-->
+                        {% if value %}
+                        У вас {{ value }} новые сообщении
+                        {% else %}
+                        Написать сообщения
+                        {% endif %}
+                    </button>
+                    <!--                                </a>-->
+                </div>
+                <form action="{% url 'contact:remove_from_friend' %}" method="post" class="mt-10">
+                    {% csrf_token %}
+                    <input type="hidden" name="profile_pk" value="{{ obj.id }}">
+                    <button class="mini ui negative basic button my-2 w-big" type="submit">
+                        <i class="minus square icon"></i>Удалить из друзей
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div class="ui tiny modal personal_message">
+    <i class="close icon"></i>
+    {% include 'contact/chat/thread.html' %}
+</div>
+{% endblock content %}
+{% block jscdn %}
+    <!--Like and add dish to culinary book action Js cdn-->
+    <script type="text/javascript" src="{% static 'js/private_message.js' %}"></script>
+{% endblock jscdn %}

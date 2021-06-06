@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Кулинарные посты
+{% endblock title %}
+
+{% block content %}
+<h2>Кулинарные посты</h2>
+<div class="ui grid m-2">
+    <div class="column">
+        {% for post in qs %}
+        <div class="ui fluid card">
+            <div class="ui header"><a href="{{ post.get_absolute_url }}">{{post.title}}</a></div>
+            <div class="content">
+                <div class="ui right floated meta">
+                    <div class="ui grid">
+                        <div class="ui inline row">
+                            {% ifequal request.user post.author.user %}
+                            <div class="ui row">
+
+                                <a href="{% url 'culinary_post:post_update' post.pk %}">
+                                    <small>Обновить</small>
+                                </a>
+                                <a href="{% url 'culinary_post:post_delete' post.pk %}">
+                                    <small>Удалить</small>
+                                </a>
+
+                            </div>
+                            {% endifequal %}
+                        </div>
+                    </div>
+                </div>
+                <img loading="lazy" src="{{ post.author.avatar.url }}" class="ui avatar url">
+                <small>{{ post.author.user.username }} - {{ post.created|timesince}} назад</small>
+                <div class="ui fluid image">
+                    {% if post.image %}
+                    <img loading="lazy" src="{{ post.image.url }}">
+                    {% endif %}
+                </div>
+
+            </div>
+            <div class="content">
+                <p>{{ post.content|safe }}</p>
+                <i class="comment icon"></i>
+                <small>{{ post.get_total_comments }} коментарии</small>
+            </div>
+            <div class="extra content">
+                <div class="mb-4">
+
+                </div>
+
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

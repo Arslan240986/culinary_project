@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Обновить пост
+{% endblock title %}
+
+{% block content %}
+<div class="ui segment">
+    <h3>Обновить пост</h3>
+    <form class="ui form" method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+            {{ form.title.errors }}
+            {{ form.title.label_tag }}
+
+            <div class="{% if form.title.errors %}error{% endif %} field">
+                {{ form.title }}
+            </div>
+            {{form.image.errors}}
+            {{form.image.label_tag}}
+            <div class="{% if form.image.errors %}error{% endif %} field">
+                <div class="ui medium image poster_image_div ">
+                    <img loading="lazy" id="poster_image_id" class="ui centered medium rounded image" src="{{ form.initial.image.url }}">
+                    <div class="form__add-img"></div>
+                </div>
+                <input class="d_none" type="file" name="image" accept="image/*" required="" id="id_poster" onchange="readURL(this)">
+            </div>
+        {{form.content.errors}}
+        {{form.content.label_tag}}
+        <div class="{% if form.content.errors %}error{% endif %} field">
+            {{form.media}}
+            {{form.content}}
+        </div>
+        <button type="submit" class="ui fluid inverted green button mt-4">Обновить</button>
+    </form>
+</div>
+{% endblock content %}
+
+{% block jscdn %}
+<script async type="text/javascript" src="{% static 'js/add_recipe.js' %}"></script>
+{% endblock jscdn %}

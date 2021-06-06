@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block title %}{% trans "Sign In" %}{% endblock %}
+
+{% block steps_breadcrumbs %}
+{% endblock steps_breadcrumbs %}
+
+{% block content %}
+<div class="ui middle aligned center aligned  grid">
+    <div class="ui card" style="width: 400px; margin-top: 30px; height: 100%;">
+        <div class="ui center aligned teal image header">
+            <img src="/static/image/yumy2.png" width="50" height="25" class="image">
+            <div class="content">
+                <h1>{% trans "Sign In" %}</h1>
+            </div>
+        </div>
+        <div class="item">
+        {% if form.errors %}
+                {{ form.non_field_errors }}
+        {% endif %}
+
+        <form class="ui large form" method="POST" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            <div class="ui stacked segment">
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        {{ form.login }}
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        {{ form.password }}
+                    </div>
+                </div>
+                <button type="submit" class="ui fluid large teal submit button">Войти</button>
+                <div class="center aligned content">
+                    <a href="{% url 'account_reset_password' %}">Забыли пароль?</a>
+                </div>
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+            </div>
+        </form>
+                        </div>
+        <div class="ui extra center aligned content">
+            Ещё не снами?
+            <a href="{{ signup_url }}">Зарегистрируйтесь</a>
+            <p>или</p>
+            <p>Войдите с одного из вашего аккаунта</p>
+            {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+            <a href="#">
+                <i class="ui facebook large icon"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
