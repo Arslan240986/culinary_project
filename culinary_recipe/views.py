@@ -1,22 +1,39 @@
+from PIL import Image
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
-from django.db.models import Q
-from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
+from django.db.models import Q, Count
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 
 from django.views.generic.base import View
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
-from hitcount.views import HitCountDetailView
+from hitcount.models import HitCount
+from hitcount.views import HitCountMixin
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Dish, Country, Category, SubCategory, DishLike, Ingredient, Step
+
+from .models import Dish, Country, Category, SubCategory, DishLike, IngredientList, Step, IngredientTitle
 from culinary_post.models import CulinaryPost
-from .forms import DishCommentForm, DishForm, IngredientFormSet, InstructionFormSet
+from .forms import DishCommentForm, DishForm, InstructionFormSet, IngredientNestedFormSet
 from .utils import getMonth
-# from .tasks import comment_add
 from contact.models import UserProfile
+
+
+def watermark_photo(input_image_path,
+                    output_image_path,
+                    watermark_image_path,
+                    position):
+    print('ishledi')
+    base_image = Image.open(input_image_path)
+    watermark = Image.open(watermark_image_path)
+    width, height = base_image.size
+    transparent = Image.new('RGB', (width, height), (0,0,0,0))
+    transparent.paste(base_image, (0,0))
+    transparent.paste(watermark, position, mask=watermark)
+    transparent.save(f'{settings.MEDIA_ROOT}/{output_image_path}')
 
 
 class CategoryViewList(ListView):
@@ -24,15 +41,22 @@ class CategoryViewList(ListView):
     model = Category
     template_name = 'home.html'
     context_object_name = 'categories'
-    extra_context = {
-        'countries': Country.objects.all(),
-        'posts': CulinaryPost.objects.all().order_by('-created')[:6],
-    }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        country = Country.objects.annotate(cnt=Count('dish'))
+        has_dish_country = []
+        for con in country:
+            if con.dish_set.all():
+                has_dish_country.append(con)
+        context['countries'] = has_dish_country
+        context['posts'] = CulinaryPost.objects.all().order_by('-created')[:6]
+        return context
 
 
 def get_sub_category(request, slug):
     category = get_object_or_404(Category, slug=slug)
-    sub_category = SubCategory.objects.filter(category=category)
+    sub_category = SubCategory.objects.filter(category=category).annotate(cnt=Count('dish'))
     context = {
         'sub_categories': sub_category,
         'category': category
@@ -49,7 +73,7 @@ class GetItems(View):
         if slug:
             meal = meal.filter(sub_category__slug=slug, moderator=True, draft=False)
             category_name = get_object_or_404(SubCategory, slug=slug)
-        paginator = Paginator(meal, 2)
+        paginator = Paginator(meal, 10)
 
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
@@ -63,8 +87,9 @@ class GetItems(View):
 
 class DishByCountry(View):
     """Вывод блюд по Странам"""
-    def get(self, request, slug):
-        country = get_object_or_404(Country, slug=slug)
+    def get(self, request, slug, pk):
+        # countr = Country.objects.prefetch_related('dish_set').get(slug=slug, id=pk)
+        country = get_object_or_404(Country, slug=slug, id=pk)
         meals = Dish.objects.filter(country=country)
         return render(request, 'culinary_recipe/dishes_list.html', {'meals': meals, 'country': country})
 
@@ -75,7 +100,7 @@ class Search(ListView):
     def get_queryset(self):
         q = self.request.GET.get('q')
         meals = Dish.objects.filter(
-            Q(ingredient__name__icontains=q) | Q(title__icontains=q)).distinct()
+            Q(ingredienttitle__ingredientlist__name__icontains=q) | Q(title__icontains=q)).distinct()
         return meals
 
     def get_context_data(self,  *args, **kwargs):
@@ -84,16 +109,22 @@ class Search(ListView):
         return context
 
 
-class MealDetailView(HitCountDetailView):
+class MealDetailView(DetailView):
     """Вывод деталей рецепта"""
     model = Dish
-    count_hit = True
     template_name = 'culinary_recipe/meal_detail.html'
 
     def get(self, request, *args, **kwargs):
         meal = get_object_or_404(Dish, slug=self.kwargs.get('slug'), id=self.kwargs.get('pk'))
-        meal_ings_list = set(meal.ingredient_set.all().values_list('name', flat=True))
-        similar_meals = Dish.objects.filter(ingredient__name__in=meal_ings_list, moderator=True, draft=False).exclude(id=self.kwargs.get('pk'))[:3]
+        # counts hits and show how many hits was made
+        hit_count = HitCount.objects.get_for_object(meal)
+        HitCountMixin.hit_count(request, hit_count)
+        # To show similar dishes on detail page
+        meal_ings_list = []
+        for ingredient in meal.ingredienttitle_set.all():
+            meal_ings_list += set(ingredient.ingredientlist_set.all().values_list('name', flat=True))
+        similar_meals = Dish.objects.filter(ingredienttitle__ingredientlist__name__in=meal_ings_list, moderator=True, draft=False).exclude(id=self.kwargs.get('pk')).distinct()[:6]
+
         form = DishCommentForm()
         comments = meal.comments.filter(status=False)
         comment_size = len(comments)
@@ -138,7 +169,8 @@ class MealDetailView(HitCountDetailView):
         context = {'meal': meal,
                    'form': form,
                    'pag_comments': new_comments,
-                   'similar_meals': similar_meals
+                   'similar_meals': similar_meals,
+                   'load_more': False if len(new_comments) >= comment_size else True,
                    }
         return render(request, self.template_name, context)
 
@@ -202,11 +234,11 @@ class DishCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        ingredient_form = IngredientFormSet()
+        ingredient_title_form = IngredientNestedFormSet()
         instruction_form = InstructionFormSet()
         return self.render_to_response(
             self.get_context_data(form=form,
-                                  ingredient_form=ingredient_form,
+                                  ingredient_title_form=ingredient_title_form,
                                   instruction_form=instruction_form,
                                   )
         )
@@ -215,33 +247,34 @@ class DishCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        ingredient_form = IngredientFormSet(self.request.POST)
+        ingredient_title_form=IngredientNestedFormSet(self.request.POST)
         instruction_form = InstructionFormSet(self.request.POST, self.request.FILES)
-        if form.is_valid() and ingredient_form.is_valid() and instruction_form.is_valid():
-            return self.form_valid(form, ingredient_form, instruction_form)
+        if form.is_valid() and ingredient_title_form.is_valid() and instruction_form.is_valid():
+            return self.form_valid(form, ingredient_title_form, instruction_form)
         else:
-            messages.error(request, 'Исправте ниже указанные ошибки')
-            print(ingredient_form.non_form_errors())
-            return self.form_invalid(form, ingredient_form, instruction_form)
+            # messages.error(request, 'Исправте ниже указанные ошибки')
+            return self.form_invalid(form, ingredient_title_form, instruction_form)
 
-    def form_valid(self, form, ingredient_form, instruction_form):
+    def form_valid(self, form, ingredient_title_form, instruction_form):
         user = get_object_or_404(User, id=self.request.user.id)
-        print(form.instance.draft)
         form.instance.author = user
         self.object = form.save()
-        ingredient_form.instance = self.object
-        ingredient_form.save()
+        ingredient_title_form.instance = self.object
+        ingredient_title_form.save()
         instruction_form.instance = self.object
         instruction_form.save()
+        watermark_photo(form.instance.poster, str(form.instance.poster), 'static/image/yumy2.png', position=(10, 10))
+        for steps_image in instruction_form:
+            if steps_image.instance.image:
+                watermark_photo(steps_image.instance.image, str(steps_image.instance.image), 'static/image/yumy2.png', position=(10, 10))
         if form.instance.draft:
             return HttpResponseRedirect(user.profile.get_personal_absolute_url())
         messages.success(self.request, 'Спасибо за участие! Ваш рецепт будет добавлен на сайт после прохождения модерации.')
         return HttpResponseRedirect(self.get_success_url())
 
-    def form_invalid(self, form, ingredient_form, instruction_form):
+    def form_invalid(self, form, ingredient_title_form, instruction_form):
         return self.render_to_response(
-            self.get_context_data(
-                                  ingredient_form=ingredient_form,
+            self.get_context_data(form=form, ingredient_title_form=ingredient_title_form,
                                   instruction_form=instruction_form)
         )
 
@@ -256,87 +289,51 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
          context = super(DishUpdateView, self).get_context_data(**kwargs)
          if self.request.POST:
              context['form'] = DishForm(self.request.POST, self.request.FILES, instance=self.object)
-             context['ingredient_form'] = IngredientFormSet(self.request.POST, instance=self.object)
+             context['ingredient_title_form'] = IngredientNestedFormSet(self.request.POST, instance=self.object)
              context['instruction_form'] = InstructionFormSet(self.request.POST, self.request.FILES, instance=self.object)
          else:
              if not self.request.user == self.object.author:
-                 context['error_message'] = "Ты не можеш изменять ретцепт чужих пользователей"
+                 context['error_message'] = "Ты не можешь изменять рецепты чужих пользователей"
              else:
                 context['form'] = DishForm(instance=self.object)
-                context['ingredient_form'] = IngredientFormSet(instance=self.object)
+                context['ingredient_title_form'] = IngredientNestedFormSet(instance=self.object)
                 context['instruction_form'] = InstructionFormSet(instance=self.object)
          return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        # print('sel_obj', [steps.image for steps in self.object.step_set.all()])
         form_class = self.get_form_class()
+        print(self.request.FILES)
         form = self.get_form(form_class)
-        ingredient_form = IngredientFormSet(self.request.POST)
-        instruction_form = InstructionFormSet(self.request.POST, self.request.FILES)
-        ingredient_id = ''
-        for item, value in self.request.POST.items():
-            if 'on' in value:
-                if 'ingredient' in item and not ingredient_form.deleted_forms:
-                    new_arr = item.split('-')
-                    ingredient_id = new_arr[0]+'-'+new_arr[1]
-            if item == f'{ingredient_id}-id':
-                try:
-                    ingredient_to_obj_delete = get_object_or_404(Ingredient, id=int(value))
-                    ingredient_to_obj_delete.delete()
-                except:
-                    pass
-        instruction_id = ''
-        for item, value in self.request.POST.items():
-            if 'on' in value:
-                if 'step' in item and not instruction_form.deleted_forms:
-                    new_arr = item.split('-')
-                    instruction_id = new_arr[0] + '-' + new_arr[1]
-            if item == f'{instruction_id}-id':
-                try:
-                    instruction_to_obj_delete = get_object_or_404(Step, id=int(value))
-                    instruction_to_obj_delete.image.delete()
-                    instruction_to_obj_delete.delete()
-                except:
-                    pass
-        # Deleting old image from data when adding new one
-        if self.request.FILES:
-            for files in list(self.request.FILES):
-                if files == 'poster':
-                    self.object.poster.delete()
-                elif 'step' in files:
-                    for steps in [form.cleaned_data for form in instruction_form.ordered_forms]:
-                        if steps['image']:
-                            try:
-                                step = self.object.step_set.get(id=steps['id'].id)
-                                step.image.delete()
-                            except: pass
-        if [form.cleaned_data for form in instruction_form.deleted_forms]:
-            for steps in [form.cleaned_data for form in instruction_form.deleted_forms]:
-                try:
-                    step = self.object.step_set.get(id=steps['id'].id)
-                    step.image.delete()
-                except:
-                    pass
-        if form.is_valid() and ingredient_form.is_valid() and instruction_form.is_valid():
+        ingredient_nested_form = IngredientNestedFormSet(self.request.POST, instance=self.object)
+        instruction_form = InstructionFormSet(self.request.POST, self.request.FILES, instance=self.object)
+        if form.is_valid() and ingredient_nested_form.is_valid() and instruction_form.is_valid():
             return self.form_valid(form)
         else:
-            print('form_errors', form.errors)
-            print('ingredients_errors', ingredient_form.errors)
-            print('instruction_errors', instruction_form.errors)
-            return self.form_invalid(form, ingredient_form, instruction_form)
+            return self.form_invalid(form, ingredient_nested_form, instruction_form)
 
     def form_valid(self, form):
         user = get_object_or_404(User, id=self.request.user.id)
         self.object = self.get_object()
         contex = self.get_context_data()
         base_form = contex['form']
-        ingredient_form = contex['ingredient_form']
+        ingredient_nested_form = contex['ingredient_title_form']
         instruction_form = contex['instruction_form']
-        if base_form.is_valid() and ingredient_form.is_valid() and instruction_form.is_valid():
+        if base_form.is_valid() and ingredient_nested_form.is_valid() and instruction_form.is_valid():
             base_form.save()
-            ingredient_form.save()
+            ingredient_nested_form.save()
             instruction_form.save()
+            if self.request.FILES:
+                if 'poster' in self.request.FILES:
+                    watermark_photo(base_form.instance.poster, str(base_form.instance.poster), 'static/image/yumy2.png',
+                                    position=(10, 10))
+
+                for value, items in self.request.FILES.items():
+                    if 'step' in value:
+                        for steps_image in instruction_form:
+                            if steps_image.instance.image:
+                                watermark_photo(steps_image.instance.image, str(steps_image.instance.image), 'static/image/yumy2.png',
+                                        position=(10, 10))
             if base_form.instance.draft:
                 return HttpResponseRedirect(user.profile.get_personal_absolute_url())
             messages.success(self.request,'Спасибо за участие! Ваш рецепт будет добавлен на сайт после прохождения модерации.')
@@ -344,11 +341,11 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         else:
             return self.render_to_response(self)
 
-    def form_invalid(self, form, ingredient_form, instruction_form):
+    def form_invalid(self, form, ingredient_nested_form, instruction_form):
         messages.error(self.request, 'Исправте ниже указанные ошибки')
         return self.render_to_response(
             self.get_context_data(form=form,
-                                  ingredient_form=ingredient_form,
+                                  ingredient_title_form=ingredient_nested_form,
                                   instruction_form=instruction_form)
         )
 
@@ -368,5 +365,6 @@ def get_ajax_response_category(request):
 
 
 def ingredient_list_view(request):
-    ings = set(list(Ingredient.objects.all().values_list('name', flat=True)))
+    ings = set(list(IngredientList.objects.all().values_list('name', flat=True)))
     return JsonResponse(list(ings), safe=False)
+

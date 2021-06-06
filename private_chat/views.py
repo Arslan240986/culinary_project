@@ -36,7 +36,6 @@ class InboxView(LoginRequiredMixin, ListView):
 #     def get_object(self):
 #         user_slug  = self.kwargs.get("slug")
 #         post_num = self.kwargs.get("post_num")
-#         print(post_num)
 #         user_profile = self.request.user.profile
 #         other_username = get_object_or_404(UserProfile, slug=user_slug)
 #         if other_username.user in user_profile.friends.all():
@@ -68,7 +67,6 @@ class InboxView(LoginRequiredMixin, ListView):
 #
 #     def form_valid(self, form):
 #         thread = self.get_object()
-#         print(thread)
 #         user = self.request.user.profile
 #         message = form.cleaned_data.get("message")
 #         ChatMessage.objects.create(user=user, thread=thread, message=message)

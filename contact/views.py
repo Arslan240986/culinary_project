@@ -74,7 +74,6 @@ def contact_view(request):
     email_form = ContactSubscribeForm()
     if request.method == 'POST':
         email_form = ContactSubscribeForm(request.POST)
-        print(request.POST)
         if email_form.is_valid():
             email_form.save()
             send_subscribe.delay(email_form.instance.email)
@@ -132,7 +131,6 @@ def invites_received_view(request):
     profile = get_object_or_404(UserProfile, user=request.user)
     qs = Relationship.objects.invitations_received(profile)
     result = list(map(lambda x: x.sender, qs))
-    print('testing', result)
     context = {
         'qs': result
     }
@@ -146,7 +144,6 @@ def accept_invitation(request):
         sender = get_object_or_404(UserProfile, id=pk)
         receiver = get_object_or_404(UserProfile, user=request.user)
         rel = get_object_or_404(Relationship, sender=sender, receiver=receiver)
-        print(rel.status)
         if rel.status == 'send':
             rel.status = 'accepted'
             rel.save()
@@ -207,16 +204,22 @@ class ProfileFriendList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         profile = UserProfile.objects.get(slug=self.kwargs['slug'])
-        friends = profile.friends.all()
-        friends_dict = {}
-        for friend in friends:
-            count = friend.profile.chatmessage_set.filter(Q(thread__first=profile) | Q(thread__second=profile), is_readed=False).count()
+        request_profile = UserProfile.objects.get(slug=self.request.user.profile.slug)
+        if profile == request_profile:
+            friends = profile.friends.all()
+            friends_dict = {}
+            for friend in friends:
+                count = friend.profile.chatmessage_set.filter(Q(thread__first=profile) | Q(thread__second=profile), is_readed=False).count()
 
-            try:
-                friends_dict[friend.profile]+=count
-            except:
-                friends_dict[friend.profile] = count
-        return friends_dict
+                try:
+                    friends_dict[friend.profile]+=count
+                except:
+                    friends_dict[friend.profile] = count
+            return friends_dict
+        else:
+            print('aassd')
+            messages.error(self.request, 'Вы пытаетесь просмотреть чужой профиль')
+
 
 
 class ProfileListView(LoginRequiredMixin, ListView):

@@ -28,20 +28,19 @@
     <div class="ui two right aligned column grid mx-10">
         <div class="right floated middle aligned eight wide column">
             <small>{{ post.created }}/{{ post.user }}</small>
-            <img class="ui avatar image"
+            <img loading="lazy" class="ui avatar image"
                 src="{% if post.user.profile.avatar %}{{ post.user.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}">
         </div>
     </div>
-
     <div class="dish_row">
         <h1 class="font-lobster p-10">{{ post.title }}</h1>
     </div>
-    <div class="row">
-        <p class="font-oswald p-10">{{post.content}}</p>
-    </div>
 
     <div class="row">
-        <img class="ui fluid rounded image" src="{{ post.image.url }}" alt="{{ post.title }}">
+        <img loading="lazy" class="ui fluid rounded image" src="{{ post.image.url }}" alt="{{ post.title }}">
+    </div>
+    <div class="row">
+        <p class="font-oswald p-10">{{post.content|safe}}</p>
     </div>
 
     <div class="ui equal width grid p-10">
@@ -57,9 +56,7 @@
                                 class="mr-5 font-s-20 c-black">
                                 {{ post.get_total_comments}}</small>
                         </a>
-                        <i class='ui heart outline big yellow icon main_point'></i><small
-                            class="mr-5 font-s-20 c-black">
-                            1</small>
+
                         <div class="right floated">
                             <form action="{% url 'culinary_post:like_post_view' %}" method="post" class="like_form"
                                 id="{{ post.id }}">
@@ -98,7 +95,7 @@
         {% recursetree post_comments %}
         <div class="comment custom_comment">
             <a class="avatar" href="#">
-                <img src="{% if node.author.avatar %}{{ node.author.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
+                <img loading="lazy" src="{% if node.author.avatar %}{{ node.author.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
                     alt="avatarka">
             </a>
             <div class="content">

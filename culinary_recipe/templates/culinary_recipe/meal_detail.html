@@ -30,7 +30,7 @@
         </div>
         <div class="right floated middle aligned eight wide column">
             <small>{{ meal.created }}/{{ meal.author }}</small>
-            <img class="ui avatar image"
+            <img loading="lazy" class="ui avatar image"
                 src="{% if meal.author.profile.avatar %}{{ meal.author.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}">
         </div>
     </div>
@@ -39,14 +39,19 @@
         <h1 class="font-lobster p-10">{{ meal.title }}</h1>
     </div>
 
-
     <div class="row">
-        <img class="ui fluid rounded image" src="{{ meal.poster.url }}" alt="{{ meal.title }}">
+        <div class="page_image loading_gif">
+            <img data-src="{{ meal.poster.url }}" src="/static/image/1x1.png" alt="{{ meal.title }}">
+        </div>
     </div>
 
-    <div class="ui equal width grid p-10">
+    <div class="dish_row">
+        <span class="p-10">{{ meal.description|safe }}</span>
+    </div>
+
+    <div class="ui equal stackable width grid p-10">
         <div class="equal width row">
-            <div class="column">
+            <div class="column p-0">
                 <div class="ui grid p-10">
                     <div class="inline column row">
                         {% get_hit_count for meal as count %}
@@ -66,115 +71,148 @@
                     </div>
                 </div>
             </div>
-            <div class="right aligned column">
-                {% if user != meal.author and user.is_authenticated %}
-                <div class="subscribe_div_add {% if meal.dish_added %}active{% endif%}">
-                    <form class="need_change m-4" action="{% url 'contact:add_dishes_to_book' %}" method="post"
-                        name="add_dishes_to_book" id="add_dishes_to_book">
-                        {% csrf_token %}
-                        <input type="hidden" class="meal_id" value="{{ meal.id }}">
-                        <input type="submit" class="add_dishes subscribe_form_btn subscribe_link font-oswald result"
-                            value="{% if meal.dish_added %}в кулинарнй книге{% else %}в мою кулинарную книгу{% endif %}">
-                    </form>
+            <!--    add to culinary book forms        -->
+            {% if user != meal.author and user.is_authenticated %}
+                <div class="right aligned column p-0">
+                    <div class="subscribe_div_add {% if meal.dish_added %}active{% endif%}">
+                        <form class="need_change " action="{% url 'contact:add_dishes_to_book' %}" method="post"
+                            name="add_dishes_to_book" id="add_dishes_to_book">
+                            {% csrf_token %}
+                            <input type="hidden" class="meal_id" value="{{ meal.id }}">
+                            <input type="submit" class="add_dishes subscribe_form_btn subscribe_link font-oswald result"
+                                value="{% if meal.dish_added %}в кулинарнй книге{% else %}в мою кулинарную книгу{% endif %}">
+                        </form>
+                    </div>
                 </div>
-                {% endif %}
-            </div>
+            {% endif %}
         </div>
     </div>
 
     <div class="ui stackable two column grid">
         <div class="twelve wide column">
-            <h4 class="ui block grey header font-oswald">ИНГРЕДИЕНТЫ</h4>
+            {% for ingredient_title in meal.ingredienttitle_set.all %}
+            <h4 class="ui block grey header font-oswald">{{ ingredient_title.name }}</h4>
             <ul class="ingredients_ul mb-4">
-                {% for ingredient in meal.ingredient_set.all %}
+                {% for ingredient in ingredient_title.ingredientlist_set.all %}
                 <li class="ingredints_li">
                     <span>
-                        {{ ingredient.quantity }} {{ ingredient.measure }} {{ ingredient.name }}
+                        {{ ingredient.name }} - {% if ingredient.quantity %}{{ ingredient.quantity }}{% endif %} {% if ingredient.measure %}{{ ingredient.measure }}{% endif %}
                         {% if ingredient.note %}({{ingredient.note}}){% endif %}
                     </span>
                 </li>
                 {% endfor %}
             </ul>
+            {% endfor %}
             <h4 class="font-oswald ui block grey header">ПОШАГОВЫЙ РЕЦЕПТ ПРИГОТОВЛЕНИЯ</h4>
             {% for step in meal.step_set.all %}
-            <p class="steps_counter font-oswald">Шаг {{ forloop.counter }}</p>
-            {% if step.image %}
-            <div class="dish_poster img-fluid">
-
-                <img src="{{ step.image.url }}" class="dish_poster" alt="poster">
-
-            </div>
-            {% endif %}
+            <div class="steps_counter font-oswald mt-10">Шаг {{ forloop.counter }}</div>
             <p class="steps_descriptions p-10">
                 {{ step.description }}
             </p>
+            {% if step.image %}
+                <div class="page_image loading_gif">
+                    <img data-src="{{ step.image.url }}" src="/static/image/1x1.png">
+                </div>
+            {% endif %}
             {% endfor %}
+            <div class="meal_advice_field">
+                {{meal.advice|safe}}
+            </div>
 
         </div>
         <div class="four wide column">
-            <h5 class="ui block grey header"> Время подготовки</h5>
-            <p><small class="text-muted">
-                    {% if meal.preparation_time_hour %}{{ meal.preparation_time_hour }}{% endif %} <smaal>ч</smaal> /
-                    {% if meal.preparation_time_minute %}{{ meal.preparation_time_minute }}{% endif %} <smaal>мин
-                    </smaal>
+            <p class="ui grey header prepare_time"> Время подготовки</p>
+            <p><small class="font-oswald text-muted pl-10">
+                {% if meal.preparation_time_hour or meal.preparation_time_minute %}
+                    {% if meal.preparation_time_hour %}{{ meal.preparation_time_hour }}{% else %}0{% endif %} <smal>ч</smal> /
+                    {% if meal.preparation_time_minute %}{{ meal.preparation_time_minute }}{% else %}0{% endif %} <smal>мин
+                {% else %}
+                Не указан
+                {% endif %}
+                    </smal>
                 </small>
             </p>
-            <p class="ui block grey header">Время готовки</p>
-            <p><small class="text-muted">
-                    {% if meal.cooking_time_hour %}{{ meal.cooking_time_hour }}{% endif %} <smaal>ч</smaal> /
-                    {% if meal.cooking_time_minute %}{{ meal.cooking_time_minute }}{% endif %} <smaal>мин</smaal>
+            <p class="ui grey header">Время готовки</p>
+            <p><small class="font-oswald text-muted pl-10">
+                {% if meal.cooking_time_hour or meal.cooking_time_minute %}
+                    {% if meal.cooking_time_hour %}{{ meal.cooking_time_hour }}{% else %}0{% endif %} <smal>ч</smal> /
+                    {% if meal.cooking_time_minute %}{{ meal.cooking_time_minute }}{% else %}0{% endif %} <smal>мин</smal>
+                {% else %}
+                Не указан
+                {% endif %}
                 </small>
             </p>
-            <p class="ui block grey header">Количество порций</p>
+            <p class="ui grey header">Количество порций</p>
             <p>
-                <small class="text-muted">{% if meal.servings %}{{ meal.servings }}{% endif %}</small>
+                <small class="font-oswald text-muted pl-10">
+                    {{ meal.servings|default:'Не указан' }}
+                </small>
             </p>
-            <p class="ui block grey header">Вегетарианское</p>
+            <p class="ui grey header">Вегетарианское</p>
             <p>
-                <small class="text-muted">{% if meal.vegetarian %}{{ meal.vegetarian }}{% endif %}</small>
+                <small class="font-oswald text-muted pl-10">
+                    {{ meal.vegetarian|default:'Не указан' }}
+                </small>
             </p>
-            {% if meal.technology %}
-            <p class="ui block grey header">Технология</p>
+            <p class="ui  grey header">Технология</p>
             <p>
                 {% for technology in meal.technology.all %}
-                <small class="text-muted">{{technology}}{% if not forloop.last %}, {% endif %}</small>
+                <small class="font-oswald text-muted pl-10">
+                    {{ technology }}{% if not forloop.last %}, {% endif %}
+                </small>
+                {% empty %}
+                <small class="font-oswald text-muted pl-10">
+                    Не указан
+                </small>
                 {% endfor %}
             </p>
-            {% endif %}
-            {% if meal.device %}
-            <p class="ui block grey header">Устройтво</p>
+            <p class="ui grey header">Повод</p>
+            <p>
+                {% for occasion in meal.occasion.all %}
+                <small class="font-oswald text-muted pl-10">
+                    {{ occasion }}{% if not forloop.last %},{% endif %}
+                </small>
+                {% empty %}
+                <small class="font-oswald text-muted pl-10">
+                    Не указан
+                </small>
+                {% endfor %}
+            </p>
+            <p class="ui grey header">Устройтво</p>
             <p>
                 {% for device in meal.device.all %}
-                <small class="text-muted">{{device}}{% if not forloop.last %}, {% endif %}</small>
+                <small class="font-oswald text-muted pl-10">
+                    {{ device }}{% if not forloop.last %},{% endif %}
+                </small>
+                {% empty %}
+                <small class="font-oswald text-muted pl-10">
+                    Не указан
+                </small>
                 {% endfor %}
             </p>
-            {% endif %}
-            {% if meal.calorie %}
-            <p class="ui block grey header">Калории</p>
+            <p class="ui grey header">Калории</p>
             <p>
-                <small class="text-muted">{{meal.calorie}}</small>
+                <small class="font-oswald text-muted pl-10">
+                        {{meal.calorie|default:'Не указан'}}
+                </small>
             </p>
-            {% endif %}
-            {% if meal.protein %}
-            <p class="ui block grey header">Протеин</p>
-            <p>
-                <small class="text-muted">{{meal.protein}}</small>
-            </p>
-            {% endif %}
-            {% if meal.fat %}
-            <p class="ui block grey header">Жиры</p>
-            <p>
-                <small class="text-muted">{{meal.fat}}</small>
-            </p>
-            {% endif %}
-            {% if meal.carbohydrate %}
-            <p class="ui block grey header">Углеводы</p>
-            <p>
-                <small class="text-muted">{{meal.carbohydrate}}</small>
-            </p>
-            {% endif %}
-        </div>
 
+
+            <p class="ui grey header">Протеин</p>
+            <p><small class="font-oswald text-muted pl-10">
+                        {{meal.protein|default:'Не указан'}}
+            </small></p>
+
+            <p class="ui grey header">Жиры</p>
+            <p><small class="font-oswald text-muted pl-10">
+                    {{meal.fat|default:'Не указан'}}
+            </small></p>
+
+            <p class="ui grey header">Углеводы</p>
+            <p><small class="font-oswald text-muted pl-10">
+                    {{meal.carbohydrate|default:'Не указан'}}
+            </small></p>
+        </div>
     </div>
 </div>
 <!--Similar recipe views -->
@@ -186,7 +224,9 @@
         {% for meal in similar_meals %}
         <div class="five wide column">
             <div class="card">
-                <img class="img-thumbnail cat_image" src="{{ meal.poster.url }}" alt="Card image cap">
+                <div class="page_image loading_gif">
+                    <img  data-src="{{ meal.poster.url }}" src="/static/image/1x1.png" alt="{{ meal.poster}}">
+                </div>
                 <div class="card-body">
                     <a class="ui link" href="{{meal.get_absolute_url}}"><p class="card-text">{{ meal.title }}</p></a>
                 </div>
@@ -203,14 +243,14 @@
 <button class="cmt_btn ui fluid button mb-4">Показать / Скрыть коментарии</button>
 <div class="comment-box">
     <div class="comment">
-        <div class="ui fluid button get_another_number" data-href-template="{{meal.get_absolute_url }}">Открыть сообшения</div>
+        <div class="ui fluid button get_another_number {% if not load_more %}d_none{% endif %}" data-href-template="{{meal.get_absolute_url }}">Открыть сообшения</div>
         <div class="ui active centered inline black loader d_none"></div>
     </div>
     <div class="ui threaded comments">
         {% recursetree pag_comments %}
         <div class="comment custom_comment">
             <a class="avatar" href="#">
-                <img src="{% if node.author.profile.avatar %}{{ node.author.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
+                <img loading="lazy" src="{% if node.author.profile.avatar %}{{ node.author.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}"
                     alt="avatarka">
             </a>
             <div class="content">
@@ -222,7 +262,7 @@
                     {{ node.text }}
                 </div>
                 {% if node.level < 2 %} <div id="{{node.id}}" class="actions">
-                    <a class="ui basic mini positive button" onclick="addComment({{ node.id }})">Ответить</a>
+                    <a class="ui inverted green mini button" onclick="addComment({{ node.id }})">Ответить</a>
             </div>
             {% endif %}
         </div>
@@ -246,7 +286,7 @@
     {% csrf_token %}
     {{ form }}
     <input type="hidden" name="parent" id="contactparent" value="">
-    <button type="submit" class="ui fluid basic positive button mt-10 comment_button">ДОБАВИТЬ КОММЕНТАРИЙ</button>
+    <button type="submit" class="ui fluid inverted green button mt-10 comment_button">ДОБАВИТЬ КОММЕНТАРИЙ</button>
 </form>
 {{status}}
 <!-- Form for reviews -->

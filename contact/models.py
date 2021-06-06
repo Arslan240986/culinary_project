@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 from culinary_recipe.models import Dish
+from culinary_recipe.utils import make_slug
 
 
 class UserProfileManager(models.Manager):
@@ -35,7 +36,7 @@ GENDERS = [
 
 
 def get_profile_image_filepath(self, fileName):
-    return f'users/{self.pk}/{"profile_image.png"}'
+    return f'users/{self.pk}/{fileName}'
 
 
 class UserProfile(models.Model):
@@ -79,10 +80,10 @@ class UserProfile(models.Model):
         to_slug = self.slug
         if self.first_name != self.__initial_first_name or self.last_name != self.__initial_last_name or self.slug == '':
             if self.first_name and self.last_name:
-                to_slug = slugify(str(self.first_name)+' '+ str(self.last_name))
+                to_slug = f'{make_slug(str(self.first_name))}-{make_slug(str(self.last_name))}'
                 ex = UserProfile.objects.filter(slug=to_slug).exists()
                 while ex:
-                    to_slug = slugify(to_slug+" "+str(self.pk))
+                    to_slug = f'{to_slug}-{str(self.pk)}'
                     ex = UserProfile.objects.filter(slug=to_slug).exists()
             else:
                 to_slug = str(self.user)

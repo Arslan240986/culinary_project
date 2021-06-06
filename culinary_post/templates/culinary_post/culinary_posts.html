@@ -31,17 +31,17 @@
                         </div>
                     </div>
                 </div>
-                <img src="{{ post.author.avatar.url }}" class="ui avatar url">
+                <img loading="lazy" src="{{ post.author.avatar.url }}" class="ui avatar url">
                 <small>{{ post.author.user.username }} - {{ post.created|timesince}} назад</small>
                 <div class="ui fluid image">
                     {% if post.image %}
-                    <img src="{{ post.image.url }}">
+                    <img loading="lazy" src="{{ post.image.url }}">
                     {% endif %}
                 </div>
 
             </div>
             <div class="content">
-                <p>{{ post.content }}</p>
+                <p>{{ post.content|safe }}</p>
                 <i class="comment icon"></i>
                 <small>{{ post.get_total_comments }} коментарии</small>
             </div>

@@ -6,6 +6,6 @@ from .tasks import comment_add
 
 @receiver(post_save, sender=DishComment)
 def post_save_create_comment(sender, instance, **kwargs):
-    user_id = instance.author.id
-    meal = instance.meal
-    comment_add.delay(meal.id, user_id)
+    comment = len(DishComment.objects.all().filter(status=True))
+    if comment == 10 or comment == 15 or comment==20:
+        comment_add.delay(comments=comment)

@@ -21,7 +21,7 @@
             <div class="right floated meta">
                 {% ifequal user meal.author %}
                 {% else %}
-                <img class="ui avatar image" src="{{ meal.author.profile.avatar.url }}">
+                <img loading="lazy" class="ui avatar image" src="{{ meal.author.profile.avatar.url }}">
                 <a href="{{ meal.author.profile.get_user_profile_detail_absolute_url }}"><span>{{ meal.author.username }}</span></a>
                 {% endifequal %}
             </div>
@@ -33,18 +33,20 @@
     </div>
     <div class="content">
         <div class="ui medium rounded image">
-            <img src="{{ meal.poster.url }}" width="300px" height="300px" alt="{{ meal.title }}">
+            <img loading="lazy" src="{{ meal.poster.url }}" width="300px" height="300px" alt="{{ meal.title }}">
         </div>
     </div>
     <div class="content">
-        <small class="card-text text-muted">Категория:
-            <a class="button_link text-muted" href="{{ meal.category.get_absolute_url }}">{{ meal.category }}</a>
-            <a class="button_link text-muted" href="{{ meal.sub_category.get_absolute_url }}">{{ meal.sub_category.name }}</a>
+        <small class="card-text ">Категория:
+            <a class="button_link " href="{{ meal.category.get_absolute_url }}">{{ meal.category }}</a>
+            <a class="button_link " href="{{ meal.sub_category.get_absolute_url }}">{{ meal.sub_category.name }}</a>
         </small>
-        <p class="description">{{ meal.description }}</p>
-        <small class="card-text text-muted">Ингредиенты:
-            {% for ings in meal.ingredient_set.all %}
-            <span class="text-muted">{{ ings.name }}{% if not forloop.last %},{% endif %}</span>
+        <p class="description">{{ meal.description|safe|truncatewords:"100" }}</p>
+        <small class="card-text ">Ингредиенты:
+            {% for ingredient_title in meal.ingredienttitle_set.all %}
+                {% for ingredient in ingredient_title.ingredientlist_set.all %}
+                    {{ ingredient.name }},
+                {% endfor %}
             {% endfor %}
         </small>
     </div>
@@ -56,9 +58,6 @@
     </div>
 </div>
 {% endfor %}
-<div class="my-4">
-    {% include 'includes/paginator.html' %}
-</div>
 <div class="ui center aligned container">
 {% include 'includes/pagination.html' %}
 </div>

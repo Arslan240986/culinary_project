@@ -18,6 +18,6 @@ urlpatterns = [
     path('recipe/dishes/<slug:slug>/', views.GetItems.as_view(), name='last_list'),
     path('likes_meal/', views.like_unlike_post, name='likes_meal'),
     path('json/', views.ingredient_list_view, name='get_ingredient_lists'),
-    # path('category/country/<slug:slug>/', views.DishByCountry.as_view(), name='by_country'),
+    path('category/country/<slug:slug>/<int:pk>', views.DishByCountry.as_view(), name='by_country'),
     path('<slug:slug>/', views.get_sub_category, name='cats_list'),
 ]

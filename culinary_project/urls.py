@@ -19,13 +19,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('ckeditor/', include('ckeditor_uploader.urls')),
     path('ushefa_admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('profile/', include('contact.urls', namespace='profile')),
     path('posts/', include('culinary_post.urls', namespace='culinary_post')),
     path('private/chat/', include('private_chat.urls', namespace='private_chat')),
     path('', include('culinary_recipe.urls', namespace='culinary_recipe')),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -2,8 +2,9 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
-from django.utils.text import slugify
+from ckeditor.fields import RichTextField
 from .utils import make_slug
+
 import uuid
 
 
@@ -21,7 +22,7 @@ class Country(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('culinary_recipe:by_country', args=[self.slug])
+        return reverse('culinary_recipe:by_country', args=[self.slug, self.pk])
 
     class Meta:
         verbose_name = 'Страна'
@@ -135,7 +136,7 @@ class Vegeterian(models.Model):
 
 
 def get_poster_image_filepath(self, fileName):
-    return f'meal/{self.slug}/poster/{fileName}'
+    return f'meal/{self.slug[0:30]}/poster/{fileName}'
 
 
 def get_steps_image_filepath(self, fileName):
@@ -144,9 +145,9 @@ def get_steps_image_filepath(self, fileName):
 
 class Dish(models.Model):
     """Блюдо"""
-    title = models.CharField(verbose_name='Название', max_length=200)
+    title = models.CharField(verbose_name='Название', max_length=700)
     slug = models.SlugField(max_length=300, unique=True, verbose_name='Поле для урл')
-    description = models.TextField(verbose_name='Описание')
+    description = RichTextField(verbose_name='Описание')
     poster = models.ImageField('Постер', upload_to=get_poster_image_filepath)
     category = models.ForeignKey(Category, verbose_name='Категория',
                                  on_delete=models.SET_NULL, null=True)
@@ -158,10 +159,11 @@ class Dish(models.Model):
     preparation_time_minute = models.PositiveSmallIntegerField(blank=True, null=True)
     cooking_time_hour = models.PositiveSmallIntegerField(verbose_name='Время готовки', blank=True, null=True)
     cooking_time_minute = models.PositiveSmallIntegerField(blank=True, null=True)
-    servings = models.SmallIntegerField(verbose_name='Количество порций', default='5')
+    servings = models.CharField(verbose_name='Количество порций', max_length=100, blank=True, null=True)
     complexity = models.ForeignKey(Complexity, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Сложность приготовления')
     vegetarian = models.ForeignKey(Vegeterian, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Вегетарианство')
     technology = models.ManyToManyField(Technology, blank=True, verbose_name='Технология')
+    occasion = models.ManyToManyField(Occasion, blank=True, verbose_name='Повод')
     device = models.ManyToManyField(Device, blank=True, verbose_name='Устройтво')
     calorie = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Калория')
     protein = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Протеин')
@@ -171,7 +173,7 @@ class Dish(models.Model):
                                related_name='dish', null=True)
     draft = models.BooleanField(verbose_name='Черновик', default=False)
     moderator = models.BooleanField(verbose_name='Модератор', default=False)
-    advice = models.TextField(verbose_name="Полезные советы", blank=True)
+    advice = RichTextField(verbose_name="Полезные советы", blank=True,)
     likes = models.ManyToManyField(User, verbose_name='Лайк', related_name='meal_likes')
     is_liked = models.BooleanField(default=False)
     dish_added = models.BooleanField(default=False)
@@ -209,13 +211,16 @@ class Dish(models.Model):
     def get_update_absolute_url(self):
         return reverse('culinary_recipe:update_meal', args=[self.slug])
 
+    # def get_update_try_absolute_url(self):
+    #     return reverse('culinary_recipe:update_try_meal', args=[self.slug])
+
     def get_delete_absolute_url(self):
         return reverse('culinary_recipe:delete_meal', args=[self.pk])
 
     def get_ingredients(self, slug):
-        ingredients = [x for x in self.ingredient_set.all()]
-        if slug in ingredients:
-            return self
+        # ingredients = [x for x in self.ingredienttitle.ingredientlist_set.all()]
+        # if slug in ingredients:
+        return self
 
     def get_comments(self):
         return self.comments.all()
@@ -260,19 +265,31 @@ class Measure(models.Model):
         verbose_name = 'Мера веса/объема'
 
 
-class Ingredient(models.Model):
-    """Ингредиент"""
+class IngredientTitle(models.Model):
+    name = models.CharField(max_length=250, verbose_name='Заголовок ингредиента')
     meal = models.ForeignKey(Dish, verbose_name='Блюдо', on_delete=models.CASCADE, null=True)
-    name = models.CharField(verbose_name='Название', max_length=25, blank=True)
-    quantity = models.DecimalField(max_digits=1000, decimal_places=2,
-                                   verbose_name='Количество', blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Заголовок ингредиента'
+        verbose_name_plural = 'Заголовок ингредиентов'
+
+
+class IngredientList(models.Model):
+    """Ингредиент"""
+    title = models.ForeignKey(IngredientTitle, verbose_name='Заголовок ингредиента', on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField( verbose_name='Название', max_length=25)
+    quantity = models.CharField(max_length=150, verbose_name='Количество', blank=True)
     measure = models.ForeignKey(Measure, verbose_name='Мера веса/объема', on_delete=models.SET_NULL, null=True, blank=True)
     note = models.TextField(verbose_name='Примечание', null=True, blank=True)
 
     def __str__(self):
-        return f'{self.name}-{self.meal}'
+        return f'{self.name}-{self.title}'
 
     class Meta:
+        ordering = ['id']
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
 
@@ -287,6 +304,7 @@ class Step(models.Model):
         return f'{self.pk} - {self.meal.title}'
 
     class Meta:
+        ordering = ['id']
         verbose_name = 'Пошаговый рецепт'
         verbose_name_plural = 'Пошаговый рецепты'
 
