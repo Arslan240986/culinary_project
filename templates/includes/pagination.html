@@ -1,0 +1,31 @@
+<div class="ui centered pagination menu mb-10">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}" class="icon item"><i class="left chevron icon"></i></a>
+    {% if page_obj.number|add:'-3' > 1 %}
+    <a href="?page=1" class="item">1</a>
+    {% endif %}
+    {% if page_obj.number|add:'-2' >= 2 %}
+        <a href="?page={{ page_obj.previous_page_number|add:'-2' }}" class="item">...</a>
+    {% endif %}
+    {% endif %}
+    {% if page_obj.paginator.page_range|length > 1 %}
+        {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+                <span class="active item">{{i}}</span>
+            {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
+                <a href="?page={{ i }}" class="item">{{ i }}</a>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% if page_obj.has_next %}
+    {% if page_obj.number|add:'2' < page_obj.paginator.num_pages %}
+        <a href="?page={{ page_obj.next_page_number|add:'2' }}" class="item">...</a>
+    {% endif %}
+    {% if page_obj.number|add:'3' < page_obj.paginator.num_pages %}
+        <a href="?page={{ page_obj.paginator.num_pages }}" class="item">{{ page_obj.paginator.num_pages }}</a>
+    {% endif %}
+    {% if page_obj.number < page_obj.paginator.num_pages %}
+        <a href="?page={{ page_obj.next_page_number }}" class="icon item"><i class="right chevron icon"></i></a>
+    {% endif %}
+{% endif %}
+</div>
