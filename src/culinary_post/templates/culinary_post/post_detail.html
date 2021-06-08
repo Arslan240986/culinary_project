@@ -3,7 +3,11 @@
 {% load mptt_tags %}
 {% load hitcount_tags %}
 
-{% block title %}{{ post.title }}{% endblock title %}
+{% block title %}У-шефа {{ post.title }}{% endblock title %}
+
+    {% block meta_description %}
+        <meta name="description" content="У-шефа пост {{ post.title }}"  itemprop="description">
+    {% endblock meta_description %}
 
 {% block breadcrumbs %}
 <a class="section navbar_links_yummy black" href="{% url 'culinary_post:culinary_post_view' %}">Кулинарные посты</a>

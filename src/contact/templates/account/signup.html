@@ -53,7 +53,6 @@
                 <a href="{{ login_url }}">Войти</a>.
             <p>или</p>
             <p>Войдите с одного из вашего аккаунта</p>
-                {% include "socialaccount/snippets/provider_list.html" with process="login" %}
             <a href="{% provider_login_url 'google' %}">
                 <i class="ui google large icon"></i>
             </a>

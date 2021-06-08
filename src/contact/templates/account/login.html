@@ -11,7 +11,6 @@
 <div class="ui middle aligned center aligned  grid">
     <div class="ui card" style="width: 400px; margin-top: 30px; height: 100%;">
         <div class="ui center aligned teal image header">
-            <img src="/static/image/yumy2.png" width="50" height="25" class="image">
             <div class="content">
                 <h1>{% trans "Sign In" %}</h1>
             </div>
@@ -51,9 +50,8 @@
             <a href="{{ signup_url }}">Зарегистрируйтесь</a>
             <p>или</p>
             <p>Войдите с одного из вашего аккаунта</p>
-            {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-            <a href="#">
-                <i class="ui facebook large icon"></i>
+            <a href="{% provider_login_url 'google' %}">
+                <i class="ui google large icon"></i>
             </a>
         </div>
     </div>

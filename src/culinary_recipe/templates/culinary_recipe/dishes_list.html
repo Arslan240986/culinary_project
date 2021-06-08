@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
 {% load hitcount_tags %}
-{% block title %}{% if category %}{{ category }}{% else %} Все ретцепты {% endif %}{% endblock title %}
-{% if category %}
-{% block breadcrumbs %}
-<span class="text-muted">{{category.name }}</span>
-{% endblock breadcrumbs %}
-{% endif %}
-{% block content %}
 
+{% block title %}{% if category %}{{ category }}{% else %} Все ретцепты {% endif %}{% endblock title %}
+
+{% if category %}
+    {% block breadcrumbs %}
+        <span class="text-muted">{{category.name }}</span>
+    {% endblock breadcrumbs %}
+{% endif %}
+
+{% block content %}
 {% if country %}
 <h3>Страна {{country.name}}</h3>
 {% else %}

@@ -5,6 +5,9 @@
 
 {% block title %}{{ meal.title }}{% endblock title %}
 
+{% block meta_description %}
+<meta name="description" content="Пошаговый пример готовки блюды - {{ meal.title|truncatewords:'100' }}"  itemprop="description">
+{% endblock meta_description %}
 
 {% block breadcrumbs %}
 <a class="section navbar_links_yummy black" href="{{ meal.category.get_absolute_url }}">{{meal.category.name}}</a>

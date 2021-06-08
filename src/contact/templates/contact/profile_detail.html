@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}
-Профиль пользователя
-{% endblock title %}
+{% block title %}Профиль пользователя{% endblock title %}
+
+{% block robots %}
+<meta name="robots" content="noindex">
+{% endblock robots %}
 
 {% block content %}
 <div class="ui center stackable aligned grid m-2">

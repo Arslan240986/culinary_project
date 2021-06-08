@@ -1,6 +1,4 @@
-arslan =  {'poster': '[<InMemoryUploadedFile: 494928.jpg (image/jpeg)>]',
-            'step_set-0-image': '[<InMemoryUploadedFile: 494919.jpg (image/jpeg)>]'
-           }
+arslan =  'Готовите ли вы к праздникам или просто нуждаетесь в отличных идеях на ужин, у нас есть для вас рецепты, советы по приготовлению и многое другое'
 
-for value, items in arslan.items():
-    print('step' in value)
+print(len(arslan))
+

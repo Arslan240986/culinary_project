@@ -129,49 +129,43 @@
 
                         <div class="menu transition hidden add_post_box_custom" tabindex="-1">
                             <div class="divider"></div>
-                            <div class="item personal_drop_list">
-                                <i class="file outline icon"></i>
-                                <a class="font-yanone black pt-10"
-                                   href="{{ user.profile.get_personal_absolute_url }}">Ваша страница</a>
-                            </div>
+                            <a class="item font-yanone black pt-10"
+                                   href="{{ user.profile.get_personal_absolute_url }}" >
+                                <i class="file outline icon"></i>Ваша страница
+                            </a>
                             <div class="divider"></div>
-                            <div class="item personal_drop_list">
+                            <a class="item font-yanone black pt-10" href="{% url 'contact:my_invites_view' %}">
                                 <i class="user outline icon"></i>
-                                <a class="font-yanone black pt-10" href="{% url 'contact:my_invites_view' %}">Запрос на дружбу
+                                Запрос на
+                                    дружбу
                                     <span class="ui red label ">{{ user.profile.get_total_friend_request }}</span>
-                                </a>
-                            </div>
+                            </a>
                             <div class="divider"></div>
-                            <div class="item personal_drop_list">
+                            <a class="item font-yanone black pt-10"
+                                   href="{{user.profile.get_absolute_url_for_friends_view}}">
                                 <i class="chat outline icon custom_chat_icon"></i>
-                                <a class="font-yanone black pt-10" href="{{user.profile.get_absolute_url_for_friends_view}}">Сообщения
+                                Сообщения
                                     <span class="ui red label ">{{ msg_notification }}</span>
-                                </a>
-                            </div>
+                            </a>
                             <div class="divider"></div>
-                            <div class="item personal_drop_list">
+                            <a class="item font-yanone black pt-10" href="{% url 'contact:all_profiles_view' %}">
                                 <i class="users icon"></i>
-                                <a class="font-yanone black pt-10" href="{% url 'contact:all_profiles_view' %}">Все
-                                    пользователи</a>
-                            </div>
+                                Все пользователи
+                            </a>
                             <div class="divider"></div>
-                            <div class="item personal_drop_list">
+                            <a class="item font-yanone black pt-10" href="{% url 'contact:invite_profiles_view' %}">
                                 <i class="search icon"></i>
-                                <a class="font-yanone black pt-10" href="{% url 'contact:invite_profiles_view' %}">Найти
-                                    друзей </a>
-                            </div>
+                                Найти друзей
+                            </a>
                             <div class="divider"></div>
-                            <div class="item personal_drop_list">
-                                <i class="book icon"></i>
-                                <a class="font-yanone black pt-10"
-                                   href="{{ user.profile.get_dish_book_absolute_url }}">Кулинарная книга <span
-                                        class="ui teal label dish_book_count">{{ user.profile.get_total_book }}</span></a>
-                            </div>
+                            <a class="item font-yanone black pt-10" href="{{ user.profile.get_dish_book_absolute_url }}">
+                                <i class="book icon"></i>Кулинарная книга
+                                <span class="ui teal label dish_book_count">{{ user.profile.get_total_book }}</span>
+                            </a>
                             <div class="divider"></div>
-                            <div class="item personal_drop_list">
-                                <i class="logout icon"></i>
-                                <a class="font-yanone black pt-10" href="{% url 'account_logout' %}">Выйти</a></div>
-
+                            <a class="item font-yanone black pt-10" href="{% url 'account_logout' %}">
+                                <i class="logout icon"></i> Выйти
+                            </a>
                         </div>
                     </div>
                 </div>

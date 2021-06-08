@@ -2,6 +2,10 @@
 {% load static %}
 {% block title %} Ваша страница {% endblock title %}
 
+{% block robots %}
+<meta name="robots" content="noindex">
+{% endblock robots %}
+
 {% block breadcrumbs %}
 <div class="active section">Ваша страница</div>
 {% endblock breadcrumbs %}
