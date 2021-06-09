@@ -128,11 +128,11 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static_cdn', 'media')
 
 EMAIL_HOST = 'smtp.send-box.ru'
+EMAIL_PORT = 2525
 EMAIL_HOST_USER = 'sendbox@ushefa.ru'
 EMAIL_HOST_PASSWORD = 'nNGLmenXoKfqsQ'
-EMAIL_PORT = 2525
 EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
+SERVER_EMAIL = 'noreply@ushefa.ru'
 
 
 
@@ -178,10 +178,7 @@ try:
 except ImportError:
     from .prod_settings import *
 
-if not DEBUG:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-else:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 
 CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/'

@@ -26,7 +26,6 @@ def watermark_photo(input_image_path,
                     output_image_path,
                     watermark_image_path,
                     position):
-    print('ishledi')
     base_image = Image.open(input_image_path)
     watermark = Image.open(watermark_image_path)
     width, height = base_image.size
@@ -260,10 +259,10 @@ class DishCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         ingredient_title_form.save()
         instruction_form.instance = self.object
         instruction_form.save()
-        watermark_photo(form.instance.poster, str(form.instance.poster), 'static/image/yumy2.png', position=(10, 10))
+        watermark_photo(form.instance.poster, str(form.instance.poster), 'static/image/logo_header.png', position=(10, 10))
         for steps_image in instruction_form:
             if steps_image.instance.image:
-                watermark_photo(steps_image.instance.image, str(steps_image.instance.image), 'static/image/yumy2.png', position=(10, 10))
+                watermark_photo(steps_image.instance.image, str(steps_image.instance.image), 'static/image/logo_header.png', position=(10, 10))
         if form.instance.draft:
             return HttpResponseRedirect(user.profile.get_personal_absolute_url())
         messages.success(self.request, 'Спасибо за участие! Ваш рецепт будет добавлен на сайт после прохождения модерации.')
@@ -322,14 +321,14 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             instruction_form.save()
             if self.request.FILES:
                 if 'poster' in self.request.FILES:
-                    watermark_photo(base_form.instance.poster, str(base_form.instance.poster), 'static/image/yumy2.png',
+                    watermark_photo(base_form.instance.poster, str(base_form.instance.poster), 'static/image/logo_header.png',
                                     position=(10, 10))
 
                 for value, items in self.request.FILES.items():
                     if 'step' in value:
                         for steps_image in instruction_form:
                             if steps_image.instance.image:
-                                watermark_photo(steps_image.instance.image, str(steps_image.instance.image), 'static/image/yumy2.png',
+                                watermark_photo(steps_image.instance.image, str(steps_image.instance.image), 'static/image/logo_header.png',
                                         position=(10, 10))
             if base_form.instance.draft:
                 return HttpResponseRedirect(user.profile.get_personal_absolute_url())
