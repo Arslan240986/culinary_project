@@ -21,10 +21,7 @@
         {% for meal in sub_category.get_last_three_dishes %}
         <div class="five wide column">
             <div class="page_image loading_gif">
-                <img loading="lazy" src="{{ meal.poster.url }}" alt="Card image cap">
-                <div class="card-body">
-                    <a class="ui link" href="{{meal.get_absolute_url}}"><p class="card-text">{{ meal.title }}</p></a>
-                </div>
+                <img src="/static/image/1x1.png" data-src="{{ meal.poster.url }}" alt="{{meal.title}}">
             </div>
             <a href="{{ meal.get_absolute_url }}"><span>{{ meal.title }}</span></a>
         </div>

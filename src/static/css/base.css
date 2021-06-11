@@ -972,3 +972,7 @@ textarea {
     background-size: cover !important;
     z-index: 999999 !important;
 }
+.all-label_suffix{
+    color: red !important;
+    font-size: 25px !important;
+}

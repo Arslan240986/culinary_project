@@ -28,18 +28,25 @@
 <form action="." method="post" enctype="multipart/form-data" class="ui equal width form textearea" novalidate>
     {% csrf_token %}
     <h4 class="ui ui teal dividing header font-oswald">Добавить рецепт</h4>
-    {{form.title.label_tag}}
+    <div class="ui positive message mb-10">
+            <small>Поля указанные красной звездочкой обезательны к заполнению. После обновления рецепты пройдут проверку заного.</small>
+    </div>
+    {{form.title.label}}<span class="all-label_suffix">*</span>
     <div class="{% if form.title.errors %}error{% endif %} field">
         {{form.title.errors}}
         {{form.title}}
     </div>
-    {{form.description.label_tag}}
+    {{form.description.label}}<span class="all-label_suffix">*</span>
     <div class="{% if form.description.errors %}error{% endif %} field">
         {{form.description.errors}}
         {{ form.media }}
         {{form.description}}
     </div>
-    {{form.poster.label_tag}}
+     <div class="ui positive message mb-10">
+            <small>Размер фотографий не должны превышать 1мб и не менее 500 пикселей.</small>
+    </div>
+    {{form.poster.errors}}
+    {{form.poster.label}}<span class="all-label_suffix">*</span>
     <div class="{% if form.poster.errors %}error{% endif %} field">
         <div class="ui medium image poster_image_div ">
             <img loading="lazy" id="poster_image_id" class="ui centered medium rounded image"
@@ -48,47 +55,45 @@
         </div>
         <input class="d_none" type="file" name="poster" accept="image/*" required="" id="id_poster"
                onchange="readURL(this)">
-        {{form.poster.errors}}
-        <div class="ui message">
-            <ul class="list">
-                <li><small>{{form.poster.help_text}}</small></li>
-            </ul>
+    </div>
+     <div class="ui positive message">
+    <small><i>После выбора категории появится список под категорий соответствующему выбору категория. <br>
+При медленном интернете вывод под категории может занять чуть больше времени.
+Если среди списков нет нужного вам категория укажите раздел "Другое". При проверке модератор добавит нужный раздел и укажет.</i></small>
+        <div class="fields">
+            <div class="field">{{form.category.errors}}</div>
+            <div class="field">{{form.sub_category.errors}}</div>
         </div>
-    </div>
-    <div class="fields">
-        <div class="field">{{form.category.errors}}</div>
-        <div class="field">{{form.sub_category.errors}}</div>
-    </div>
-    <div class="fields">
-        <div class="{% if form.category.errors %}error{% endif %} field">
-            <div class="recipe_box_category"
-                 data-href-template="{% url 'culinary_recipe:get_ajax_response_category' %}">
-                {{form.category.label_tag}}
-                {{form.category}}
+        <div class="fields">
+            <div class="{% if form.category.errors %}error{% endif %} field">
+                <div class="recipe_box_category"
+                     data-href-template="{% url 'culinary_recipe:get_ajax_response_category' %}">
+                    {{form.category.label}}<span class="all-label_suffix">*</span>
+                    {{form.category}}
+                </div>
+            </div>
+            <div class="{% if form.sub_category.errors %}error{% endif %} field sub_category">
+                <div class="sub_category">
+                    {{form.sub_category.label}}<span class="all-label_suffix">*</span>
+                    {{form.sub_category}}
+                </div>
             </div>
         </div>
-        <div class="{% if form.sub_category.errors %}error{% endif %} field sub_category">
-            <div class="sub_category">
-                {{form.sub_category.label_tag}}
-                {{form.sub_category}}
-            </div>
-        </div>
-    </div>
-
+     </div>
     <div class="fields">
         <div class="{% if form.country.errors %}error{% endif %} field">
-            {{form.country.label_tag}}
             {{form.country.errors}}
+            {{form.country.label}}<span class="all-label_suffix">*</span>
             {{form.country}}
         </div>
         <div class="{% if form.complexity.errors %}error{% endif %} field">
-            {{form.complexity.label_tag}}
             {{form.complexity.errors}}
+            {{form.complexity.label_tag}}
             {{form.complexity}}
         </div>
         <div class="{% if form.vegetarian.errors %}error{% endif %} field">
-            {{form.vegetarian.label_tag}}
             {{form.vegetarian.errors}}
+            {{form.vegetarian.label_tag}}
             {{form.vegetarian}}
         </div>
     </div>
@@ -185,14 +190,13 @@
             <fieldset class="ingredient_form_set empty-form mb-10" id="{{ ingredient_title_form.empty_form.prefix }}">
                 <div class="ingredient_explanation">
                     <legend>Ингредиенты к ретцепту</legend>
-                    <small>Как минимум нужно добавить два ингредиента! Менше двух выявит ошибку и вы не сможете добавить
-                        ретцепт.
+                    <small>Как минимум нужно добавить один ингредиент! Менше одного выявит ошибку. <br> Примечание при выводе автоматически выводится в скобках.
                     </small>
                 </div>
 
                 <div class="field">
                         {{ ingredient_title_form.name.errors }}
-                        {{ ingredient_title_form.empty_form.name.label_tag }}
+                        {{ ingredient_title_form.empty_form.name.label}}<span class="all-label_suffix">*</span>
                         {{ ingredient_title_form.empty_form.name }}
                 </div>
 
@@ -206,7 +210,7 @@
                                     <div class="field">
                                         <div class="fields">
                                             <div class="field">
-                                                {{ ingredient_title_form.empty_form.nested.empty_form.name.label_tag }}
+                                                {{ ingredient_title_form.empty_form.nested.empty_form.name.label}}<span class="all-label_suffix">*</span>
                                                 <div class="ingredient_name_td mr-4" data-href="{% url 'culinary_recipe:get_ingredient_lists' %}">
                                                     {{ ingredient_title_form.empty_form.nested.empty_form.name }}
                                                     <div class="d_none" id="autocomplete_list"></div>
@@ -248,7 +252,7 @@
                                     <div class="field">
                                         <div class="fields">
                                             <div class="field">
-                                                {{ ingredient_form.name.label_tag }}
+                                                {{ ingredient_form.name.label}}<span class="all-label_suffix">*</span>
                                                 <div class="ingredient_name_td mr-4"
                                                      data-href="{% url 'culinary_recipe:get_ingredient_lists' %}">
                                                     {{ ingredient_form.name }}
@@ -300,14 +304,13 @@
             <fieldset class="ingredient_form_set visible-form mb-10" id="{{ inner_ingredient_title_form.prefix }}">
                 <div class="ingredient_explanation">
                     <legend>Ингредиенты к ретцепту</legend>
-                    <small>Как минимум нужно добавить два ингредиента! Менше двух выявит ошибку и вы не сможете добавить
-                        ретцепт.
+                    <small>Как минимум нужно добавить один ингредиент! Менше одного выявит ошибку. <br> Примечание при выводе автоматически выводится в скобках.
                     </small>
                 </div>
 
                 <div class="{% if inner_ingredient_title_form.name.errors %}error {% endif%}field">
                         {{ inner_ingredient_title_form.name.errors }}
-                        {{ inner_ingredient_title_form.name.label_tag }}
+                        {{ inner_ingredient_title_form.name.label}}<span class="all-label_suffix">*</span>
                         {{ inner_ingredient_title_form.name }}
                 </div>
 
@@ -330,7 +333,7 @@
                                     <div class="field">
                                         <div class="fields">
                                             <div class="field">
-                                                {{ ingredient_title_form.empty_form.nested.empty_form.name.label_tag }}
+                                                {{ ingredient_title_form.empty_form.nested.empty_form.name.label}}<span class="all-label_suffix">*</span>
                                                 <div class="ingredient_name_td mr-4"
                                                      data-href="{% url 'culinary_recipe:get_ingredient_lists' %}">
                                                     {{ ingredient_title_form.empty_form.nested.empty_form.name }}
@@ -373,7 +376,7 @@
                                     <div class="fields">
                                         <div class="{% if nested_ingredient_form.name.errors %}error {% endif%}field">
                                             {{ nested_ingredient_form.name.errors }}
-                                            {{ nested_ingredient_form.name.label_tag }}
+                                            {{ nested_ingredient_form.name.label}}<span class="all-label_suffix">*</span>
                                             <div class="ingredient_name_td mr-4"
                                                  data-href="{% url 'culinary_recipe:get_ingredient_lists' %}">
                                                 {{ nested_ingredient_form.name }}
@@ -458,7 +461,7 @@
                         <div class="field">
                             <div class="{% if instruction_form.empty_form.name.errors %}error {% endif%}field">
                                 {{ instruction_form.empty_form.description.errors }}
-                                {{ instruction_form.empty_form.description.label_tag }}
+                                {{ instruction_form.empty_form.description.label}}<span class="all-label_suffix">*</span>
                                 {{ instruction_form.empty_form.description }}
                             </div>
                             <div class="{% if instruction_form.empty_form.image.errors %}error {% endif%}field">
@@ -492,7 +495,7 @@
                             <div class="field">
                                 <div class="{% if form.name.errors %}error {% endif%}field">
                                     {{ form.description.errors }}
-                                    {{ form.description.label_tag }}
+                                    {{ form.description.label }}<span class="all-label_suffix">*</span>
                                     {{ form.description }}
                                 </div>
                                 <div class="{% if form.image.errors %}error {% endif%}field">
@@ -529,6 +532,9 @@
         {{ form.advice }}
     </div>
     <div class="field">
+         <div class="ui positive message mb-10">
+            <small>Указав рецепт как черновик можете отложить заполение на потом но обезателные поля при этом должны быть заполнены. Найти их можете в вашей странице.</small>
+        </div>
         <div class="ui fluid segment">
             <div class="ui toggle checkbox">
                 {{form.draft.label_tag}}

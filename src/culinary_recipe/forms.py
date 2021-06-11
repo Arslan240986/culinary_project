@@ -32,8 +32,7 @@ class StepsForm(forms.ModelForm):
 
 class DishForm(forms.ModelForm):
     title = forms.CharField(error_messages={'required': 'Укажите название рецепта'}, label='Название рецепта')
-    poster = forms.ImageField(error_messages={'required': 'Загрузить обязательно'}, label='Постер',
-                              help_text='Загрузите качественную фотографию блюда так как это главное фотография')
+    poster = forms.ImageField(label_suffix='*', error_messages={'required': 'Загрузить обязательно'}, label='Постер',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

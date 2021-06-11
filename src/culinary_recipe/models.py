@@ -57,7 +57,7 @@ class SubCategory(models.Model):
     slug = models.SlugField(max_length=250, unique=True, verbose_name='Поле для урл')
 
     def __str__(self):
-        return f'{self. category.name} -> {self.name}'
+        return self.name
 
     def get_absolute_url(self):
         return reverse('culinary_recipe:last_list', args=[self.slug])
