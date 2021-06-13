@@ -95,19 +95,59 @@
                 </a>
             </div>
         </div>
-    <hr>
-    <h3 class="pl-10 font-oswald">Национальные кухни</h3>
-    <div class="country_block my-4">
-
-        {% for country in countries %}
-            <span class="flag">
-                <a class="button_link text-muted {% if forloop.first %}pl-10{% endif %}" href="{{country.get_absolute_url}}">
-                    {{ country.name }}: {{country.cnt}}
-                    {% if not forloop.last %},{% endif %}
-                </a>
-            </span>
-        {% endfor %}
-
-    </div>
-
     {% endblock %}
+        {% block popularity %}
+        <hr>
+          <h3 class="pl-10 font-oswald">Популярные рецепты</h3>
+            <div class="grid_ushefa">
+            {% for popular_meal in popular_meals %}
+                <div class="grid-item_ushefa">
+                <a href="{{popular_meal.get_absolute_url}}" class="ui fluid card">
+                  <div class="image">
+                    <img src="{{ popular_meal.poster.url }}" alt="{{popular_meal.title}}">
+                  </div>
+                  <div class="content">
+                      <div class="header grey">
+                        {{popular_meal.title}}
+                      </div>
+                  </div>
+                  <div class="extra content">
+                        <span class="left floated">
+                          <i class="comment icon"></i>
+                            {{ popular_meal.get_total_comments}}
+                            <i class="eye icon"></i>
+                            {{ popular_meal.current_hit_count}}
+                            <i class="ui thumbs up icon"></i>
+                            {{ popular_meal.get_total_likes }}
+                        </span>
+                  </div>
+                </a>
+                </div>
+            {% endfor %}
+        </div>
+
+        <h3 class="pl-10 font-oswald">Национальные кухни</h3>
+        <div class="country_block my-4">
+            {% for country in countries %}
+                <span class="flag">
+                    <a class="button_link text-muted {% if forloop.first %}pl-10{% endif %}" href="{{country.get_absolute_url}}">
+                        {{ country.name }}: {{country.cnt}}
+                        {% if not forloop.last %},{% endif %}
+                    </a>
+                </span>
+            {% endfor %}
+        </div>
+    {% endblock popularity %}
+
+{% block jscdn %}
+    <script type="text/javascript" src="{% static 'js/masonry.pkgd.min.js' %}"></script>
+{% endblock jscdn %}
+
+{% block javascript %}
+    $('.grid_ushefa').masonry({
+        fitWidth: true,
+        gutter: 10,
+        columnWidth: 250,
+        itemSelector: '.grid-item_ushefa',
+    });
+{% endblock javascript %}

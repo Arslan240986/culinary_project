@@ -895,7 +895,7 @@ textarea {
     border-top: 1px solid grey;
 }
 .text-muted{
-    font-size: 1.5rem !important;
+    font-size: 16px !important;
 }
 .f-color{
     color: rgb(57, 250, 19) !important;
@@ -947,9 +947,9 @@ textarea {
     width: 100% !important;
 }
 .justify_center{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
 }
 .preload{
     position: fixed !important;
@@ -975,4 +975,18 @@ textarea {
 .all-label_suffix{
     color: red !important;
     font-size: 25px !important;
+}
+.advertisement{
+    height: 100px !important;
+}
+.grid_ushefa{
+    text-align: center !important;
+    margin: 0 auto !important;
+}
+.grey{
+    color: rgb(133, 128, 128) !important;
+}
+.grid-item_ushefa{
+    width: 250px !important;
+    margin-bottom: 10px !important;
 }

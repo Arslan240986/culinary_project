@@ -50,6 +50,7 @@ class CategoryViewList(ListView):
                 has_dish_country.append(con)
         context['countries'] = has_dish_country
         context['posts'] = CulinaryPost.objects.all().order_by('-created')[:6]
+        context['popular_meals'] =  Dish.objects.order_by('-hit_count_generic__hits').filter(moderator=True, draft=False)[:8]
         return context
 
 
@@ -120,7 +121,7 @@ class MealDetailView(DetailView):
         meal_ings_list = []
         for ingredient in meal.ingredienttitle_set.all():
             meal_ings_list += set(ingredient.ingredientlist_set.all().values_list('name', flat=True))
-        similar_meals = Dish.objects.filter(ingredienttitle__ingredientlist__name__in=meal_ings_list, moderator=False, draft=False).exclude(id=self.kwargs.get('pk')).distinct()[:3]
+        similar_meals = Dish.objects.filter(ingredienttitle__ingredientlist__name__in=meal_ings_list, moderator=True, draft=False).exclude(id=self.kwargs.get('pk')).distinct()[:8]
         form = DishCommentForm()
         comments = meal.comments.filter(status=False)
         comment_size = len(comments)
@@ -167,6 +168,7 @@ class MealDetailView(DetailView):
                    'pag_comments': new_comments,
                    'similar_meals': similar_meals,
                    'load_more': False if len(new_comments) >= comment_size else True,
+                   'popular_meals': Dish.objects.order_by('-hit_count_generic__hits').filter(moderator=True, draft=False)[:8]
                    }
         return render(request, self.template_name, context)
 
@@ -332,7 +334,7 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
                                         position=(10, 10))
             if base_form.instance.draft:
                 return HttpResponseRedirect(user.profile.get_personal_absolute_url())
-            messages.success(self.request,'Спасибо за участие! Ваш рецепт будет добавлен на сайт после прохождения модерации.')
+            messages.success(self.request, 'Спасибо за участие! Ваш рецепт будет добавлен на сайт после прохождения модерации.')
             return HttpResponseRedirect(self.get_success_url())
         else:
             return self.render_to_response(self)

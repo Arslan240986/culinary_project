@@ -59,7 +59,7 @@
                     <div class="inline column row">
                         {% get_hit_count for meal as count %}
                         <i class="ui eye big yellow icon main_point" aria-hidden="true"></i><small
-                            class="mr-5 font-s-20 c-black">{{count}}{{ hitcount.hit_counted }}{{ hitcount.pk }}</small>
+                            class="mr-5 font-s-20 c-black">{{count}}</small>
                         <a href="#dishComments">
                             <i class='ui comment outline big yellow icon main_point'></i><small
                                 class="mr-5 font-s-20 c-black">
@@ -218,27 +218,6 @@
         </div>
     </div>
 </div>
-<!--Similar recipe views -->
-<hr>
-{% if similar_meals %}
-<h4 class="font-lobster p-10">Похожие рецепты</h4>
-<div class="ui stackable centered three column grid">
-    <div class="row">
-        {% for meal in similar_meals %}
-        <div class="five wide column">
-            <div class="card">
-                <div class="page_image loading_gif">
-                    <img  data-src="{{ meal.poster.url }}" src="/static/image/1x1.png" alt="{{ meal.poster}}">
-                </div>
-                <div class="card-body">
-                    <a class="ui link" href="{{meal.get_absolute_url}}"><p class="card-text">{{ meal.title }}</p></a>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-{% endif %}
 <!-- Show comments -->
 <hr>
 {% if pag_comments %}
@@ -291,13 +270,82 @@
     <input type="hidden" name="parent" id="contactparent" value="">
     <button type="submit" class="ui fluid inverted green button mt-10 comment_button">ДОБАВИТЬ КОММЕНТАРИЙ</button>
 </form>
-{{status}}
-<!-- Form for reviews -->
-
-
 {% endblock content %}
+
+    {% block popularity %}
+<div class="advertisement"></div>
+    <!--Similar recipe views -->
+
+    {% if similar_meals %}
+    <h3 class="pl-10 font-oswald">Похожие рецепты</h3>
+    <div class="grid_ushefa">
+            {% for similar_meal in similar_meals %}
+        <div class="grid-item_ushefa">
+            <a href="{{similar_meal.get_absolute_url}}" class="ui card" style="align-self: stretch">
+                  <div class="image">
+                    <img src="{{ similar_meal.poster.url }}" alt="{{similar_meal.title}}">
+                  </div>
+                  <div class="content">
+                      <div class="header grey">
+                    {{ similar_meal.title }}
+                          </div>
+
+                  </div>
+                  <div class="extra content">
+                        <span class="left floated">
+                          <i class="comment icon"></i>
+                            {{ similar_meal.get_total_comments}}
+                            <i class="eye icon"></i>
+                            {{ similar_meal.current_hit_count}}
+                            <i class="ui thumbs up icon"></i>
+                            {{ meal.get_total_likes }}
+                        </span>
+                  </div>
+                </a>
+        </div>
+            {% endfor %}
+    </div>
+    {% endif %}
+        <h3 class="pl-10 font-oswald">Популярные рецепты</h3>
+            <div class="grid_ushefa">
+            {% for popular_meal in popular_meals %}
+                <div class="grid-item_ushefa">
+                <a href="{{popular_meal.get_absolute_url}}" class="ui fluid card" style="align-self: stretch">
+                      <div class="image">
+                        <img src="{{ popular_meal.poster.url }}" alt="{{popular_meal.title}}">
+                      </div>
+                      <div class="content">
+                          <div class="header grey">
+                            {{popular_meal.title}}
+                          </div>
+                      </div>
+                      <div class="extra content">
+                            <span class="left floated">
+                                  <i class="comment icon"></i>
+                                    {{ popular_meal.get_total_comments}}
+                                    <i class="eye icon"></i>
+                                    {{ popular_meal.current_hit_count}}
+                                    <i class="ui thumbs up icon"></i>
+                                    {{ popular_meal.get_total_likes }}
+                            </span>
+                      </div>
+                </a>
+</div>
+            {% endfor %}
+        </div>
+    {% endblock popularity %}
 
 {% block jscdn %}
     <!--Like and add dish to culinary book action Js cdn-->
+    <script type="text/javascript" src="{% static 'js/masonry.pkgd.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/meal_detail.js' %}"></script>
 {% endblock jscdn %}
+
+{% block javascript %}
+    $('.grid_ushefa').masonry({
+        fitWidth: true,
+        gutter: 10,
+        columnWidth: 250,
+        itemSelector: '.grid-item_ushefa',
+    });
+{% endblock javascript %}

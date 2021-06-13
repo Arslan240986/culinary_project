@@ -3,6 +3,8 @@ from django.db import models
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 from ckeditor.fields import RichTextField
+from hitcount.models import HitCountMixin, HitCount
+from django.contrib.contenttypes.fields import GenericRelation
 from .utils import make_slug
 
 import uuid
@@ -143,7 +145,7 @@ def get_steps_image_filepath(self, fileName):
     return f'meal/{self.meal.pk}/steps/{fileName}'
 
 
-class Dish(models.Model):
+class Dish(models.Model, HitCountMixin):
     """Блюдо"""
     title = models.CharField(verbose_name='Название', max_length=700)
     slug = models.SlugField(max_length=300, unique=True, verbose_name='Поле для урл')
@@ -179,9 +181,14 @@ class Dish(models.Model):
     dish_added = models.BooleanField(default=False)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    hit_count_generic = GenericRelation(HitCount, object_id_field='object_pk',
+                                        related_query_name='hit_count_generic_relation')
 
     def __str__(self):
         return self.title
+
+    def current_hit_count(self):
+        return self.hit_count.hits
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
