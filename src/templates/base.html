@@ -147,7 +147,7 @@
 <script async type="text/javascript" src="{% static 'Semantic_UI/semantic.min.js' %}"></script>
 <!--  custom js -->
 <script async type="text/javascript" src="{% static 'js/base.js' %}"></script>
-
+<script type="text/javascript" src="{% static 'js/masonry.pkgd.min.js' %}"></script>
 {% block jscdn %}
 
 {% endblock jscdn %}
@@ -155,8 +155,12 @@
     {% block javascript %}
     {% endblock javascript %}
 
-
-
+    $('.grid_ushefa').masonry({
+        fitWidth: true,
+        gutter: 10,
+        columnWidth: 250,
+        itemSelector: '.grid-item_ushefa',
+    });
 
 </script>
 </body>

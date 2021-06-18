@@ -46,11 +46,11 @@ class CategoryViewList(ListView):
         country = Country.objects.annotate(cnt=Count('dish'))
         has_dish_country = []
         for con in country:
-            if con.dish_set.all():
+            if con.dish_set.filter(moderator=True):
                 has_dish_country.append(con)
         context['countries'] = has_dish_country
-        context['posts'] = CulinaryPost.objects.all().order_by('-created')[:6]
-        context['popular_meals'] =  Dish.objects.order_by('-hit_count_generic__hits').filter(moderator=True, draft=False)[:8]
+        context['posts'] = CulinaryPost.objects.all().filter(moderator=True).order_by('-created')[:6]
+        context['popular_meals'] =  Dish.objects.order_by('-hit_count_generic__hits').filter(moderator=True, draft=False)[:12]
         return context
 
 
@@ -90,7 +90,7 @@ class DishByCountry(View):
     def get(self, request, slug, pk):
         # countr = Country.objects.prefetch_related('dish_set').get(slug=slug, id=pk)
         country = get_object_or_404(Country, slug=slug, id=pk)
-        meals = Dish.objects.filter(country=country)
+        meals = Dish.objects.filter(country=country, moderator=True, draft=False)
         return render(request, 'culinary_recipe/dishes_list.html', {'meals': meals, 'country': country})
 
 
@@ -301,7 +301,6 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form_class = self.get_form_class()
-        print(self.request.FILES)
         form = self.get_form(form_class)
         ingredient_nested_form = IngredientNestedFormSet(self.request.POST, instance=self.object)
         instruction_form = InstructionFormSet(self.request.POST, self.request.FILES, instance=self.object)

@@ -12,9 +12,9 @@ $(document).ready(function () {
         }
     });
     //        Like button
-    $(document).on('click', '#like', function (event) {
+    $(document).on('click', '#meal_like_button', function (event) {
         event.preventDefault();
-        var pk = $(this).attr('value')
+        var pk = $(this).attr('datatype')
         const url = $('#like_form').attr('action')
         let csrf = $('input[name=csrfmiddlewaretoken]').val()
         $.ajax({
@@ -25,11 +25,11 @@ $(document).ready(function () {
             success: function (response) {
                 h = $('.result_book').html(response['form'])
                 if (response['is_liked'] == 'Like') {
-                    $('#like').removeClass('up')
-                    $('#like').addClass('down')
+                    $('#meal_like_button').removeClass('up')
+                    $('#meal_like_button').addClass('down')
                 } else if (response['is_liked'] == 'Unlike') {
-                    $('#like').removeClass('down')
-                    $('#like').addClass('up')
+                    $('#meal_like_button').removeClass('down')
+                    $('#meal_like_button').addClass('up')
                 }
             },
             error: function (rs, e) {

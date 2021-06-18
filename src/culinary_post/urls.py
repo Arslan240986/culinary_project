@@ -11,5 +11,5 @@ urlpatterns = [
     path('post_add/', views.posts_add, name='culinary_post_add'),
     path('liked/', views.like_unlike_post, name='like_post_view'),
     path('delete/<pk>/delete/', views.CulinaryPostDeleteView.as_view(), name='post_delete'),
-    path('update/<pk>/update/', views.CulinaryPostUpdateView.as_view(), name='post_update'),
+    path('update/<pk>/', views.CulinaryPostUpdateView.as_view(), name='post_update'),
 ]

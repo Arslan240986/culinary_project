@@ -12,10 +12,10 @@ $(document).ready(function(){
     });
 
     // <!--    Like-btn ajax js-->
-    $('.like_form').submit(function(e){
+    $('#post_like_button').click(function(e){
         e.preventDefault()
-        const post_id = $(this).attr('id')
-        const url = $(this).attr('action')
+        const post_id = $(this).attr('datatype')
+        const url = $('#post_like_form').attr('action')
         let result;
         let likes = parseInt($.trim($(`.like-count${post_id}`).text()))
         $.ajax({

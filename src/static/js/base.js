@@ -173,6 +173,15 @@ function lazyScrollCheck(){
                 lazy_images[imgIndex].removeAttribute('data-src')
                 lazy_images[imgIndex].classList.remove('d_none')
                 lazy_images[imgIndex].parentElement.classList.remove('loading_gif')
+                setTimeout(()=>{
+                    $('.grid_ushefa').masonry({
+                        fitWidth: true,
+                        gutter: 10,
+                        columnWidth: 250,
+                        itemSelector: '.grid-item_ushefa',
+                    });
+                },500);
+
             },1000)
         }
         delete lazyImagesPosition[imgIndex]

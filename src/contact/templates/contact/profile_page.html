@@ -174,7 +174,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Ваши рецепты в ожидаеии проверки</td>
+                            <td>Ваши рецепты и посты в ожидаеии проверки</td>
                             <td><span class="ui teal label">{{ profile.get_total_recipe_moderator_false }}</span>
                             </td>
                         </tr>
@@ -246,9 +246,9 @@
     <hr>
 
 
-    {% if meals_not_added %}
+    {% if meals_not_added or posts_false%}
     <div class="personal_info_title row ">
-        <h2>Ваши рецепты в ожидаеии проверки</h2>
+        <h2>Ваши рецепты и посты в ожидаеии проверки</h2>
     </div>
 
     <table class="ui unstackable table fluid">
@@ -262,6 +262,7 @@
             </td>
             <td>
                 <div class="ui middle aligned">
+                    <span>рецепт: </span>
                     <a href="{{meal.get_absolute_url }}"><span>{{ meal.title|truncatechars:"20" }}</span></a>
                 </div>
             </td>
@@ -285,11 +286,45 @@
             </td>
         </tr>
         {% endfor %}
+        {% for post in posts_false %}
+        <tr>
+            <td>
+                <div class="dishe_images">
+                    <img loading="lazy" class="user_image" src="{{ post.image.url }}" alt="{{ post.title }}">
+                </div>
+            </td>
+            <td>
+                <div class="ui middle aligned">
+                    <span>пост: </span>
+                    <a href="{{post.get_absolute_url }}"><span>{{ post.title|truncatechars:"20" }}</span></a>
+                </div>
+            </td>
+            <td>
+                <div class="dish_created">
+                        <span class="dish_date">
+                            {{ post.created|date:"j E Y" }}
+                        </span>
+                </div>
+            </td>
+            <td>
+
+                <div class="ui two buttons">
+                    <a class="ui basic green button" href="{{ post.get_update_absolute_url }}">
+                        <i class="edit green icon"></i>
+                    </a>
+                    <a class="ui basic red button" href="{{ post.get_delete_absolute_url }}">
+                        <i class="delete red icon"></i>
+                    </a>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
         </tbody>
     </table>
-    {% else %}
+    {% endif %}
+    {% if not meals_not_added and not posts_false %}
     <div class="personal_info_title row ">
-        <h2>У Вас пока нет рецептов в ожидаеии проверки</h2>
+        <h2>У Вас пока нет рецептов или постов в ожидаеии проверки</h2>
     </div>
     {% endif %}
     <hr>

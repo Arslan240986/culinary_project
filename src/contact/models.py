@@ -123,7 +123,9 @@ class UserProfile(models.Model):
         return reverse('contact:user_dish_book', args=[self.slug])
 
     def get_total_recipe_moderator_false(self):
-        return Dish.objects.filter(draft=False, author=self.user, moderator=False).count()
+        recipes = Dish.objects.filter(draft=False, author=self.user, moderator=False).count()
+        post = self.culinary_post.all().filter(moderator=False).count()
+        return recipes + post
 
     def get_total_draft(self):
         return Dish.objects.filter(draft=True, author=self.user).count()
@@ -147,8 +149,11 @@ class UserProfile(models.Model):
     def get_total_posts_number(self):
         return self.culinary_post.all().count()
 
-    def get_total_posts(self):
-        return self.culinary_post.all()
+    def get_total_posts_moderator_true(self):
+        return self.culinary_post.all().filter(moderator=True)
+
+    def get_total_posts_moderator_false(self):
+        return self.culinary_post.all().filter(moderator=False)
 
     def get_all_likes_given_to_posts(self):
         likes = self.postlike_set.all()

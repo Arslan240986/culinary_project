@@ -50,7 +50,8 @@ def personal_page(request, slug):
         msg = ChatMessage.objects.filter(thread=thread, is_readed=False).exclude(user=user_profile).count()
         total_msg += msg
     context = {
-        'posts' : user_profile.get_total_posts(),
+        'posts' : user_profile.get_total_posts_moderator_true(),
+        'posts_false': user_profile.get_total_posts_moderator_false(),
         'msg_count': total_msg,
         'meals': meals,
         'meals_not_added': meals_not_added,

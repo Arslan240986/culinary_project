@@ -9,8 +9,8 @@ from mptt.models import MPTTModel
 
 
 def validate_max_len(val):
-    if len(val) < 5:
-        raise ValidationError('Число %(value)s нечетное', code='odd', params={'value': val})
+    if len(val) < 10:
+        raise ValidationError('Длина названия поста должен привышать 10 символов', code='odd', params={'value': val})
 
 
 class CulinaryPost(models.Model):
@@ -19,6 +19,7 @@ class CulinaryPost(models.Model):
     content = RichTextField(verbose_name='Описания')
     image = models.ImageField(verbose_name='Фотография', upload_to='posts', blank=True, null=True)
     liked = models.ManyToManyField(UserProfile, blank=True, related_name='post_likes')
+    moderator = models.BooleanField(verbose_name='Модератор', default=False)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='culinary_post')
@@ -63,8 +64,8 @@ class CulinaryPostComment(MPTTModel):
         return f'{self.author} -to- {self.text}'
 
     class MPTTMeta:
-        ordering = ['created']
-        order_insertion_by = ['created']
+        ordering = ['update']
+        order_insertion_by = ['update']
         verbose_name = 'Коментария'
         verbose_name_plural = 'Коментарии'
 

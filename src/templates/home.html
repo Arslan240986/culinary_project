@@ -60,28 +60,28 @@
                     </a>
                 </div>
             </div>
-    <hr>
+{% endblock %}
+        {% block popularity %}
+         <hr>
 
     <div class="ui header pl-10 font-oswald">Кулинарные посты и новости</div>
-    <div class="ui stackable centered three column grid">
+    <div class="grid_ushefa">
         {% for post in posts %}
-            <div class="five wide column cont">
-                <h6>
-                    <a class="button_link" href="{{ post.get_absolute_url }}">
-                        <h4 class="badge badge-secondary">{{ post.title }}</h4>
+            <div class="grid-item_ushefa">
+                <a href="{{ post.get_absolute_url }}" class="ui fluid card">
+                          <div class="page_image loading_gif">
+                            <img src="/static/image/2.png" data-src="{{ post.image.url }}" alt="{{ post.title }}">
+                          </div>
+                          <div class="content">
+                              <div class="header grey text_center">
+                                {{ post.title }}
+                              </div>
+                          </div>
+
                     </a>
-                </h6>
-                {% if post.image %}
-                <div class="page_image loading_gif">
-                    <img src="/static/image/2.png" data-src="{{ post.image.url }}" alt="{{ post.title }}">
-                </div>
-                {% endif %}
-                <div class="content">
-                    {{ post.content|safe|truncatewords:"25"}}
-                </div>
+
             </div>
         {% endfor %}
-
     </div>
         <div class="row p-10">
             <div class="justify_center">
@@ -95,33 +95,32 @@
                 </a>
             </div>
         </div>
-    {% endblock %}
-        {% block popularity %}
+
         <hr>
           <h3 class="pl-10 font-oswald">Популярные рецепты</h3>
             <div class="grid_ushefa">
             {% for popular_meal in popular_meals %}
                 <div class="grid-item_ushefa">
-                <a href="{{popular_meal.get_absolute_url}}" class="ui fluid card">
-                  <div class="image">
-                    <img src="{{ popular_meal.poster.url }}" alt="{{popular_meal.title}}">
-                  </div>
-                  <div class="content">
-                      <div class="header grey">
-                        {{popular_meal.title}}
-                      </div>
-                  </div>
-                  <div class="extra content">
-                        <span class="left floated">
-                          <i class="comment icon"></i>
-                            {{ popular_meal.get_total_comments}}
-                            <i class="eye icon"></i>
-                            {{ popular_meal.current_hit_count}}
-                            <i class="ui thumbs up icon"></i>
-                            {{ popular_meal.get_total_likes }}
-                        </span>
-                  </div>
-                </a>
+                    <a href="{{popular_meal.get_absolute_url}}" class="ui fluid card">
+                          <div class="page_image loading_gif">
+                            <img src="/static/image/2.png" data-src="{{ popular_meal.poster.url }}" alt="{{popular_meal.title}}">
+                          </div>
+                          <div class="content">
+                              <div class="header grey">
+                                {{popular_meal.title}}
+                              </div>
+                          </div>
+                          <div class="extra content">
+                                <span class="left floated">
+                                  <i class="comment icon"></i>
+                                    {{ popular_meal.get_total_comments}}
+                                    <i class="eye icon"></i>
+                                    {{ popular_meal.current_hit_count}}
+                                    <i class="ui thumbs up icon"></i>
+                                    {{ popular_meal.get_total_likes }}
+                                </span>
+                          </div>
+                    </a>
                 </div>
             {% endfor %}
         </div>
@@ -138,16 +137,4 @@
             {% endfor %}
         </div>
     {% endblock popularity %}
-
-{% block jscdn %}
-    <script type="text/javascript" src="{% static 'js/masonry.pkgd.min.js' %}"></script>
-{% endblock jscdn %}
-
-{% block javascript %}
-    $('.grid_ushefa').masonry({
-        fitWidth: true,
-        gutter: 10,
-        columnWidth: 250,
-        itemSelector: '.grid-item_ushefa',
-    });
-{% endblock javascript %}
+        </div>

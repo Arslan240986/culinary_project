@@ -29,7 +29,7 @@ def posts_add(request):
             instance = p_form.save(commit=False)
             instance.author = profile
             instance.save()
-            watermark_photo(instance.image, str(instance.image), 'static/image/yumy2.png', position=(10, 10))
+            watermark_photo(instance.image, str(instance.image), 'static/image/logo_header.png', position=(10, 10))
             return redirect('culinary_post:culinary_post_view')
         else:
             context = {'p_form': p_form}
@@ -43,7 +43,7 @@ def posts_add(request):
 
 @login_required()
 def post__list_view(request):
-    qs = CulinaryPost.objects.all()
+    qs = CulinaryPost.objects.all().filter(moderator=True)
     profile = get_object_or_404(UserProfile, user=request.user)
 
     context = {
@@ -176,16 +176,17 @@ class CulinaryPostUpdateView(LoginRequiredMixin, UpdateView):
     form_class = CulinaryPostModelForm
     template_name = 'culinary_post/post_update.html'
 
-    def post(self, request, *args, **kwargs):
-        print(request.POST)
-
     def form_valid(self, form):
         profile = get_object_or_404(UserProfile, user=self.request.user)
+        context = self.get_context_data()
+        print('form', context['form'].is_valid())
         if form.instance.author == profile:
+            print('bool', form.instance.author == profile)
             instance = form.save(commit=False)
             instance.save()
+            print('image' in self.request.FILES)
             if 'image' in self.request.FILES:
-                watermark_photo(instance.image, str(instance.image), 'static/image/yumy2.png', position=(10, 10))
+                watermark_photo(instance.image, str(instance.image), 'static/image/logo_header.png', position=(10, 10))
             messages.success(self.request, 'Спасибо за участие! Ваш пост будет добавлен на сайт после прохождения модерации.')
             return HttpResponseRedirect(self.get_success_url())
         else:

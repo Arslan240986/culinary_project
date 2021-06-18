@@ -327,7 +327,7 @@ ul.collapse {
 
 .ingredints_li {
     padding: 7px;
-    border-bottom: 1px solid rgb(161, 158, 158);
+    border-bottom: 1px dotted rgb(161, 158, 158);
 }
 
 .dish_steps {
@@ -903,9 +903,6 @@ textarea {
 .d-inline{
     display: inline !important;
 }
-.page_image{
-    border-radius: 1rem !important;
-}
 .page_image.loading_gif{
     padding: 0px 0px 70% 0px !important;
     background: url('/static/image/load2.gif') center / 25% no-repeat !important;
@@ -914,7 +911,6 @@ textarea {
 .page_image img{
     max-width: 100% !important;
     max-height: 100% !important;
-    border-radius: 1rem !important;
 }
 .width{
     width: 100% !important;
@@ -980,8 +976,10 @@ textarea {
     height: 100px !important;
 }
 .grid_ushefa{
-    text-align: center !important;
     margin: 0 auto !important;
+}
+.text_center{
+    text-align: center !important;
 }
 .grey{
     color: rgb(133, 128, 128) !important;
