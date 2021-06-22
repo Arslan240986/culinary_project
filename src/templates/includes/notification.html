@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="ui yellow message text_center">
+    {{ notification }} <br>
+    <a href="/">Вернутся на главную</a><br>
+    {% if link_to_back %}
+    <a href="{{ link_to_back }}">Вернутся на на страницу</a>
+    {% endif %}
+</div>
+
+
+{% endblock content %}

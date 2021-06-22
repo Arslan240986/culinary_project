@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import DeleteView, UpdateView
@@ -30,18 +30,17 @@ def posts_add(request):
             instance.author = profile
             instance.save()
             watermark_photo(instance.image, str(instance.image), 'static/image/logo_header.png', position=(10, 10))
-            return redirect('culinary_post:culinary_post_view')
+            messages.success(request, 'Спасибо за участие! Ваш пост будет добавлен на сайт после прохождения модерации.')
+            return HttpResponseRedirect(instance.get_absolute_url())
         else:
             context = {'p_form': p_form}
             return render(request, 'culinary_post/posts_add.html', context)
-
     context = {
         'p_form': p_form,
     }
     return render(request, 'culinary_post/posts_add.html', context)
 
 
-@login_required()
 def post__list_view(request):
     qs = CulinaryPost.objects.all().filter(moderator=True)
     profile = get_object_or_404(UserProfile, user=request.user)
@@ -81,7 +80,7 @@ class CulinaryPostDetailView(HitCountDetailView):
     def get(self, request, *args, **kwargs):
         post = self.get_object()
         hit_count = HitCount.objects.get_for_object(post)
-        hit_count_response = HitCountMixin.hit_count(request, hit_count)
+        HitCountMixin.hit_count(request, hit_count)
         form = PostCommentModelForm()
         comments = post.post_comments.all().filter(status=True)
         comment_size = len(comments)
@@ -176,10 +175,19 @@ class CulinaryPostUpdateView(LoginRequiredMixin, UpdateView):
     form_class = CulinaryPostModelForm
     template_name = 'culinary_post/post_update.html'
 
+    def get(self, request, *args, **kwargs):
+        if not self.get_object().author == self.request.user.profile:
+            context = {
+                'notification': 'Упс! Вы не являетесь автором данного поста!',
+                'link_to_back': f'{self.request.user.profile.get_personal_absolute_url()}'
+            }
+            return render(request, 'includes/notification.html', context)
+        return super().get(request, *args, **kwargs)
+
     def form_valid(self, form):
         profile = get_object_or_404(UserProfile, user=self.request.user)
         context = self.get_context_data()
-        print('form', context['form'].is_valid())
+        print('form', form.instance.author)
         if form.instance.author == profile:
             print('bool', form.instance.author == profile)
             instance = form.save(commit=False)

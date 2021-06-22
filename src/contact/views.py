@@ -31,6 +31,11 @@ def edit(request):
             context = {'profile_form': profile_form}
             return render(request, 'contact/profile_page.html', context)
     else:
+        if not user_profile == request.user.profile:
+            context = {
+                'notification': 'Упс! Вы пытаетесь войти в чужую страницу!',
+            }
+            return render(request, 'includes/notification.html', context)
         profile_form = ProfileEditForm(instance=request.user.profile)
 
     return render(request, 'contact/profile_page.html', {'profile_form': profile_form, 'profile': user_profile})
@@ -39,28 +44,34 @@ def edit(request):
 @login_required
 def personal_page(request, slug):
     user_profile = get_object_or_404(UserProfile, slug=slug)
-    profile_form = ProfileEditForm(instance=request.user.profile)
-    meals = Dish.objects.filter(author__profile=user_profile, draft=False, moderator=True).order_by('-created')
-    meals_not_added = Dish.objects.filter(author__profile=user_profile, draft=False, moderator=False)
-    meals_draft = Dish.objects.filter(author__profile=user_profile, draft=True)
-    reviews = DishComment.objects.filter(author__profile=user_profile)
-    threads = Thread.objects.by_user(user_profile)
-    total_msg = 0
-    for thread in threads:
-        msg = ChatMessage.objects.filter(thread=thread, is_readed=False).exclude(user=user_profile).count()
-        total_msg += msg
-    context = {
-        'posts' : user_profile.get_total_posts_moderator_true(),
-        'posts_false': user_profile.get_total_posts_moderator_false(),
-        'msg_count': total_msg,
-        'meals': meals,
-        'meals_not_added': meals_not_added,
-        'meals_draft': meals_draft,
-        'reviews': reviews,
-        'profile': user_profile,
-        'profile_form': profile_form
-    }
-    return render(request, 'contact/profile_page.html', context)
+    if not user_profile == request.user.profile:
+        context = {
+            'notification': 'Упс! Вы пытаетесь войти в чужую страницу!',
+        }
+        return render(request, 'includes/notification.html', context)
+    else:
+        profile_form = ProfileEditForm(instance=request.user.profile)
+        meals = Dish.objects.filter(author__profile=user_profile, draft=False, moderator=True).order_by('-created')
+        meals_not_added = Dish.objects.filter(author__profile=user_profile, draft=False, moderator=False)
+        meals_draft = Dish.objects.filter(author__profile=user_profile, draft=True)
+        reviews = DishComment.objects.filter(author__profile=user_profile)
+        threads = Thread.objects.by_user(user_profile)
+        total_msg = 0
+        for thread in threads:
+            msg = ChatMessage.objects.filter(thread=thread, is_readed=False).exclude(user=user_profile).count()
+            total_msg += msg
+        context = {
+            'posts' : user_profile.get_total_posts_moderator_true(),
+            'posts_false': user_profile.get_total_posts_moderator_false(),
+            'msg_count': total_msg,
+            'meals': meals,
+            'meals_not_added': meals_not_added,
+            'meals_draft': meals_draft,
+            'reviews': reviews,
+            'profile': user_profile,
+            'profile_form': profile_form
+        }
+        return render(request, 'contact/profile_page.html', context)
 
 
 @login_required
@@ -124,7 +135,11 @@ def user_dish_book(request, slug):
             dishes = profile.dishes.all()
             return render(request, 'contact/dish_book.html', {'dishes': dishes})
         else:
-            return HttpResponse('Wy pytayetes voyti ne svoyu knigu')
+            context = {
+                'notification': 'Упс! Вы не являетесь автором данной кулинарной книги!',
+                'link_to_back': f'{profile.get_personal_absolute_url()}'
+            }
+            return render(request, 'includes/notification.html', context)
 
 
 @login_required
@@ -193,8 +208,8 @@ class UserProfileDetailView(DetailView):
         context['rel_sender'] = [item.sender.user for item in rel_s]
         context['is_empty'] = False
         context['recipes'] = recipes
-        context['posts'] = self.get_object().get_total_posts()
-        context['len_posts'] = True if len(self.get_object().get_total_posts()) > 0 else False
+        # context['posts'] = self.get_object().get_total_posts()
+        # context['len_posts'] = True if len(self.get_object().get_total_posts()) > 0 else False
         return context
 
 

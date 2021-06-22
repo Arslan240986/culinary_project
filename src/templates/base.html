@@ -51,9 +51,7 @@
     <meta name="google-site-verification" content="8P7W4EhJuTSXjQstz-APNRDoVJIyuhaekolpPdf_yF4" />
 
 </head>
-<!--<div class="preload">-->
-<!--    <div class="preload content"></div>-->
-<!--</div>-->
+
 <body class="body_yummy">
 {% include 'includes/header.html' %}
 <div class="ui small center basic test modal ushefa_modal center aligned grid">
@@ -96,13 +94,16 @@
         </div>
     </div>
 </div>
+
 <!-- Content side -->
 <div class=" ui bread " style="">
     <div class="custom_container">
-        <div class="ui stackable two fluid column divided grid">
+        <div class="ui stackable fluid column divided grid">
 
             <!-- /.blog-sidebar Каталог рецептов -->
+            {% block full %}
             <div class="twelve wide fluid column content_side_yummy p-10">
+            {% endblock full %}
                 <!-- Bread crumbs -->
                 {% block steps_breadcrumbs %}
                 <div class="mt-2">
@@ -126,7 +127,9 @@
                 {% endblock %}
 
             </div>
+            {% block sidbar %}
             {% include 'includes/side_bar.html' %}
+            {% endblock sidbar %}
         </div>
         {% block popularity %}
         {% endblock popularity %}
@@ -146,8 +149,8 @@
 <!--Semantik Ui Js-->
 <script async type="text/javascript" src="{% static 'Semantic_UI/semantic.min.js' %}"></script>
 <!--  custom js -->
-<script async type="text/javascript" src="{% static 'js/base.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/masonry.pkgd.min.js' %}"></script>
+<script async type="text/javascript" src="{% static 'js/base.js' %}"></script>
 {% block jscdn %}
 
 {% endblock jscdn %}

@@ -5,20 +5,22 @@
     Кулинарные посты
 {% endblock title %}
 
+{% block breadcrumbs %}
+<a class="section navbar_links_yummy black" href="#">Кулинарные посты</a>
+{% endblock breadcrumbs %}
 {% block content %}
 <h2>Кулинарные посты</h2>
-<div class="ui grid m-2">
-    <div class="column">
+<div class="ui stackable grid m-2">
+
         {% for post in qs %}
+        <div class="eight wide column">
         <div class="ui fluid card">
-            <div class="ui header"><a href="{{ post.get_absolute_url }}">{{post.title}}</a></div>
             <div class="content">
                 <div class="ui right floated meta">
                     <div class="ui grid">
                         <div class="ui inline row">
                             {% ifequal request.user post.author.user %}
                             <div class="ui row">
-
                                 <a href="{% url 'culinary_post:post_update' post.pk %}">
                                     <small>Обновить</small>
                                 </a>
@@ -31,8 +33,14 @@
                         </div>
                     </div>
                 </div>
+                {% ifequal request.user post.author.user %}
+
+                <small>{{ post.created|timesince}} назад</small>
+                {% else %}
                 <img loading="lazy" src="{{ post.author.avatar.url }}" class="ui avatar url">
                 <small>{{ post.author.user.username }} - {{ post.created|timesince}} назад</small>
+                {% endifequal %}
+
                 <div class="ui fluid image">
                     {% if post.image %}
                     <img loading="lazy" src="{{ post.image.url }}">
@@ -41,19 +49,15 @@
 
             </div>
             <div class="content">
-                <p>{{ post.content|safe }}</p>
-                <i class="comment icon"></i>
-                <small>{{ post.get_total_comments }} коментарии</small>
+                <a href="{{ post.get_absolute_url }}">{{post.title}}</a>
             </div>
             <div class="extra content">
-                <div class="mb-4">
-
-                </div>
-
+                <i class="comment icon"></i>
+                <small>{{ post.get_total_comments }}</small>
             </div>
-
         </div>
+            </div>
         {% endfor %}
-    </div>
+
 </div>
 {% endblock content %}

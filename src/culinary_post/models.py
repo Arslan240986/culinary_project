@@ -25,7 +25,7 @@ class CulinaryPost(models.Model):
     author = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='culinary_post')
 
     def __str__(self):
-        return str(self.content[:20])
+        return str(self.title)
 
     def get_absolute_url(self):
         return reverse('culinary_post:culinary_post_detail_view', args=[self.pk])

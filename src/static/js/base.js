@@ -175,6 +175,7 @@ function lazyScrollCheck(){
                 lazy_images[imgIndex].parentElement.classList.remove('loading_gif')
                 setTimeout(()=>{
                     $('.grid_ushefa').masonry({
+                        fitHeight:true,
                         fitWidth: true,
                         gutter: 10,
                         columnWidth: 250,
