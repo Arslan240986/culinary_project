@@ -200,8 +200,8 @@ imageLazyLoad()
 
 // ajax filterin dishes by categories
 if (document.contains(document.querySelector('form[name=dish_filter_ajax]'))){
-    function sendAjaxToFilterDishe(url, params){
-        fetch(`${url}?${params}`,{
+    async function sendAjaxToFilterDishe(url, params){
+        await fetch(`${url}?${params}`,{
             method:'GET',
             headers:{
                 'Content-Type':'application/x-www-form-urlcoded',
@@ -212,8 +212,8 @@ if (document.contains(document.querySelector('form[name=dish_filter_ajax]'))){
         .catch(error => console.error(error))
         
     }
-    function sendAjaxToPagination(url, page_num, params){
-        fetch(`${url}${page_num}?${params}`,{
+    async function sendAjaxToPagination(url, page_num, params){
+        await fetch(`${url}${page_num}?${params}`,{
             method:'GET',
             headers:{
                 'Content-Type':'application/x-www-form-urlcoded',
@@ -232,7 +232,7 @@ if (document.contains(document.querySelector('form[name=dish_filter_ajax]'))){
         let params = new URLSearchParams(new FormData(forms_filetr_send_ajax)).toString();
         sendAjaxToFilterDishe(url, params)
     })
-
+    
     $('.search_title_ajax').on('click', function(e){
         e.preventDefault()
         let url = forms_filetr_send_ajax.action;
