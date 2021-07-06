@@ -5,7 +5,7 @@
     {% get_last_dishes %}
     {% get_categories as categories %}
     <div class="ui vertical fluid menu category_side_yummy">
-        <div class=" font-s-25 font-italic font-lobster p-10">Категории</div>
+        <div class="font-s-25 font-italic font-lobster p-10">Категории</div>
         <div class="ui accordion">
             {% for category in categories %}
             {% if category.sub_category.all %}

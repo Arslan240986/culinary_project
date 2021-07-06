@@ -19,9 +19,10 @@
                                  href="{% url 'culinary_post:culinary_post_view' %}">Кулинарные посты</a></div>
         </div>
         <div class="right menu">
+
                 <div class="item">
-                    <i class="big white search link icon search_form_ushefa_icon display"></i>
-                    <form action="{% url 'culinary_recipe:search_dishes' %}"
+                    <i class="big white search link icon search_form_ushefa_icon display aaa"></i>
+                    <form action="{% url 'culinary_recipe:search_dishes_by_title' %}"
                           class="ui icon input mr-10 search_form_ushefa display" method="get">
                         <div class="ui action input">
                             <input class=" font-oswald" type="search" placeholder="Введите слово" aria-label="Search"

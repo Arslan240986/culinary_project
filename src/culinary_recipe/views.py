@@ -7,6 +7,7 @@ from django.db.models import Q, Count
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
+import django_filters
 
 from django.views.generic.base import View
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
@@ -15,9 +16,11 @@ from hitcount.views import HitCountMixin
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Dish, Country, Category, SubCategory, DishLike, IngredientList, Step, IngredientTitle
+from .models import (Dish, Country, Category,
+                     SubCategory, DishLike, IngredientList,
+                     Step, IngredientTitle, Technology, Occasion, Device, Complexity, Vegeterian)
 from culinary_post.models import CulinaryPost
-from .forms import DishCommentForm, DishForm, InstructionFormSet, IngredientNestedFormSet
+from .forms import DishCommentForm, DishForm, InstructionFormSet, IngredientNestedFormSet, SearchField
 from .utils import getMonth
 from contact.models import UserProfile
 
@@ -46,7 +49,7 @@ class CategoryViewList(ListView):
         country = Country.objects.annotate(cnt=Count('dish'))
         has_dish_country = []
         for con in country:
-            if con.dish_set.filter(moderator=True):
+            if con.dish_set.filter(draft=False, moderator=True):
                 has_dish_country.append(con)
         context['countries'] = has_dish_country
         context['posts'] = CulinaryPost.objects.all().filter(moderator=True).order_by('-created')[:8]
@@ -64,49 +67,144 @@ def get_sub_category(request, slug):
     return render(request, 'culinary_recipe/recipe_categories.html', context)
 
 
-class GetItems(View):
-    """Вывод под категорий"""
-    def get(self, request, slug=None):
-        meal = Dish.objects.filter(draft=False, moderator=True)
+class GetAllItemForFilterDish:
+    """Shows lists for filtering dishes"""
 
-        category_name = None
-        if slug:
-            meal = meal.filter(sub_category__slug=slug, moderator=True, draft=False)
-            category_name = get_object_or_404(SubCategory, slug=slug)
-        paginator = Paginator(meal, 10)
+    def get_technology(self):
+        return Technology.objects.annotate(cnt=Count('dish'))
 
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        context = {
-            'meals': page_obj,
-            'category': category_name,
-            'page_obj': page_obj
-        }
-        return render(request, 'culinary_recipe/dishes_list.html', context)
+    def get_occasion(self):
+        return Occasion.objects.annotate(cnt=Count('dish'))
+
+    def get_device(self):
+        return Device.objects.annotate(cnt=Count('dish'))
+
+    def get_vegeterian(self):
+        return Vegeterian.objects.annotate(cnt=Count('dish'))
+
+    def get_сomplexity(self):
+        return Complexity.objects.annotate(cnt=Count('dish'))
+
+    def get_country(self):
+        country = Country.objects.annotate(cnt=Count('dish'))
+        has_dish_country = []
+        for con in country:
+            if con.dish_set.filter(draft=False, moderator=True):
+                has_dish_country.append(con)
+        return has_dish_country
+
+    def get_category(self):
+        return Category.objects.annotate(cnt=Count('sub_category__dish'))
 
 
-class DishByCountry(View):
-    """Вывод блюд по Странам"""
-    def get(self, request, slug, pk):
-        # countr = Country.objects.prefetch_related('dish_set').get(slug=slug, id=pk)
-        country = get_object_or_404(Country, slug=slug, id=pk)
-        meals = Dish.objects.filter(country=country, moderator=True, draft=False)
-        return render(request, 'culinary_recipe/dishes_list.html', {'meals': meals, 'country': country})
-
-
-class Search(ListView):
+class GetItems(GetAllItemForFilterDish, ListView):
+    model = Dish
+    queryset = Dish.objects.filter(draft=False, moderator=True)
+    paginate_by = 30
+    context_object_name = 'meals'
     template_name = 'culinary_recipe/dishes_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.kwargs:
+            if 'slug' in self.kwargs:
+                context['category'] = SubCategory.objects.get(slug=self.kwargs['slug'])
+                form = SearchField()
+                context['search'] = form
+                return context
+            elif 'country' in self.kwargs:
+                country = get_object_or_404(Country, slug=self.kwargs['country'], id=self.kwargs['pk'])
+                context['country'] = country
+                form = SearchField()
+                context['search'] = form
+                return context
+        form = SearchField()
+        context['search'] = form
+        return context
+
+    def get(self, request, *args, **kwargs):
+        if self.kwargs:
+            if 'slug' in self.kwargs:
+                self.queryset = Dish.objects.filter(sub_category__slug=self.kwargs['slug'], moderator=True, draft=False)
+
+                return super().get(request, *args, **kwargs)
+            if 'country' in self.kwargs:
+                country = get_object_or_404(Country, slug=self.kwargs['country'], id=self.kwargs['pk'])
+                self.queryset = Dish.objects.filter(country=country, moderator=True, draft=False)
+                return super().get(request, *args, **kwargs)
+        else:
+            return super().get(request, *args, **kwargs)
+
+
+class SearchByTitle(GetAllItemForFilterDish, ListView):
+    paginate_by = 30
+    template_name = 'culinary_recipe/dishes_list.html'
+    context_object_name = 'meals'
 
     def get_queryset(self):
         q = self.request.GET.get('q')
-        meals = Dish.objects.filter(
-            Q(ingredienttitle__ingredientlist__name__icontains=q) | Q(title__icontains=q)).distinct()
+        meals = Dish.objects.filter(title__icontains=q, draft=False, moderator=True)
         return meals
 
-    def get_context_data(self,  *args, **kwargs):
+    def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['meals'] = self.get_queryset()
+        q = self.request.GET.get('q')
+        form = SearchField(initial={'search':q})
+        context['search'] = form
+        context['q'] = f'q={q}&'
         return context
+
+
+class Search(GetAllItemForFilterDish, ListView):
+    model = Dish
+    template_name = 'culinary_recipe/dishes_list.html'
+
+    def get_queryset(self):
+        print(self.request.GET)
+        queryset = Dish.objects.filter(draft=False, moderator=True).values('title', 'poster', 'created', 'slug', 'id')
+        if self.request.GET.get('search') != '':
+            print('search', self.request.GET.get('search'))
+            queryset = queryset.filter(draft=False, moderator=True,
+                                           title__icontains=self.request.GET.get('search')
+                                           ).values('title', 'poster', 'created', 'slug', 'id')
+        if(self.request.GET.getlist('sub_category') or self.request.GET.getlist('complexity') or
+                self.request.GET.getlist('technology') or self.request.GET.getlist('device') or
+                self.request.GET.getlist('occasion') or self.request.GET.getlist('vegetarian') or
+                self.request.GET.getlist('country')):
+            print('request')
+            queryset = queryset.filter(draft=False, moderator=True).filter(
+                                            Q(sub_category__slug__in=self.request.GET.getlist('sub_category')) |
+                                            Q(complexity__slug__in=self.request.GET.getlist('complexity')) |
+                                            Q(technology__slug__in=self.request.GET.getlist('technology')) |
+                                            Q(device__slug__in=self.request.GET.getlist('device')) |
+                                            Q(occasion__slug__in=self.request.GET.getlist('occasion')) |
+                                            Q(vegetarian__slug__in=self.request.GET.getlist('vegetarian'))|
+                                            Q(country__slug__in=self.request.GET.getlist('country'))
+                                           ).distinct()
+
+        for query in queryset:
+            item = Dish.objects.get(id=query['id'])
+            query['total_comments'] = item.get_total_comments()
+            query['total_hits'] = item.current_hit_count()
+            query['likes'] = item.get_total_likes()
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        meal_counts = len(self.get_queryset())
+        page_obj = Paginator(self.get_queryset(), 30)
+        first_page = page_obj.page(1).object_list
+        page_range = page_obj.page_range
+        page_num = 1
+        if kwargs.get('page_num'):
+            first_page = page_obj.page(kwargs.get('page_num')).object_list
+            page_num = kwargs.get('page_num')
+        queryset = list(first_page)
+        page_range = list(page_range)
+        context = {
+            'meals': queryset, 'page_range': page_range,
+            'page_num': page_num, 'meal_counts': meal_counts,
+        }
+        return JsonResponse(context, safe=False)
 
 
 class MealDetailView(DetailView):

@@ -118,10 +118,6 @@
                 </div>
             {% endif %}
             {% endfor %}
-            <div class="meal_advice_field">
-                {{meal.advice|safe}}
-            </div>
-
         </div>
         <div class="four wide column">
             <p class="ui grey header prepare_time"> Время подготовки</p>
@@ -215,6 +211,9 @@
             <p><small class="font-oswald text-muted pl-10">
                     {{meal.carbohydrate|default:'Не указан'}}
             </small></p>
+        </div>
+        <div class="meal_advice_field">
+                {{meal.advice|safe}}
         </div>
     </div>
 </div>

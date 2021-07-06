@@ -98,14 +98,7 @@
 <!-- Content side -->
 <div class=" ui bread " style="">
     <div class="custom_container">
-        <div class="ui stackable fluid column divided grid">
-
-            <!-- /.blog-sidebar Каталог рецептов -->
-            {% block full %}
-            <div class="twelve wide fluid column content_side_yummy p-10">
-            {% endblock full %}
-                <!-- Bread crumbs -->
-                {% block steps_breadcrumbs %}
+        {% block steps_breadcrumbs %}
                 <div class="mt-2">
                     <div class="ui breadcrumb font-oswald black p-10">
 
@@ -120,17 +113,29 @@
                         {% endblock breadcrumbs %}
                     </div>
                 </div>
-                <hr>
-                {% endblock steps_breadcrumbs %}
+                <hr class="mb-10">
+            {% endblock steps_breadcrumbs %}
+
+        <div class="ui stackable grid">
+
+            <!-- /.blog-sidebar Каталог рецептов -->
+            {% block full %}
+            <div class="twelve wide fluid column content_side_yummy mx-20">
+            {% endblock full %}
+                <!-- Bread crumbs -->
+
                 {% block content %}
                 <hr>
                 {% endblock %}
 
             </div>
             {% block sidbar %}
-            {% include 'includes/side_bar.html' %}
+                {% include 'includes/side_bar.html' %}
             {% endblock sidbar %}
         </div>
+        {% block paginator %}
+        {% endblock paginator %}
+
         {% block popularity %}
         {% endblock popularity %}
     </div>
@@ -150,7 +155,10 @@
 <script async type="text/javascript" src="{% static 'Semantic_UI/semantic.min.js' %}"></script>
 <!--  custom js -->
 <script type="text/javascript" src="{% static 'js/masonry.pkgd.min.js' %}"></script>
+
 <script async type="text/javascript" src="{% static 'js/base.js' %}"></script>
+<script async type="text/javascript" src="{% static 'js/hogan.js-3.0.2/web/builds/3.0.1/hogan-3.0.1.js' %}"></script>
+<!--<script async src="http://twitter.github.com/hogan.js/builds/3.0.1/hogan-3.0.1.js"></script>-->
 {% block jscdn %}
 
 {% endblock jscdn %}

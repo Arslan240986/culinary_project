@@ -408,8 +408,6 @@ ul.collapse {
     background-size: contain !important;
 }
 
-.content_side_yummy {}
-
 .img-fluid {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 5px;
@@ -595,7 +593,9 @@ textarea {
 .mb-10 {
     margin-bottom: 10px !important;
 }
-
+.mx-20{
+    margin: 20px 0 !important;
+}
 #poster_image_id {
     cursor: pointer !important;
 }
@@ -775,7 +775,6 @@ textarea {
     height: 56px;
     margin: 0 auto 10px;
     background-image: url('/static/image/add_recipe4.png') !important;
-    /* background-position: -226px 0; */
     background-repeat: no-repeat;
     background-size: contain;
 }
@@ -984,7 +983,26 @@ textarea {
 .grey{
     color: rgb(133, 128, 128) !important;
 }
-.grid-item_ushefa{
+.grid-item_ushefa, .grid-item_ushefa_filtered{
     width: 250px !important;
     margin-bottom: 10px !important;
+}
+.side_bar_search_content{
+    margin-top: 25px !important;
+}
+.custom_dimmer_loader{
+    background-color: rgba(255, 255, 255, 0.99) !important;
+}
+.show_more_button{
+    text-align: center !important;
+    padding: 5px !important;
+    border: 1px dotted gray !important;
+    margin-bottom: 5px !important;
+    cursor: pointer !important;
+}
+.show_more_button:hover{
+    padding: 6px !important;
+}
+.custom_dimmer_loader{
+    z-index: 99 !important;
 }

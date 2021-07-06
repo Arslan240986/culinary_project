@@ -1,66 +1,257 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load hitcount_tags %}
 
 {% block title %}{% if category %}{{ category }}{% else %} Все ретцепты {% endif %}{% endblock title %}
 
 {% if category %}
     {% block breadcrumbs %}
-        <span class="text-muted">{{category.name }}</span>
+        <span class="text-muted">{{ category.name }}</span>
     {% endblock breadcrumbs %}
 {% endif %}
 
+{% block sidbar %}
+    <div class="four wide column side_bar_search_content">
+        <div class="ui vertical fluid menu">
+            <form action="{% url 'culinary_recipe:search_dishes' %}" method="get" name="dish_filter_ajax">
+            <div class="item">
+                    <div class="ui search">
+                        <div class="ui action input">
+                            {{search}}
+                            <button class="ui basic grey button search_title_ajax" type="submit">
+                                <i class="search link icon"></i>
+                            </button>
+                        </div>
+                    </div>
+            </div>
+            <div class="item">
+
+                <div class="header mb-10">
+                    Уточните свой поиск
+                </div>
+                {% for category in view.get_category %}
+                <div class="header">
+                    <div class="mb-10 p-10 techno">
+                            {{ category }}
+                    </div>
+                </div>
+                {% for item in category.sub_category.all %}
+                    {% if forloop.counter >= 4 %}
+                    <div class="{{category.slug}}_div_container mb-10 d_none">
+                        <div class="ui checkbox">
+                            <input class="all_filter_click" type="checkbox" name="{{country}}" value="{{item.slug}}"
+                                   {% ifequal country item %} checked {% endifequal %}>
+                            <label>{{item}} ({{item.cnt}})</label>
+                        </div>
+                    </div>
+                    {% if forloop.last %}
+                        <div class="show_more_button" datatype="{{category.slug}}_div_container"><i class="ui small plus grey icon"></i>показать все</div>
+                    {% endif %}
+                    {% else %}
+                    <div class="mb-10">
+                        <div class="ui checkbox ">
+                            <input class="all_filter_click" type="checkbox" name="sub_category" value="{{item.slug}}"
+                                   {% ifequal country item %} checked {% endifequal %}>
+                            <label>{{item}} ({{ item.dish_set.all.count }})</label>
+                        </div>
+                    </div>
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
+                <div class="header">
+                    <div class="mb-10 p-10 techno">
+                            Страны
+                    </div>
+                </div>
+                {% for item in view.get_country %}
+                    {% if forloop.counter >= 4 %}
+                    <div class="country_div_container mb-10 d_none">
+                        <div class="ui checkbox">
+                            <input class="all_filter_click" type="checkbox" name="country" value="{{item.slug}}"
+                                   {% ifequal country item %} checked {% endifequal %}>
+                            <label>{{item}} ({{item.cnt}})</label>
+                        </div>
+                    </div>
+                    {% if forloop.last %}
+                        <div class="show_more_button" datatype="country_div_container"><i class="ui small plus grey icon"></i>показать все</div>
+                    {% endif %}
+                    {% else %}
+                    <div class="mb-10">
+                        <div class="ui checkbox ">
+                            <input class="all_filter_click" type="checkbox" name="country" value="{{item.slug}}"
+                                   {% ifequal country item %} checked {% endifequal %}>
+                            <label>{{item}} ({{item.cnt}})</label>
+                        </div>
+                    </div>
+                {% endif %}
+                {% endfor %}
+                <div class="header">
+                    <div class="mb-10 p-10 techno">
+                            Технологии
+                    </div>
+                </div>
+                {% for item in view.get_technology %}
+                    {% if forloop.counter >= 4 %}
+                    <div class="technology_div_container mb-10 d_none">
+                        <div class="ui checkbox">
+                            <input class="all_filter_click" type="checkbox" name="technology" value="{{item.slug}}">
+                            <label>{{item}} ({{item.cnt}})</label>
+                        </div>
+                    </div>
+                        {% if forloop.last %}
+                        <div class="show_more_button" datatype="technology_div_container"><i class="ui small plus grey icon"></i>показать все</div>
+                        {% endif %}
+                    {% else %}
+                    <div class="mb-10">
+                        <div class="ui checkbox ">
+                            <input class="all_filter_click" type="checkbox" name="technology" value="{{item.slug}}">
+                            <label>{{item}} ({{item.cnt}})</label>
+                        </div>
+                    </div>
+                {% endif %}
+                {% endfor %}
+                    <div class="mb-10 p-10" style="border-top: 1px dotted grey;">
+                        Повод
+                    </div>
+                {% for item in view.get_occasion %}
+                    {% if forloop.counter >= 4 %}
+                    <div class="occasion_div_container mb-10 d_none">
+                        <div class="ui checkbox">
+                            <input class="all_filter_click" type="checkbox" name="occasion" value="{{item.slug}}">
+                            <label>{{item}} ({{item.cnt}})</label>
+                        </div>
+                    </div>
+                        {% if forloop.last %}
+                        <div class="show_more_button" datatype="occasion_div_container"><i class="ui small plus grey icon"></i>показать все</div>
+                        {% endif %}
+                    {% else %}
+                    <div class="mb-10">
+                        <div class="ui checkbox">
+                            <input class="all_filter_click" type="checkbox" name="occasion" value="{{item.slug}}">
+                            <label>{{item}} ({{item.cnt}})</label>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                    <div class="mb-10 p-10" style="border-top: 1px dotted grey;">
+                        Оборудрвания
+                    </div>
+                {% for item in view.get_device %}
+                    {% if forloop.counter >= 4 %}
+                    <div class="device_div_container mb-10 d_none">
+                        <div class="ui checkbox">
+                            <input class="all_filter_click" type="checkbox" name="device" value="{{item.slug}}">
+                            <label>{{item}} ({{item.cnt}})</label>
+                        </div>
+                    </div>
+                        {% if forloop.last %}
+                        <div class="show_more_button" datatype="device_div_container"><i class="ui small plus grey icon"></i>показать все</div>
+                        {% endif %}
+                    {% else %}
+                    <div class="mb-10">
+                        <div class="ui checkbox">
+                            <input class="all_filter_click" type="checkbox" name="device" value="{{item.slug}}">
+                            <label>{{item}} ({{item.cnt}})</label>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                    <div class="mb-10 p-10" style="border-top: 1px dotted grey;">
+                        Сложность
+                    </div>
+                {% for item in view.get_сomplexity %}
+                    {% if forloop.counter >= 4 %}
+                    <div class="mb-10 d_none">
+                        <div class="ui radio checkbox">
+                            <input class="all_filter_click" type="radio" name="complexity" value="{{item.slug}}">
+                            <label>{{item}} ({{item.cnt}})</label>
+                        </div>
+                    </div>
+
+                    {% else %}
+                    <div class="mb-10">
+                        <div class="ui radio checkbox">
+                            <input class="all_filter_click" type="radio" name="complexity" value="{{item.slug}}">
+                            <label>{{item}} ({{item.cnt}})</label>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                    <div class="mb-10 p-10" style="border-top: 1px dotted grey;">
+                        Вегетарианство
+                    </div>
+                {% for item in view.get_vegeterian %}
+                    {% if forloop.counter >= 4 %}
+                    <div class="mb-10 d_none">
+                        <div class="ui radio checkbox">
+                            <input class="all_filter_click" type="radio" name="vegeterian" value="{{item.slug}}">
+                            <label>{{item}} ({{item.cnt}})</label>
+                        </div>
+                    </div>
+
+                    {% else %}
+                    <div class="mb-10">
+                        <div class="ui radio checkbox">
+                            <input class="all_filter_click" type="radio" name="vegeterian" value="{{item.slug}}">
+                            <label>{{item}} ({{item.cnt}})</label>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                    </form>
+            </div>
+        </div>
+    </div>
+{% endblock sidbar %}
+
 {% block content %}
+
 {% if country %}
 <h3>Страна {{country.name}}</h3>
 {% else %}
-<h3>Ретцепты приготовления</h3>
+<h3 class="ushefa_according_title">Ретцепты </h3>
 {% endif %}
 
-{% for meal in meals %}
-<div class="ui fluid card">
-    <div class="content">
-        <div class="header">
-            <div class="right floated meta">
-                {% ifequal user meal.author %}
-                {% else %}
-                <img loading="lazy" class="ui avatar image" src="{{ meal.author.profile.avatar.url }}">
-                <a href="{{ meal.author.profile.get_user_profile_detail_absolute_url }}"><span>{{ meal.author.username }}</span></a>
-                {% endifequal %}
-            </div>
-            <a class="button_link" href="{{ meal.get_absolute_url }}">
-                {{ meal.title }}
-            </a>
-            <i class="fa fa-cutlery"></i>
-        </div>
-    </div>
-    <div class="content">
-        <div class="ui medium rounded image">
-            <img loading="lazy" src="{{ meal.poster.url }}" width="300px" height="300px" alt="{{ meal.title }}">
-        </div>
-    </div>
-    <div class="content">
-        <small class="card-text ">Категория:
-            <a class="button_link " href="{{ meal.category.get_absolute_url }}">{{ meal.category }}</a>
-            <a class="button_link " href="{{ meal.sub_category.get_absolute_url }}">{{ meal.sub_category.name }}</a>
-        </small>
-        <p class="description">{{ meal.description|safe|truncatewords:"100" }}</p>
-        <small class="card-text ">Ингредиенты:
-            {% for ingredient_title in meal.ingredienttitle_set.all %}
-                {% for ingredient in ingredient_title.ingredientlist_set.all %}
-                    {{ ingredient.name }},
-                {% endfor %}
+<div class="grid_ushefa">
+            {% for popular_meal in meals %}
+                <div class="grid-item_ushefa">
+                    <a href="{{popular_meal.get_absolute_url}}" class="ui fluid card">
+                          <div class="page_image loading_gif">
+                            <img src="/static/image/2.png" data-src="{{ popular_meal.poster.url }}" alt="{{popular_meal.title}}">
+                          </div>
+                          <div class="content">
+                              <div class="header grey">
+                                {{popular_meal.title}}
+                              </div>
+                          </div>
+                          <div class="extra content">
+                                <span class="left floated">
+                                  <i class="comment icon"></i>
+                                    {{ popular_meal.get_total_comments}}
+                                    <i class="eye icon"></i>
+                                    {{ popular_meal.current_hit_count}}
+                                    <i class="ui thumbs up icon"></i>
+                                    {{ popular_meal.get_total_likes }}
+                                </span>
+                          </div>
+                    </a>
+                </div>
             {% endfor %}
-        </small>
-    </div>
-    <div class="extra content">
-        {% get_hit_count for meal as count %}
-        <i class="ui eye icon" aria-hidden="true"></i><small>{{ count}}</small>
-        <i class='ui comment icon'></i><small> {{ meal.get_total_comments }}</small>
-        <i class='ui thumbs up icon'></i><small>{{ meal.get_total_likes }}</small>
-    </div>
-</div>
-{% endfor %}
-<div class="ui center aligned container">
-{% include 'includes/pagination.html' %}
-</div>
+        </div>
 {% endblock %}
+
+{% block paginator %}
+<div class="ui grid">
+    <div class="twelve wide fluid column content_side_yummy mx-20">
+        {% if page_obj.has_next or page_obj.has_previous %}
+            <div class="ui center aligned container">
+                {% include 'includes/pagination.html' %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock paginator %}
+
+{% block jscdn %}
+    <script async type="text/javascript" src="{% static 'js/filter_search.js' %}"></script>
+{% endblock jscdn %}

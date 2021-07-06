@@ -8,6 +8,13 @@ from .models import (DishComment, Dish, Category,
 from django.forms.models import BaseInlineFormSet, inlineformset_factory
 
 
+class SearchField(forms.Form):
+    search = forms.CharField(max_length=200, label='', label_suffix='',
+                             widget=forms.TextInput(
+                                 attrs={'class':'font-oswald',
+                                        'placeholder': 'Поиск по названию'}))
+
+
 class DishCommentForm(forms.ModelForm):
     """Форма отзывов"""
     class Meta:
