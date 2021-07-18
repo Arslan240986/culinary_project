@@ -207,7 +207,7 @@ if (document.contains(document.querySelector('form[name=dish_filter_ajax]'))){
                 'Content-Type':'application/x-www-form-urlcoded',
             }
         })
-        .then(response => response.json())
+        .then(response => response.json(), console.log('aaa'))
         .then(json => renderFilterResult(json))
         .catch(error => console.error(error))
         
@@ -241,15 +241,41 @@ if (document.contains(document.querySelector('form[name=dish_filter_ajax]'))){
     });
 
     function renderFilterResult(data){
-        console.log(data)
-        let template = Hogan.compile(html)
-        let output = template.render(data)
+        // let template = Hogan.compile(html)
+        // let output = template.render(data)
         let div_output = $('.grid_ushefa')
+        div_output.html('')
+        for(var i=0; i<data['meals'].length; i++){
+            let meal = data['meals'][i]
+            div_output.append(`
+                <div class="grid-item_ushefa">
+                    <a href="/detail/${meal['slug']}/{${meal['id']}" class="ui fluid card">
+                        <div class="page_image loading_gif">
+                            <img class="filtered_dishes_img" src="/static/image/2.png" data-src="/media/${meal['poster']}" alt="${meal['title']}">
+                        </div>
+                        <div class="content">
+                            <div class="header grey">
+                            ${meal['title']}
+                            </div>
+                        </div>
+                        <div class="extra content">
+                            <span class="left floated">
+                                <i class="comment icon"></i>
+                                ${meal['total_comments']}
+                                <i class="eye icon"></i>
+                                ${meal['total_hits']}
+                                <i class="ui thumbs up icon"></i>
+                                ${meal['likes']}
+                            </span>
+                        </div>
+                    </a>
+                </div>`)
+        }
         let loader = `<div class="ui active inverted dimmer custom_dimmer_loader">
                         <div class="ui large text loader">Loading</div>
                     </div>`
         $('.content_side_yummy').append(loader)
-        div_output.html(output)
+        
         div_output.masonry('reloadItems')
         imageLazyLoad()
         setTimeout(()=>{
@@ -296,30 +322,30 @@ if (document.contains(document.querySelector('form[name=dish_filter_ajax]'))){
 
     }
 
-    let html = `
-        {{#meals}}
-            <div class="grid-item_ushefa">
-                <a href="/detail/{{ slug }}/{{ id }}" class="ui fluid card">
-                    <div class="page_image loading_gif">
-                        <img class="filtered_dishes_img" src="/static/image/2.png" data-src="/media/{{ poster }}" alt="{{title}}">
-                    </div>
-                    <div class="content">
-                        <div class="header grey">
-                            {{title}}
-                        </div>
-                    </div>
-                    <div class="extra content">
-                        <span class="left floated">
-                            <i class="comment icon"></i>
-                            {{total_comments}}
-                            <i class="eye icon"></i>
-                            {{total_hits}}
-                            <i class="ui thumbs up icon"></i>
-                            {{likes}}
-                        </span>
-                    </div>
-                </a>
-            </div>
-        {{/meals}}
-    `
+    // let html = `
+    //     {{#meals}}
+    //         <div class="grid-item_ushefa">
+    //             <a href="/detail/{{ slug }}/{{ id }}" class="ui fluid card">
+    //                 <div class="page_image loading_gif">
+    //                     <img class="filtered_dishes_img" src="/static/image/2.png" data-src="/media/{{ poster }}" alt="{{title}}">
+    //                 </div>
+    //                 <div class="content">
+    //                     <div class="header grey">
+    //                         {{title}}
+    //                     </div>
+    //                 </div>
+    //                 <div class="extra content">
+    //                     <span class="left floated">
+    //                         <i class="comment icon"></i>
+    //                         {{total_comments}}
+    //                         <i class="eye icon"></i>
+    //                         {{total_hits}}
+    //                         <i class="ui thumbs up icon"></i>
+    //                         {{likes}}
+    //                     </span>
+    //                 </div>
+    //             </a>
+    //         </div>
+    //     {{/meals}}
+    // `
 }
