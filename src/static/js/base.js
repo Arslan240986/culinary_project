@@ -249,7 +249,7 @@ if (document.contains(document.querySelector('form[name=dish_filter_ajax]'))){
             let meal = data['meals'][i]
             div_output.append(`
                 <div class="grid-item_ushefa">
-                    <a href="/detail/${meal['slug']}/{${meal['id']}" class="ui fluid card">
+                    <a href="/detail/${meal['slug']}/${meal['id']}" class="ui fluid card">
                         <div class="page_image loading_gif">
                             <img class="filtered_dishes_img" src="/static/image/2.png" data-src="/media/${meal['poster']}" alt="${meal['title']}">
                         </div>
@@ -324,7 +324,7 @@ if (document.contains(document.querySelector('form[name=dish_filter_ajax]'))){
 
     // let html = `
     //     {{#meals}}
-    //         <div class="grid-item_ushefa">
+    //         <div class="0cAgjV7q">
     //             <a href="/detail/{{ slug }}/{{ id }}" class="ui fluid card">
     //                 <div class="page_image loading_gif">
     //                     <img class="filtered_dishes_img" src="/static/image/2.png" data-src="/media/{{ poster }}" alt="{{title}}">
