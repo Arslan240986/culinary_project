@@ -116,7 +116,11 @@
                 <hr class="mb-10">
             {% endblock steps_breadcrumbs %}
 
-        <div class="ui stackable grid">
+<div class="show_search_button">
+    <i class="ui filter white big icon"></i>
+    <span>Фильтр</span>
+</div>
+        <div class="ui stackable grid filter_element_container">
 
             <!-- /.blog-sidebar Каталог рецептов -->
             {% block full %}
@@ -157,8 +161,6 @@
 <script type="text/javascript" src="{% static 'js/masonry.pkgd.min.js' %}"></script>
 
 <script async type="text/javascript" src="{% static 'js/base.js' %}"></script>
-<!--<script async type="text/javascript" src="{% static 'js/hogan.js-3.0.2/web/builds/3.0.1/hogan-3.0.1.js' %}"></script>-->
-<!--<script src="http://twitter.github.com/hogan.js/builds/3.0.1/hogan-3.0.1.js"></script>-->
 {% block jscdn %}
 
 {% endblock jscdn %}

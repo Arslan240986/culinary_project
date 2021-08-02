@@ -22,4 +22,18 @@ $(document).ready(()=>{
         }
         
     })
+    if ($(window).width() < 770){
+        $('.show_search_button').addClass('show')
+        $('.side_bar_search_content').removeClass('four').removeClass('wide')
+        .removeClass('column').addClass('sidebar');
+        $('.filter_element_container').removeClass('stackable').removeClass('grid').removeClass('ui').addClass('pushable');
+        $('.content_side_yummy').removeClass('twelve').removeClass('wide')
+        .removeClass('fluid').removeClass('column').addClass('pusher');
+        $('.side_bar_search_content')
+        .sidebar({
+            context: $('.filter_element_container')
+        })
+        .sidebar('attach events', '.show_search_button');
+        
+    };
 })

@@ -11,196 +11,195 @@
 {% endif %}
 
 {% block sidbar %}
-    <div class="four wide column side_bar_search_content">
-        <div class="ui vertical fluid menu">
+    <div class="four wide column ui right inline vertical menu side_bar_search_content">
             <form action="{% url 'culinary_recipe:search_dishes' %}" method="get" name="dish_filter_ajax">
-            <div class="item">
-                    <div class="ui search">
-                        <div class="ui action input">
-                            {{search}}
-                            <button class="ui basic grey button search_title_ajax" type="submit">
-                                <i class="search link icon"></i>
-                            </button>
+                <div class="item">
+                        <div class="ui search">
+                            <div class="ui action input">
+                                {{search}}
+                                <button class="ui basic grey button search_title_ajax" type="submit">
+                                    <i class="search link icon"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-            </div>
-            <div class="item">
+                </div>
+                <div class="item">
 
-                <div class="header mb-10">
-                    Уточните свой поиск
-                </div>
-                {% for category in view.get_category %}
-                <div class="header">
-                    <div class="mb-10 p-10 techno">
-                            {{ category }}
+                    <div class="header mb-10">
+                        Уточните свой поиск
                     </div>
-                </div>
-                {% for item in category.sub_category.all %}
-                    {% if forloop.counter >= 4 %}
-                    <div class="{{category.slug}}_div_container mb-10 d_none">
-                        <div class="ui checkbox">
-                            <input class="all_filter_click" type="checkbox" name="{{country}}" value="{{item.slug}}"
-                                   {% ifequal country item %} checked {% endifequal %}>
-                            <label>{{item}} ({{item.cnt}})</label>
+                    {% for category in view.get_category %}
+                    <div class="header">
+                        <div class="mb-10 p-10 techno">
+                                {{ category }}
                         </div>
                     </div>
-                    {% if forloop.last %}
-                        <div class="show_more_button" datatype="{{category.slug}}_div_container"><i class="ui small plus grey icon"></i>показать все</div>
-                    {% endif %}
-                    {% else %}
-                    <div class="mb-10">
-                        <div class="ui checkbox ">
-                            <input class="all_filter_click" type="checkbox" name="sub_category" value="{{item.slug}}"
-                                   {% ifequal country item %} checked {% endifequal %}>
-                            <label>{{item}} ({{ item.dish_set.all.count }})</label>
+                    {% for item in category.sub_category.all %}
+                        {% if forloop.counter >= 4 %}
+                        <div class="{{category.slug}}_div_container mb-10 d_none">
+                            <div class="ui checkbox">
+                                <input class="all_filter_click" type="checkbox" name="{{country}}" value="{{item.slug}}"
+                                       {% ifequal country item %} checked {% endifequal %}>
+                                <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                            </div>
                         </div>
-                    </div>
-                {% endif %}
-                {% endfor %}
-                {% endfor %}
-                <div class="header">
-                    <div class="mb-10 p-10 techno">
-                            Страны
-                    </div>
-                </div>
-                {% for item in view.get_country %}
-                    {% if forloop.counter >= 4 %}
-                    <div class="country_div_container mb-10 d_none">
-                        <div class="ui checkbox">
-                            <input class="all_filter_click" type="checkbox" name="country" value="{{item.slug}}"
-                                   {% ifequal country item %} checked {% endifequal %}>
-                            <label>{{item}} ({{item.cnt}})</label>
-                        </div>
-                    </div>
-                    {% if forloop.last %}
-                        <div class="show_more_button" datatype="country_div_container"><i class="ui small plus grey icon"></i>показать все</div>
-                    {% endif %}
-                    {% else %}
-                    <div class="mb-10">
-                        <div class="ui checkbox ">
-                            <input class="all_filter_click" type="checkbox" name="country" value="{{item.slug}}"
-                                   {% ifequal country item %} checked {% endifequal %}>
-                            <label>{{item}} ({{item.cnt}})</label>
-                        </div>
-                    </div>
-                {% endif %}
-                {% endfor %}
-                <div class="header">
-                    <div class="mb-10 p-10 techno">
-                            Технологии
-                    </div>
-                </div>
-                {% for item in view.get_technology %}
-                    {% if forloop.counter >= 4 %}
-                    <div class="technology_div_container mb-10 d_none">
-                        <div class="ui checkbox">
-                            <input class="all_filter_click" type="checkbox" name="technology" value="{{item.slug}}">
-                            <label>{{item}} ({{item.cnt}})</label>
-                        </div>
-                    </div>
                         {% if forloop.last %}
-                        <div class="show_more_button" datatype="technology_div_container"><i class="ui small plus grey icon"></i>показать все</div>
+                            <div class="show_more_button" datatype="{{category.slug}}_div_container"><i class="ui small plus grey icon"></i>показать все</div>
                         {% endif %}
-                    {% else %}
-                    <div class="mb-10">
-                        <div class="ui checkbox ">
-                            <input class="all_filter_click" type="checkbox" name="technology" value="{{item.slug}}">
-                            <label>{{item}} ({{item.cnt}})</label>
+                        {% else %}
+                        <div class="mb-10">
+                            <div class="ui checkbox ">
+                                <input class="all_filter_click" type="checkbox" name="sub_category" value="{{item.slug}}"
+                                       {% ifequal country item %} checked {% endifequal %}>
+                                <label class="all_filter_checkbox_label">{{item}} ({{ item.dish_set.all.count }})</label>
+                            </div>
                         </div>
-                    </div>
-                {% endif %}
-                {% endfor %}
-                    <div class="mb-10 p-10" style="border-top: 1px dotted grey;">
-                        Повод
-                    </div>
-                {% for item in view.get_occasion %}
-                    {% if forloop.counter >= 4 %}
-                    <div class="occasion_div_container mb-10 d_none">
-                        <div class="ui checkbox">
-                            <input class="all_filter_click" type="checkbox" name="occasion" value="{{item.slug}}">
-                            <label>{{item}} ({{item.cnt}})</label>
-                        </div>
-                    </div>
-                        {% if forloop.last %}
-                        <div class="show_more_button" datatype="occasion_div_container"><i class="ui small plus grey icon"></i>показать все</div>
-                        {% endif %}
-                    {% else %}
-                    <div class="mb-10">
-                        <div class="ui checkbox">
-                            <input class="all_filter_click" type="checkbox" name="occasion" value="{{item.slug}}">
-                            <label>{{item}} ({{item.cnt}})</label>
-                        </div>
-                    </div>
                     {% endif %}
-                {% endfor %}
-                    <div class="mb-10 p-10" style="border-top: 1px dotted grey;">
-                        Оборудрвания
-                    </div>
-                {% for item in view.get_device %}
-                    {% if forloop.counter >= 4 %}
-                    <div class="device_div_container mb-10 d_none">
-                        <div class="ui checkbox">
-                            <input class="all_filter_click" type="checkbox" name="device" value="{{item.slug}}">
-                            <label>{{item}} ({{item.cnt}})</label>
+                    {% endfor %}
+                    {% endfor %}
+                    <div class="header">
+                        <div class="mb-10 p-10 techno">
+                                Страны
                         </div>
                     </div>
+                    {% for item in view.get_country %}
+                        {% if forloop.counter >= 4 %}
+                        <div class="country_div_container mb-10 d_none">
+                            <div class="ui checkbox">
+                                <input class="all_filter_click" type="checkbox" name="country" value="{{item.slug}}"
+                                       {% ifequal country item %} checked {% endifequal %}>
+                                <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                            </div>
+                        </div>
                         {% if forloop.last %}
-                        <div class="show_more_button" datatype="device_div_container"><i class="ui small plus grey icon"></i>показать все</div>
+                            <div class="show_more_button" datatype="country_div_container"><i class="ui small plus grey icon"></i>показать все</div>
                         {% endif %}
-                    {% else %}
-                    <div class="mb-10">
-                        <div class="ui checkbox">
-                            <input class="all_filter_click" type="checkbox" name="device" value="{{item.slug}}">
-                            <label>{{item}} ({{item.cnt}})</label>
+                        {% else %}
+                        <div class="mb-10">
+                            <div class="ui checkbox ">
+                                <input class="all_filter_click" type="checkbox" name="country" value="{{item.slug}}"
+                                       {% ifequal country item %} checked {% endifequal %}>
+                                <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                            </div>
                         </div>
-                    </div>
                     {% endif %}
-                {% endfor %}
-                    <div class="mb-10 p-10" style="border-top: 1px dotted grey;">
-                        Сложность
-                    </div>
-                {% for item in view.get_сomplexity %}
-                    {% if forloop.counter >= 4 %}
-                    <div class="mb-10 d_none">
-                        <div class="ui radio checkbox">
-                            <input class="all_filter_click" type="radio" name="complexity" value="{{item.slug}}">
-                            <label>{{item}} ({{item.cnt}})</label>
+                    {% endfor %}
+                    <div class="header">
+                        <div class="mb-10 p-10 techno">
+                                Технологии
                         </div>
                     </div>
+                    {% for item in view.get_technology %}
+                        {% if forloop.counter >= 4 %}
+                        <div class="technology_div_container mb-10 d_none">
+                            <div class="ui checkbox">
+                                <input class="all_filter_click" type="checkbox" name="technology" value="{{item.slug}}">
+                                <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                            </div>
+                        </div>
+                            {% if forloop.last %}
+                            <div class="show_more_button" datatype="technology_div_container"><i class="ui small plus grey icon"></i>показать все</div>
+                            {% endif %}
+                        {% else %}
+                        <div class="mb-10">
+                            <div class="ui checkbox ">
+                                <input class="all_filter_click" type="checkbox" name="technology" value="{{item.slug}}">
+                                <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% endfor %}
+                        <div class="mb-10 p-10" style="border-top: 1px dotted grey;">
+                            Повод
+                        </div>
+                    {% for item in view.get_occasion %}
+                        {% if forloop.counter >= 4 %}
+                        <div class="occasion_div_container mb-10 d_none">
+                            <div class="ui checkbox">
+                                <input class="all_filter_click" type="checkbox" name="occasion" value="{{item.slug}}">
+                                <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                            </div>
+                        </div>
+                            {% if forloop.last %}
+                            <div class="show_more_button" datatype="occasion_div_container"><i class="ui small plus grey icon"></i>показать все</div>
+                            {% endif %}
+                        {% else %}
+                        <div class="mb-10">
+                            <div class="ui checkbox">
+                                <input class="all_filter_click" type="checkbox" name="occasion" value="{{item.slug}}">
+                                <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                        <div class="mb-10 p-10" style="border-top: 1px dotted grey;">
+                            Оборудрвания
+                        </div>
+                    {% for item in view.get_device %}
+                        {% if forloop.counter >= 4 %}
+                        <div class="device_div_container mb-10 d_none">
+                            <div class="ui checkbox">
+                                <input class="all_filter_click" type="checkbox" name="device" value="{{item.slug}}">
+                                <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                            </div>
+                        </div>
+                            {% if forloop.last %}
+                            <div class="show_more_button" datatype="device_div_container"><i class="ui small plus grey icon"></i>показать все</div>
+                            {% endif %}
+                        {% else %}
+                        <div class="mb-10">
+                            <div class="ui checkbox">
+                                <input class="all_filter_click" type="checkbox" name="device" value="{{item.slug}}">
+                                <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                        <div class="mb-10 p-10" style="border-top: 1px dotted grey;">
+                            Сложность
+                        </div>
+                    {% for item in view.get_сomplexity %}
+                        {% if forloop.counter >= 4 %}
+                        <div class="mb-10 d_none">
+                            <div class="ui radio checkbox">
+                                <input class="all_filter_click" type="radio" name="complexity" value="{{item.slug}}">
+                                <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                            </div>
+                        </div>
 
-                    {% else %}
-                    <div class="mb-10">
-                        <div class="ui radio checkbox">
-                            <input class="all_filter_click" type="radio" name="complexity" value="{{item.slug}}">
-                            <label>{{item}} ({{item.cnt}})</label>
+                        {% else %}
+                        <div class="mb-10">
+                            <div class="ui radio checkbox">
+                                <input class="all_filter_click" type="radio" name="complexity" value="{{item.slug}}">
+                                <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                            </div>
                         </div>
-                    </div>
-                    {% endif %}
-                {% endfor %}
-                    <div class="mb-10 p-10" style="border-top: 1px dotted grey;">
-                        Вегетарианство
-                    </div>
-                {% for item in view.get_vegeterian %}
-                    {% if forloop.counter >= 4 %}
-                    <div class="mb-10 d_none">
-                        <div class="ui radio checkbox">
-                            <input class="all_filter_click" type="radio" name="vegeterian" value="{{item.slug}}">
-                            <label>{{item}} ({{item.cnt}})</label>
+                        {% endif %}
+                    {% endfor %}
+                        <div class="mb-10 p-10" style="border-top: 1px dotted grey;">
+                            Вегетарианство
                         </div>
-                    </div>
+                    {% for item in view.get_vegeterian %}
+                        {% if forloop.counter >= 4 %}
+                        <div class="mb-10 d_none">
+                            <div class="ui radio checkbox">
+                                <input class="all_filter_click" type="radio" name="vegeterian" value="{{item.slug}}">
+                                <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                            </div>
+                        </div>
 
-                    {% else %}
-                    <div class="mb-10">
-                        <div class="ui radio checkbox">
-                            <input class="all_filter_click" type="radio" name="vegeterian" value="{{item.slug}}">
-                            <label>{{item}} ({{item.cnt}})</label>
+                        {% else %}
+                        <div class="mb-10">
+                            <div class="ui radio checkbox">
+                                <input class="all_filter_click" type="radio" name="vegeterian" value="{{item.slug}}">
+                                <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                            </div>
                         </div>
-                    </div>
-                    {% endif %}
-                {% endfor %}
-                    </form>
-            </div>
-        </div>
+                        {% endif %}
+                    {% endfor %}
+
+                </div>
+            </form>
     </div>
 {% endblock sidbar %}
 
@@ -241,15 +240,15 @@
 {% endblock %}
 
 {% block paginator %}
-<div class="ui grid">
-    <div class="twelve wide fluid column content_side_yummy mx-20">
-        {% if page_obj.has_next or page_obj.has_previous %}
+{% if page_obj.has_next or page_obj.has_previous %}
+    <div class="ui grid">
+        <div class="twelve wide fluid column content_side_yummy mx-20">
             <div class="ui center aligned container">
                 {% include 'includes/pagination.html' %}
             </div>
-        {% endif %}
+        </div>
     </div>
-</div>
+{% endif %}
 {% endblock paginator %}
 
 {% block jscdn %}

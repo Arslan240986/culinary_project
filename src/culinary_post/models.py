@@ -64,10 +64,10 @@ class CulinaryPostComment(MPTTModel):
         return f'{self.author} -to- {self.text}'
 
     class MPTTMeta:
-        ordering = ['update']
-        order_insertion_by = ['update']
         verbose_name = 'Коментария'
         verbose_name_plural = 'Коментарии'
+        ordering = ['update']
+        order_insertion_by = ['update']
 
 
 LIKE_CHOICES = (

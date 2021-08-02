@@ -12,7 +12,7 @@ class SearchField(forms.Form):
     search = forms.CharField(max_length=200, label='', label_suffix='',
                              widget=forms.TextInput(
                                  attrs={'class':'font-oswald',
-                                        'placeholder': 'Поиск по названию'}))
+                                        'placeholder': 'Поиск'}))
 
 
 class DishCommentForm(forms.ModelForm):

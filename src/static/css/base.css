@@ -983,12 +983,17 @@ textarea {
 .grey{
     color: rgb(133, 128, 128) !important;
 }
+.filter_element_container{
+    min-height: 500px !important;
+}
 .grid-item_ushefa, .grid-item_ushefa_filtered{
     width: 250px !important;
     margin-bottom: 10px !important;
 }
 .side_bar_search_content{
     margin-top: 25px !important;
+    margin-bottom: 20px !important;
+    overflow: visible !important;
 }
 .custom_dimmer_loader{
     background-color: rgba(255, 255, 255, 0.99) !important;
@@ -1005,4 +1010,29 @@ textarea {
 }
 .custom_dimmer_loader{
     z-index: 99 !important;
+}
+.show_search_button{
+    display: block !important;
+    background: rgba(0,0,0,.3) !important;
+    padding: 10px !important;
+    display: none !important;
+    /* position: absolute !important; */
+    /* right: 100px !important; */
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    text-align: center !important;
+    z-index: 1000 !important;
+}
+.show_search_button span{
+    color: white !important;
+}
+.show_search_button.show{
+    display: block !important;
+    margin-top: 20px !important;
+}
+.all_filter_checkbox_label{
+    cursor: pointer !important;
+}
+.all_filter_checkbox_label.checked{
+    color: red !important;
 }

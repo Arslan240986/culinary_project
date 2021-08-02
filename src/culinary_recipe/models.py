@@ -95,7 +95,7 @@ class Occasion(models.Model):
 
     class Meta:
         verbose_name = 'Повод'
-        verbose_name_plural = 'Повод'
+        verbose_name_plural = 'Поводы'
 
 
 class Device(models.Model):
@@ -237,7 +237,7 @@ class Dish(models.Model, HitCountMixin):
 
     class Meta:
         verbose_name = 'Блюдо'
-        verbose_name_plural = 'Блюды'
+        verbose_name_plural = 'Блюда'
 
 
 LIKE_CHOICES = (
@@ -257,7 +257,7 @@ class DishLike(models.Model):
         return f'{self.user}-{self.dish}-{self.value}'
 
     class Meta:
-        verbose_name = ' Лайки к рецепту'
+        verbose_name = 'Лайки к рецепту'
         verbose_name_plural = 'Лайки к рецептам'
 
 
@@ -313,7 +313,7 @@ class Step(models.Model):
     class Meta:
         ordering = ['id']
         verbose_name = 'Пошаговый рецепт'
-        verbose_name_plural = 'Пошаговый рецепты'
+        verbose_name_plural = 'Пошаговые рецепты'
 
 
 class DishComment(MPTTModel):
@@ -334,5 +334,5 @@ class DishComment(MPTTModel):
     class MPTTMeta:
         ordering = ['created']
         order_insertion_by = ['created']
-        verbose_name = 'Коментария'
-        verbose_name_plural = 'Коментарии'
+        verbose_name = 'Коментарий'
+        verbose_name_plural = 'Коментария'

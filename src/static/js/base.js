@@ -114,7 +114,7 @@ $(document).ready(async function () {
             $($('.first_nav_block').children()[element]).addClass('d_none')
         });
         var search_form = `<div class="item search_item_form width_100">
-        <form action="/dishes/by_search/" class="mr-10 search_form_ushefa width_100" method="get" >
+        <form action="/dishes/by_search_title/" class="mr-10 search_form_ushefa width_100" method="get" >
             <div class="ui fluid action input">
                 <input class=" font-oswald" type="search" placeholder="Введите слово" aria-label="Search" name="q">
                 <button class="ui basic yellow button" type="submit">
@@ -207,7 +207,7 @@ if (document.contains(document.querySelector('form[name=dish_filter_ajax]'))){
                 'Content-Type':'application/x-www-form-urlcoded',
             }
         })
-        .then(response => response.json(), console.log('aaa'))
+        .then(response => response.json())
         .then(json => renderFilterResult(json))
         .catch(error => console.error(error))
         
@@ -230,6 +230,27 @@ if (document.contains(document.querySelector('form[name=dish_filter_ajax]'))){
     $('.all_filter_click').on('click', function(e){
         let url = forms_filetr_send_ajax.action;
         let params = new URLSearchParams(new FormData(forms_filetr_send_ajax)).toString();
+        let loader = `<div class="ui active inverted dimmer custom_dimmer_loader">
+                        <div class="ui large text loader">Loading</div>
+                    </div>`
+        $('.content_side_yummy').append(loader)
+        sendAjaxToFilterDishe(url, params)
+    })
+    $('.all_filter_click').next().on('click', function(e){
+        if($(e.target).prev().attr('checked') == 'checked'){
+            $(e.target).prev().attr({'checked': false})
+            $(e.target).removeClass('checked')
+        } else{
+            $(e.target).prev().attr({'checked': true})
+            $(e.target).addClass('checked')
+        }
+        
+        let url = forms_filetr_send_ajax.action;
+        let params = new URLSearchParams(new FormData(forms_filetr_send_ajax)).toString();
+        let loader = `<div class="ui active inverted dimmer custom_dimmer_loader">
+                        <div class="ui large text loader">Loading</div>
+                    </div>`
+        $('.content_side_yummy').append(loader)
         sendAjaxToFilterDishe(url, params)
     })
     
@@ -271,11 +292,6 @@ if (document.contains(document.querySelector('form[name=dish_filter_ajax]'))){
                     </a>
                 </div>`)
         }
-        let loader = `<div class="ui active inverted dimmer custom_dimmer_loader">
-                        <div class="ui large text loader">Loading</div>
-                    </div>`
-        $('.content_side_yummy').append(loader)
-        
         div_output.masonry('reloadItems')
         imageLazyLoad()
         setTimeout(()=>{
@@ -321,31 +337,4 @@ if (document.contains(document.querySelector('form[name=dish_filter_ajax]'))){
         })
 
     }
-
-    // let html = `
-    //     {{#meals}}
-    //         <div class="0cAgjV7q">
-    //             <a href="/detail/{{ slug }}/{{ id }}" class="ui fluid card">
-    //                 <div class="page_image loading_gif">
-    //                     <img class="filtered_dishes_img" src="/static/image/2.png" data-src="/media/{{ poster }}" alt="{{title}}">
-    //                 </div>
-    //                 <div class="content">
-    //                     <div class="header grey">
-    //                         {{title}}
-    //                     </div>
-    //                 </div>
-    //                 <div class="extra content">
-    //                     <span class="left floated">
-    //                         <i class="comment icon"></i>
-    //                         {{total_comments}}
-    //                         <i class="eye icon"></i>
-    //                         {{total_hits}}
-    //                         <i class="ui thumbs up icon"></i>
-    //                         {{likes}}
-    //                     </span>
-    //                 </div>
-    //             </a>
-    //         </div>
-    //     {{/meals}}
-    // `
 }
