@@ -1036,3 +1036,6 @@ textarea {
 .all_filter_checkbox_label.checked{
     color: red !important;
 }
+.cursor{
+    cursor: pointer !important;
+}
