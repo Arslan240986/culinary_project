@@ -30,76 +30,8 @@ function showSubCategory() {
         });
     });
 }
-getListOfIngredient()
-async function getListOfIngredient() {
-    const url = $('.form-control.dish_ingredient_name').parent().attr('data-href')
-    await fetch(`${url}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlcoded',
-        }
-    })
-        .then(response => response.json())
-        .then(json => $('.form-control.dish_ingredient_name').on('focus', (e) => {showListOfIngredient(json, e)}))
-        .catch(error => console.error(error));
-};
-function showListOfIngredient(ingredients, e) {
-    // shows list of ingredients when user focus on input
-        var input = $(e.target);
-        var list = $(e.target).next('#autocomplete_list')
-        list.html(getComliteHtml(ingredients))
-        list.removeClass('d_none');
-        if (input.val()) {
-            var val = input.val().trim().toLowerCase();
-            keyUp(val)
-        }
-        $(document).on('click', (event) => {
-            var targ = event.target //Элемент, на котором произошло событие
-            if ($(event.target).parent().attr('id') === list.attr('id')) {
-                console.log('ss')
-                list.prev().val(targ.innerHTML);
-                list.addClass('d_none');
-                ClearAutoCompleteWindows()
-                $(document).off("click")
-            }
-        });
 
-        $(e.target).keyup(() => {
-            var val = input.val().trim().toLowerCase();
-            console.log(val)
-            keyUp(val)
-        })
 
-        function keyUp(val) {
-            if (val) {
-                var words = ingredients.filter(function (item) {
-                    return item.toLowerCase().indexOf(val) === 0;
-                });
-                list.html(getComliteHtml(words));
-                list.removeClass('d_none');
-                if (val && words.length == 0) {
-                    console.log('jjj')
-                    list.addClass('d_none');
-                }
-            } else {
-                list.html(getComliteHtml(ingredients));
-                list.removeClass('d_none');
-            }
-
-        };
-        function getComliteHtml(words) {
-            var html = "";
-            for (var i = 0; i < words.length; i++) {
-                html += '<div>' + words[i] + '</div>'
-            }
-            return html;
-        };
-        // remove autocomplite container when focusout from input
-        $('.form-control.dish_ingredient_name').on('focusout',()=>{
-            ClearAutoCompleteWindows();
-            $(document).off("click")
-        })
-}
 $(document).ready(function () {
     //<!--        Semantic ui checkbox and dropdown -->
     $('.max.example ui.normal.dropdown').dropdown({ maxSelections: 3 });
@@ -144,17 +76,6 @@ $(document).ready(function () {
 
 })
 
-// function that sets d_none class on autocomplete popups windows when blur input
-function ClearAutoCompleteWindows() {
-    var div_lists = document.querySelectorAll('#autocomplete_list')
-    div_lists.forEach((e) => {
-        if (e.getAttribute('class') == 'd_none') {
-        } else {
-            e.setAttribute('class', 'd_none')
-        }
-
-    })
-}
 //<!--Show image on temporary window-->
 function readURL(input) {
 
@@ -183,9 +104,9 @@ var outerFormset = $("fieldset.ingredient_form_set").not('.ui.negative.message')
 
                 innerFormsetElem.on('click', '[data-action=add-inner-ingredient-form]', function (event) {
                     innerFormset.addForm();
-                    getListOfIngredient() /* this fucntion  call ingredient list when focus on input*/
+ 
                 });
-                getListOfIngredient()
+
             },
         },
         deleteButtonText: '<i class="ui big times circle red icon cursor"></i>',
