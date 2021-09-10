@@ -31,6 +31,9 @@ def watermark_photo(input_image_path,
     base_image = Image.open(input_image_path)
     watermark = Image.open(watermark_image_path)
     width, height = base_image.size
+    if width > 600:
+        base_image.thumbnail((600, 600))
+        width, height = base_image.size
     transparent = Image.new('RGB', (width, height), (0,0,0,0))
     transparent.paste(base_image, (0,0))
     transparent.paste(watermark, position, mask=watermark)
