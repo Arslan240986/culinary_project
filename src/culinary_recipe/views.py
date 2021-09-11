@@ -17,7 +17,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import (Dish, Country, Category,
                      SubCategory, DishLike, IngredientList,
-                     Step, IngredientTitle, Technology, Occasion, Device, Complexity, Vegeterian)
+                     Step, Technology, Occasion, Device, Complexity, Vegeterian)
 from culinary_post.models import CulinaryPost
 from .forms import DishCommentForm, DishForm, InstructionFormSet, IngredientNestedFormSet, SearchField
 from .utils import getMonth
@@ -96,7 +96,7 @@ class GetAllItemForFilterDish:
         return has_dish_country
 
     def get_category(self):
-        return Category.objects.annotate(cnt=Count('sub_category__dish'))
+        return Category.objects.annotate(cnt=Count('sub_category__dish')).filter(sub_category__dish__moderator=True)
 
 
 class GetItems(GetAllItemForFilterDish, ListView):
@@ -162,10 +162,8 @@ class Search(GetAllItemForFilterDish, ListView):
     template_name = 'culinary_recipe/dishes_list.html'
 
     def get_queryset(self):
-        print(self.request.GET)
         queryset = Dish.objects.filter(draft=False, moderator=True).values('title', 'poster', 'created', 'slug', 'id')
         if self.request.GET.get('search') != '':
-            print('search', self.request.GET.get('search'))
             queryset = queryset.filter(draft=False, moderator=True,
                                            title__icontains=self.request.GET.get('search')
                                            ).values('title', 'poster', 'created', 'slug', 'id')
@@ -173,7 +171,6 @@ class Search(GetAllItemForFilterDish, ListView):
                 self.request.GET.getlist('technology') or self.request.GET.getlist('device') or
                 self.request.GET.getlist('occasion') or self.request.GET.getlist('vegetarian') or
                 self.request.GET.getlist('country')):
-            print('request')
             queryset = queryset.filter(draft=False, moderator=True).filter(
                                             Q(sub_category__slug__in=self.request.GET.getlist('sub_category')) |
                                             Q(complexity__slug__in=self.request.GET.getlist('complexity')) |

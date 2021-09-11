@@ -29,6 +29,7 @@ class Country(models.Model):
     class Meta:
         verbose_name = 'Страна'
         verbose_name_plural = 'Страны'
+        ordering = ('name',)
 
 
 class Category(models.Model):
@@ -49,6 +50,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
+        ordering = ('name',)
 
 
 class SubCategory(models.Model):
@@ -70,6 +72,7 @@ class SubCategory(models.Model):
     class Meta:
         verbose_name = 'Подкатегория'
         verbose_name_plural = 'Подкатегории'
+        ordering = ('name',)
 
 
 class Technology(models.Model):
@@ -83,6 +86,7 @@ class Technology(models.Model):
     class Meta:
         verbose_name = 'Технология'
         verbose_name_plural = 'Технологии'
+        ordering = ('name',)
 
 
 class Occasion(models.Model):
@@ -96,6 +100,7 @@ class Occasion(models.Model):
     class Meta:
         verbose_name = 'Повод'
         verbose_name_plural = 'Поводы'
+        ordering = ('name',)
 
 
 class Device(models.Model):
@@ -109,6 +114,7 @@ class Device(models.Model):
     class Meta:
         verbose_name = 'Устройство'
         verbose_name_plural = 'Устройства'
+        ordering = ('name',)
 
 
 class Complexity(models.Model):
@@ -122,6 +128,7 @@ class Complexity(models.Model):
     class Meta:
         verbose_name = 'Сложность приготовления'
         verbose_name_plural = 'Сложность приготовления'
+        ordering = ('name',)
 
 
 class Vegeterian(models.Model):

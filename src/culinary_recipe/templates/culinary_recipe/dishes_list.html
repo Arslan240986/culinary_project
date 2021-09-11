@@ -32,6 +32,7 @@
                     <div class="header">
                         <div class="mb-10 p-10 techno">
                                 {{ category }}
+                            {{ category.cnt }}
                         </div>
                     </div>
                     {% for item in category.sub_category.all %}
@@ -40,7 +41,7 @@
                             <div class="ui checkbox">
                                 <input class="all_filter_click" type="checkbox" name="{{country}}" value="{{item.slug}}"
                                        {% ifequal country item %} checked {% endifequal %}>
-                                <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                                <label class="all_filter_checkbox_label">{{item}} ({{item.dish_set.all.count}})</label>
                             </div>
                         </div>
                         {% if forloop.last %}
@@ -166,7 +167,9 @@
                                 <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
                             </div>
                         </div>
-
+                            {% if forloop.last %}
+                            <div class="show_more_button" datatype="device_div_container"><i class="ui small plus grey icon"></i>показать все</div>
+                            {% endif %}
                         {% else %}
                         <div class="mb-10">
                             <div class="ui radio checkbox">
@@ -181,13 +184,15 @@
                         </div>
                     {% for item in view.get_vegeterian %}
                         {% if forloop.counter >= 4 %}
-                        <div class="mb-10 d_none">
+                        <div class="vegetarian_div_container mb-10 d_none">
                             <div class="ui radio checkbox">
                                 <input class="all_filter_click" type="radio" name="vegeterian" value="{{item.slug}}">
                                 <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
                             </div>
                         </div>
-
+                            {% if forloop.last %}
+                                <div class="show_more_button" datatype="vegetarian_div_container"><i class="ui small plus grey icon"></i>показать все</div>
+                            {% endif %}
                         {% else %}
                         <div class="mb-10">
                             <div class="ui radio checkbox">
@@ -220,7 +225,7 @@
                           </div>
                           <div class="content">
                               <div class="header grey">
-                                {{popular_meal.title}}
+                                {{popular_meal.title}}{{popular_meal.sub_category}}
                               </div>
                           </div>
                           <div class="extra content">
