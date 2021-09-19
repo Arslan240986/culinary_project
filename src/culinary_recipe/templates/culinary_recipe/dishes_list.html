@@ -3,7 +3,9 @@
 {% load hitcount_tags %}
 
 {% block title %}{% if category %}{{ category }}{% else %} Все ретцепты {% endif %}{% endblock title %}
-
+{% block robots %}
+    <meta name="robots" content="noindex">
+{% endblock robots %}
 {% if category %}
     {% block breadcrumbs %}
         <span class="text-muted">{{ category.name }}</span>
@@ -225,7 +227,7 @@
                           </div>
                           <div class="content">
                               <div class="header grey">
-                                {{popular_meal.title}}{{popular_meal.sub_category}}
+                                {{popular_meal.title}}
                               </div>
                           </div>
                           <div class="extra content">
