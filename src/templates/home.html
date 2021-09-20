@@ -15,32 +15,39 @@
         <div class="ui stackable centered three column grid">
 
             {% for category in categories %}
+                <div class="five wide column cont">
+                    <h6>
+                        <a class="button_link" href="{{ category.slug }}">
+                            <span class="font-s-20 badge badge-secondary pl-10">{{ category.name }}</span>
+                        </a>
+                    </h6>
+                    <div class="page_image loading_gif">
+                        <img src="/static/image/1x1.png" data-src="{{ category.poster.url }}" alt="{{ category.name }}">
+                    </div>
+                    {% if category.sub_category.all %}
+                        {% for child in category.sub_category.all %}
+                            <span class="{% if forloop.counter >= 3 %}{{category.slug}}_div_container d_none{% endif %}">
+                                <a class="button_link" href="{{ child.get_absolute_url }}">
+                                    {{ child.name }} :
+                                </a>
+                                {% if child.get_last_three_dishes %}
+                                {% for dishes in child.get_last_three_dishes %}
+                                <a href="{{ dishes.get_absolute_url }}">
+                                    <small>{{ dishes.title }}</small>
+                                </a>
+                                {% endfor %}
+                                {% endif %}
+                            </span>
+                        {% endfor %}
+                        {% if category.sub_category.all.count > 3 %}
+                            <div class="show_more_button" datatype="{{category.slug}}_div_container"><i class="ui small plus grey icon"></i>показать все</div>
+                        {% endif %}
+                    {% endif %}
 
-            <div class="five wide column cont">
-                <h6>
-                    <a class="button_link" href="{{ category.slug }}">
-                        <span class="font-s-20 badge badge-secondary pl-10">{{ category.name }}</span>
-                    </a>
-                </h6>
-                <div class="page_image loading_gif">
-                    <img src="/static/image/1x1.png" data-src="{{ category.poster.url }}" alt="{{ category.name }}">
                 </div>
-                {% if category.sub_category.all %}
-                {% for child in category.sub_category.all %}
-                <a class="button_link" href="{{ child.get_absolute_url }}">
-                    {{ child.name }} :
-                </a>
-                {% if child.get_last_three_dishes %}
-                {% for dishes in child.get_last_three_dishes %}
-                <a href="{{ dishes.get_absolute_url }}">
-                    <small>{{ dishes.title }}</small>
-                </a>
-                {% endfor %}
-                {% endif %}
-                {% endfor %}
-                {% endif %}
-            </div>
+
             {% endfor %}
+
 
         </div>
 

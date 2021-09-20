@@ -67,25 +67,25 @@
                     </div>
                     {% for item in view.get_country %}
                         {% if forloop.counter >= 4 %}
-                        <div class="country_div_container mb-10 d_none">
-                            <div class="ui checkbox">
-                                <input class="all_filter_click" type="checkbox" name="country" value="{{item.slug}}"
-                                       {% ifequal country item %} checked {% endifequal %}>
-                                <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                            <div class="country_div_container mb-10 d_none">
+                                <div class="ui checkbox">
+                                    <input class="all_filter_click" type="checkbox" name="country" value="{{item.slug}}"
+                                           {% ifequal country item %} checked {% endifequal %}>
+                                    <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                                </div>
                             </div>
-                        </div>
-                        {% if forloop.last %}
-                            <div class="show_more_button" datatype="country_div_container"><i class="ui small plus grey icon"></i>показать все</div>
-                        {% endif %}
+                            {% if forloop.last %}
+                                <div class="show_more_button" datatype="country_div_container"><i class="ui small plus grey icon"></i>показать все</div>
+                            {% endif %}
                         {% else %}
-                        <div class="mb-10">
-                            <div class="ui checkbox ">
-                                <input class="all_filter_click" type="checkbox" name="country" value="{{item.slug}}"
-                                       {% ifequal country item %} checked {% endifequal %}>
-                                <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                            <div class="mb-10">
+                                <div class="ui checkbox ">
+                                    <input class="all_filter_click" type="checkbox" name="country" value="{{item.slug}}"
+                                           {% ifequal country item %} checked {% endifequal %}>
+                                    <label class="all_filter_checkbox_label">{{item}} ({{item.cnt}})</label>
+                                </div>
                             </div>
-                        </div>
-                    {% endif %}
+                        {% endif %}
                     {% endfor %}
                     <div class="header">
                         <div class="mb-10 p-10 techno">
@@ -258,6 +258,3 @@
 {% endif %}
 {% endblock paginator %}
 
-{% block jscdn %}
-    <script async type="text/javascript" src="{% static 'js/filter_search.js' %}"></script>
-{% endblock jscdn %}

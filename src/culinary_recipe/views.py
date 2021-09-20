@@ -55,7 +55,7 @@ class CategoryViewList(ListView):
                 has_dish_country.append(con)
         context['countries'] = has_dish_country
         context['posts'] = CulinaryPost.objects.all().filter(moderator=True).order_by('-created')[:8]
-        context['popular_meals'] =  Dish.objects.order_by('-hit_count_generic__hits').filter(moderator=True, draft=False)[:12]
+        context['popular_meals'] = Dish.objects.order_by('-hit_count_generic__hits').filter(moderator=True, draft=False)[:12]
         return context
 
 
