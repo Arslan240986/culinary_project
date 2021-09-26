@@ -13,5 +13,5 @@ def comment_add(**kwargs):
     message = ''
     for comment in comments:
         message += f'(Пользователь: {comment.author.profile.first_name} добавиль коммент на {comment.meal.title} рецепт. коммент {comment.text}) ,'
-    mail_sent = send_mail(subject, message, settings.EMAIL_HOST_USER, ['arslan092486gmail.com'])
+    mail_sent = send_mail(subject, message, settings.SERVER_EMAIL, ['arslan092486gmail.com'])
     return mail_sent

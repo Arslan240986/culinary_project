@@ -108,12 +108,15 @@
             {% endfor %}
             <h4 class="font-oswald ui block grey header">ПОШАГОВЫЙ РЕЦЕПТ ПРИГОТОВЛЕНИЯ</h4>
             {% for step in meal.step_set.all %}
-            <div class="steps_counter font-oswald mt-10">Шаг {{ forloop.counter }}</div>
-            <p class="steps_descriptions p-10">
-                {{ step.description }}
-            </p>
+            <div class="steps_counter_div font-oswald">
+                <span class="steps_counter ">Шаг {{ forloop.counter }}</span>
+                <span class="steps_descriptions p-10">
+                    {{ step.description }}
+                </span>
+            </div>
+
             {% if step.image %}
-                <div class="page_image loading_gif">
+                <div class="page_image loading_gif mt-10">
                     <img data-src="{{ step.image.url }}" src="/static/image/1x1.png">
                 </div>
             {% endif %}
@@ -212,10 +215,13 @@
                     {{meal.carbohydrate|default:'Не указан'}}
             </small></p>
         </div>
+
+    </div>
+    {% if meal.advice %}
         <div class="meal_advice_field">
                 {{meal.advice|safe}}
         </div>
-    </div>
+    {% endif %}
 </div>
 <!-- Show comments -->
 <hr>

@@ -14,7 +14,7 @@ def send_subscribe(email):
 
     mail_sent = send_mail(subject,
                           message,
-                          'admin@myshop.com',
+                          settings.SERVER_EMAIL,
                           [email])
     return mail_sent
 
@@ -23,11 +23,10 @@ def send_subscribe(email):
 def send_success_subscribe(**kwargs):
     author = User.objects.get(id=kwargs['author'])
     send_mail(
-        'Успешно пройдена проверка',
-        f'Дорогой {author.profile.first_name} Ваш рецепт {kwargs["title"]} упешно прошла проверку и добавлен на сайт',
+        f'Пошла прверка',
+        f'Дорогой {author.profile.first_name} Ваш рецепт {kwargs["title"]} уcпешно прошла проверку и добавлен на сайт',
         settings.SERVER_EMAIL,
         [author.profile.email],
-        fail_silently=False
     )
 
 
@@ -36,11 +35,10 @@ def notice_about_new_messages(**kwargs):
     sender = UserProfile.objects.get(id=kwargs['sender'])
     receiver = UserProfile.objects.get(id=kwargs['receiver'])
     mail_sent = send_mail(
-        'Успешно пройдена проверка',
+        'YEEEEES',
         f'Дорогой {receiver.first_name} Вам  {sender.first_name} на сайте У-шефа отправил сообшения для прочтения пройдите пожалуйста по ссылке\n https://ushefa.ru{receiver.get_absolute_url_for_friends_view()}',
         settings.EMAIL_HOST_USER,
         [receiver.email],
-        fail_silently=False
     )
     return mail_sent
 

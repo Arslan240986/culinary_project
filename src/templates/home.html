@@ -18,7 +18,7 @@
                 <div class="five wide column cont">
                     <h6>
                         <a class="button_link" href="{{ category.slug }}">
-                            <span class="font-s-20 badge badge-secondary pl-10">{{ category.name }}</span>
+                            <span class="font-s-20 badge badge-secondary pl-10 popup_category" data-content="Все блюда категории {{ category.name }}">{{ category.name }}</span>
                         </a>
                     </h6>
                     <div class="page_image loading_gif">
@@ -32,8 +32,9 @@
                                 </a>
                                 {% if child.get_last_three_dishes %}
                                 {% for dishes in child.get_last_three_dishes %}
-                                <a href="{{ dishes.get_absolute_url }}">
-                                    <small>{{ dishes.title }}</small>
+                                <a class="popup_category" href="{{ dishes.get_absolute_url }}"
+                                   data-html='<img class="ui small image" src="{{ dishes.poster.url }}" alt="{{dishes.title}}">'>
+                                        {{ dishes.title }}
                                 </a>
                                 {% endfor %}
                                 {% endif %}
@@ -142,3 +143,6 @@
         </div>
     {% endblock popularity %}
         </div>
+
+<script>
+</script>

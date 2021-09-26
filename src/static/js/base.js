@@ -1,4 +1,5 @@
 "use strict"
+
 var prevScrollpos = window.pageYOffset;
 var navbar = document.querySelector("#navbar")
 document.querySelector('.bread').style.marginTop = navbar.offsetHeight + 3 + 'px'
@@ -22,6 +23,8 @@ $(document).ready(async function () {
     $('.ui.dropdown.user_post').dropdown();
     $('.ui.dropdown').dropdown();
     $('.ui.accordion').accordion();
+    $('.popup_category').popup();
+    
 
     // <!--   Add email for subcribe ajax response true or false     -->
     $('.subscribe_button').click(async function (e) {

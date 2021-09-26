@@ -273,7 +273,9 @@ ul.collapse {
 }
 
 /* Meal-detail */
-
+.dish_detail{
+    padding-bottom: 20px !important;
+}
 .dish_poster {
     width: 100%;
     object-fit: fill;
@@ -329,16 +331,27 @@ ul.collapse {
     padding: 7px;
     border-bottom: 1px dotted rgb(161, 158, 158);
 }
-
+.ingredints_li span{
+    font-size: 18px !important;
+}
 .dish_steps {
-    margin-top: 40px;
-    margin-bottom: 20px;
+    margin-top: 40px !important;
+    margin-bottom: 20px !important;
+}
+
+.steps_counter_div{
+    margin-top: 30px !important;
 }
 
 .steps_counter {
-    font-weight: bold;
-    font-size: 20px;
-    padding-left: 10px;
+    color: rgb(23, 92, 124) !important;
+    font-size: 20px !important;
+    margin: 10px !important;
+}
+
+.steps_descriptions{
+    font-size: 18px !important;
+    line-height: 1.5 !important;
 }
 
 .subscribe_div_add.active {
@@ -498,10 +511,6 @@ ul.errorlist {
 
 hr {
     border: 1.5px solid black !important;
-}
-
-.p-10 {
-    padding: 10px !important;
 }
 
 pt-10 {
@@ -902,6 +911,7 @@ textarea {
 .d-inline{
     display: inline !important;
 }
+
 .page_image.loading_gif{
     padding: 0px 0px 70% 0px !important;
     background: url('/static/image/load2.gif') center / 25% no-repeat !important;
@@ -929,11 +939,20 @@ textarea {
     margin-bottom: 10px !important ;
 }
 .meal_advice_field{
+    display: block;
     margin: 20px 0px !important;
     padding: 20px !important;
     border: 1px solid green !important;
     border-bottom-left-radius: 10px !important;
     border-top-right-radius: 10px !important;
+    background-color: rgba(137, 209, 243, 0.1) !important;
+}
+
+.meal_advice_field ul{
+    padding-left: 40px !important;
+}
+.meal_advice_field ul li{
+    margin-top: 10px !important;
 }
 .personal_drop_list{
     padding: 0 !important;
@@ -972,7 +991,7 @@ textarea {
     font-size: 25px !important;
 }
 .advertisement{
-    height: 100px !important;
+    height: 10px !important;
 }
 .grid_ushefa{
     margin: 0 auto !important;
