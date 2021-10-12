@@ -23,7 +23,7 @@ def send_subscribe(email):
 def send_success_subscribe(**kwargs):
     author = User.objects.get(id=kwargs['author'])
     send_mail(
-        f'Пошла прверка',
+        f'Прошла прверка',
         f'Дорогой {author.profile.first_name} Ваш рецепт {kwargs["title"]} уcпешно прошла проверку и добавлен на сайт',
         settings.SERVER_EMAIL,
         [author.profile.email],

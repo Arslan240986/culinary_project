@@ -6,7 +6,8 @@
 {% block title %}{{ meal.title }}{% endblock title %}
 
 {% block meta_description %}
-<meta name="description" content="Пошаговый пример готовки блюды - {{ meal.title|truncatewords:'100' }}"  itemprop="description">
+<link rel="canonical" href="{{meal.get_absolute_url}}">
+<meta name="description" content="{{ meal.description|safe|truncatechars:'130' }}"  itemprop="description">
 {% endblock meta_description %}
 
 {% block breadcrumbs %}
