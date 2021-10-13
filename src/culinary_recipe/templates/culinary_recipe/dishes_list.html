@@ -2,7 +2,16 @@
 {% load static %}
 {% load hitcount_tags %}
 
+{% block filter %}
+    <div class="show_search_button">
+        <i class="ui filter white big icon"></i>
+        <span>Фильтр</span>
+    </div>
+{% endblock filter %}
+
 {% block title %}{% if category %}{{ category }}{% else %} Все ретцепты {% endif %}{% endblock title %}
+{% block meta_description %}
+{% endblock meta_description %}
 {% block robots %}
     <meta name="robots" content="noindex">
 {% endblock robots %}

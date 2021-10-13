@@ -290,32 +290,39 @@ class AddCommentToDish(View):
         return JsonResponse(context, safe=False)
 
 
-@login_required
 def like_unlike_post(request):
-    user = request.user
-    if request.method == 'POST':
-        dish_id = request.POST.get('dish_id')
-        dish_obj = get_object_or_404(Dish, id=dish_id)
-        user = get_object_or_404(User, id=user.id)
-        if user in dish_obj.likes.all():
-            dish_obj.likes.remove(user)
-            dish_obj.is_liked = False
-        else:
-            dish_obj.likes.add(user)
-            dish_obj.is_liked = True
-        like, created = DishLike.objects.get_or_create(user=user, dish_id=dish_id)
-        if not created:
-            if like.value == 'Unlike':
-                like.value = 'Like'
+    print(request.user.id)
+    try:
+        user = request.user.id
+        if request.method == 'POST':
+            dish_id = request.POST.get('dish_id')
+            dish_obj = get_object_or_404(Dish, id=dish_id)
+            user = get_object_or_404(User, id=user)
+            if user in dish_obj.likes.all():
+                dish_obj.likes.remove(user)
+                dish_obj.is_liked = False
             else:
-                like.value = 'Unlike'
-        else:
-            like.value = 'Like'
-        dish_obj.save()
-        like.save()
+                dish_obj.likes.add(user)
+                dish_obj.is_liked = True
+            like, created = DishLike.objects.get_or_create(user=user, dish_id=dish_id)
+            if not created:
+                if like.value == 'Unlike':
+                    like.value = 'Like'
+                else:
+                    like.value = 'Unlike'
+            else:
+                like.value = 'Like'
+            dish_obj.save()
+            like.save()
+            data = {
+                'is_liked': like.value,
+                'form': dish_obj.likes.all().count(),
+                'user_not_login': False,
+            }
+            return JsonResponse(data, safe=False)
+    except:
         data = {
-            'is_liked': like.value,
-            'form': dish_obj.likes.all().count()
+            'user_not_login': True,
         }
         return JsonResponse(data, safe=False)
     return redirect('/')

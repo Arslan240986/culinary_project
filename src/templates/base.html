@@ -11,12 +11,11 @@
     <title>{% block title %}У-шефа - Лучшие кулинарные рецепты мира{% endblock title %}</title>
     <meta name="keywords" content="рецепты блюд, кулинарные рецепты, кулинария, рецепты, новые рецепты">
     {% block meta_description %}
-    <meta name="description" content="Готовите ли вы к праздникам или просто нуждаетесь в отличных идеях на ужин, у нас есть для вас рецепты, советы по приготовлению и многое другое"  itemprop="description">
+        <meta name="description" content="Готовите ли вы к праздникам или просто нуждаетесь в отличных идеях на ужин, у нас есть для вас рецепты, советы по приготовлению и многое другое"  itemprop="description">
     {% endblock meta_description %}
 
     {% block robots %} {% endblock robots %}
 
-<!--aaaaswd-->
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript" >
        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -117,10 +116,9 @@
                 <hr class="mb-10">
             {% endblock steps_breadcrumbs %}
 
-<div class="show_search_button">
-    <i class="ui filter white big icon"></i>
-    <span>Фильтр</span>
-</div>
+    {% block filter %}
+
+        {% endblock filter %}
         <div class="ui stackable grid filter_element_container">
 
             <!-- /.blog-sidebar Каталог рецептов -->

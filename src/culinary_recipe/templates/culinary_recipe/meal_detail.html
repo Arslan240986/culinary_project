@@ -66,11 +66,21 @@
                                 class="mr-5 font-s-20 c-black">
                                 {{ meal.get_total_comments}}</small>
                         </a>
+
                         <form action="{% url 'culinary_recipe:likes_meal' %}" method="post" id="like_form" name="like">
                             {% csrf_token %}
                             <i id="meal_like_button" datatype="{{ meal.id }}"
+                               {% if user.is_authenticated %}
+                                    {% if meal.is_liked %}
+                                        data-content="Передумал"
+                                    {% else %}
+                                        data-content="Нравится"
+                                    {% endif %}}
+                               {% else %}
+                                    data-content="Вы не вошли"
+                               {% endif %}
                                 class='ui thumbs{% if meal.is_liked %} down {% else %} up {% endif %}outline big yellow icon main_point icon'></i>
-                            <span class="result_book mr-5 font-s-20 c-black">{{ meal.get_total_likes }}</span>
+                            <span class="meal_total_likes mr-5 font-s-20 c-black">{{ meal.get_total_likes }}</span>
                         </form>
                     </div>
                 </div>

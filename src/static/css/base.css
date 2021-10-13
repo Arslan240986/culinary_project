@@ -303,6 +303,7 @@ ul.collapse {
     padding: 8px;
     border: 1px solid rgb(31, 88, 36);
     border-radius: 3px;
+    cursor: pointer;
 }
 
 .subscribe_form_btn:hover {

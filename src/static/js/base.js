@@ -24,8 +24,6 @@ $(document).ready(async function () {
     $('.ui.dropdown').dropdown();
     $('.ui.accordion').accordion();
     $('.popup_category').popup();
-    
-
     // <!--   Add email for subcribe ajax response true or false     -->
     $('.subscribe_button').click(async function (e) {
         e.preventDefault();

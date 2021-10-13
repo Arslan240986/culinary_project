@@ -12,7 +12,14 @@ $(document).ready(function () {
         }
     });
     //        Like button
-    $(document).on('click', '#meal_like_button', function (event) {
+    if ($(window).width() < 768) {
+        $('.ui.thumbs').popup({
+            on    : 'click'
+        });
+    } else {
+        $('.ui.thumbs').popup()
+    }
+    $('#meal_like_button').on('click', function (event) {
         event.preventDefault();
         var pk = $(this).attr('datatype')
         const url = $('#like_form').attr('action')
@@ -23,17 +30,25 @@ $(document).ready(function () {
             data: { 'dish_id': pk, 'csrfmiddlewaretoken': csrf },
             dataType: 'json',
             success: function (response) {
-                h = $('.result_book').html(response['form'])
-                if (response['is_liked'] == 'Like') {
-                    $('#meal_like_button').removeClass('up')
-                    $('#meal_like_button').addClass('down')
-                } else if (response['is_liked'] == 'Unlike') {
-                    $('#meal_like_button').removeClass('down')
-                    $('#meal_like_button').addClass('up')
+                console.log(response['user_not_login'])
+                if(response['user_not_login']){
+
+                } else {
+                    h = $('.meal_total_likes').html(response['form'])
+                    if (response['is_liked'] == 'Like') {
+                        $('#meal_like_button').removeClass('up')
+                        $('#meal_like_button').addClass('down')
+                        $('#meal_like_button').attr('data-content', 'Передумал')
+                        console.log()
+                    } else if (response['is_liked'] == 'Unlike') {
+                        $('#meal_like_button').removeClass('down')
+                        $('#meal_like_button').addClass('up')
+                        $('#meal_like_button').attr('data-content', 'Нравится')
+                    }
                 }
             },
             error: function (rs, e) {
-                console.log('second', rs.responseText);
+                console.log('error in like', rs.responseText);
             },
         });
     });
@@ -251,5 +266,5 @@ $(document).ready( () => {
             }
         })
     })
-
 })
+
