@@ -7,7 +7,7 @@
 
 {% block meta_description %}
 <link rel="canonical" href="{{meal.get_absolute_url}}">
-<meta name="description" content="{{ meal.description|safe|truncatechars:'130' }}"  itemprop="description">
+<meta name="description" content="Вот как приготовить {{ meal.title}}. Пошаговый рецепт"  itemprop="description">
 {% endblock meta_description %}
 
 {% block breadcrumbs %}
