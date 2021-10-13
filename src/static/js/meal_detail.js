@@ -30,7 +30,6 @@ $(document).ready(function () {
             data: { 'dish_id': pk, 'csrfmiddlewaretoken': csrf },
             dataType: 'json',
             success: function (response) {
-                console.log(response['user_not_login'])
                 if(response['user_not_login']){
 
                 } else {
