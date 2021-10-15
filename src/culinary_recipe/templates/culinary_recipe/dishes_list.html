@@ -40,34 +40,33 @@
                         Уточните свой поиск
                     </div>
                     {% for category in view.get_category %}
-                    <div class="header">
-                        <div class="mb-10 p-10 techno">
-                                {{ category }}
-                            {{ category.cnt }}
-                        </div>
-                    </div>
-                    {% for item in category.sub_category.all %}
-                        {% if forloop.counter >= 4 %}
-                        <div class="{{category.slug}}_div_container mb-10 d_none">
-                            <div class="ui checkbox">
-                                <input class="all_filter_click" type="checkbox" name="{{country}}" value="{{item.slug}}"
-                                       {% ifequal country item %} checked {% endifequal %}>
-                                <label class="all_filter_checkbox_label">{{item}} ({{item.dish_set.all.count}})</label>
+                        <div class="header">
+                            <div class="mb-10 p-10 techno">
+                                    {{ category }}
                             </div>
                         </div>
-                        {% if forloop.last %}
-                            <div class="show_more_button" datatype="{{category.slug}}_div_container"><i class="ui small plus grey icon"></i>показать все</div>
-                        {% endif %}
-                        {% else %}
-                        <div class="mb-10">
-                            <div class="ui checkbox ">
-                                <input class="all_filter_click" type="checkbox" name="sub_category" value="{{item.slug}}"
-                                       {% ifequal country item %} checked {% endifequal %}>
-                                <label class="all_filter_checkbox_label">{{item}} ({{ item.dish_set.all.count }})</label>
+                        {% for item in category.sub_category.all %}
+                            {% if forloop.counter >= 4 %}
+                            <div class="{{category.slug}}_div_container mb-10 d_none">
+                                <div class="ui checkbox">
+                                    <input class="all_filter_click" type="checkbox" name="sub_category" value="{{item.slug}}"
+                                           {% ifequal country item %} checked {% endifequal %}>
+                                    <label class="all_filter_checkbox_label">{{item}} ({{item.dish_set.all.count}})</label>
+                                </div>
                             </div>
-                        </div>
-                    {% endif %}
-                    {% endfor %}
+                            {% if forloop.last %}
+                                <div class="show_more_button" datatype="{{category.slug}}_div_container"><i class="ui small plus grey icon"></i>показать все</div>
+                            {% endif %}
+                            {% else %}
+                            <div class="mb-10">
+                                <div class="ui checkbox ">
+                                    <input class="all_filter_click" type="checkbox" name="sub_category" value="{{item.slug}}"
+                                           {% ifequal country item %} checked {% endifequal %}>
+                                    <label class="all_filter_checkbox_label">{{item}} ({{ item.dish_set.all.count }})</label>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
                     {% endfor %}
                     <div class="header">
                         <div class="mb-10 p-10 techno">

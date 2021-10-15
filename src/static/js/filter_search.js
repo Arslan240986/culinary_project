@@ -13,14 +13,6 @@ $(document).ready(()=>{
     }
     $('.show_more_button').on('click', (e)=>{
         showHideAllFilterElements($(e.target).attr('datatype'))
-        if($(e.target).children('i').hasClass('plus')){
-            $(e.target).children('i').removeClass('plus')
-            $(e.target).children('i').addClass('minus')
-        } else{
-            $(e.target).children('i').removeClass('minus')
-            $(e.target).children('i').addClass('plus')
-        }
-        
     })
     if ($(window).width() < 770){
         $('.show_search_button').addClass('show')

@@ -105,7 +105,7 @@
     <div class="ui stackable two column grid">
         <div class="twelve wide column">
             {% for ingredient_title in meal.ingredienttitle_set.all %}
-            <h4 class="ui block grey header font-oswald">{{ ingredient_title.name }}</h4>
+            <h2 class="ui block grey header font-oswald">{{ ingredient_title.name }}</h2>
             <ul class="ingredients_ul mb-4">
                 {% for ingredient in ingredient_title.ingredientlist_set.all %}
                 <li class="ingredints_li">
@@ -117,7 +117,7 @@
                 {% endfor %}
             </ul>
             {% endfor %}
-            <h4 class="font-oswald ui block grey header">ПОШАГОВЫЙ РЕЦЕПТ ПРИГОТОВЛЕНИЯ</h4>
+            <h2 class="font-oswald ui block grey header">ПОШАГОВЫЙ РЕЦЕПТ ПРИГОТОВЛЕНИЯ</h2>
             {% for step in meal.step_set.all %}
             <div class="steps_counter_div font-oswald">
                 <span class="steps_counter ">Шаг {{ forloop.counter }}</span>
@@ -191,7 +191,7 @@
                 </small>
                 {% endfor %}
             </p>
-            <p class="ui grey header">Устройтво</p>
+            <p class="ui grey header">Устройство</p>
             <p>
                 {% for device in meal.device.all %}
                 <small class="font-oswald text-muted pl-10">

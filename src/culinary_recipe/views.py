@@ -96,7 +96,7 @@ class GetAllItemForFilterDish:
         return has_dish_country
 
     def get_category(self):
-        return Category.objects.annotate(cnt=Count('sub_category__dish')).filter(sub_category__dish__moderator=True)
+        return Category.objects.all()
 
 
 class GetItems(GetAllItemForFilterDish, ListView):
@@ -110,7 +110,9 @@ class GetItems(GetAllItemForFilterDish, ListView):
         context = super().get_context_data(**kwargs)
         if self.kwargs:
             if 'slug' in self.kwargs:
-                context['category'] = SubCategory.objects.get(slug=self.kwargs['slug'])
+                sub_category = SubCategory.objects.get(slug=self.kwargs['slug'])
+                category = Category.objects.get(sub_category=sub_category)
+                context['category'] = f'{category} | {sub_category}'
                 form = SearchField()
                 context['search'] = form
                 return context
@@ -180,7 +182,6 @@ class Search(GetAllItemForFilterDish, ListView):
                                             Q(vegetarian__slug__in=self.request.GET.getlist('vegetarian'))|
                                             Q(country__slug__in=self.request.GET.getlist('country'))
                                            ).distinct()
-
         for query in queryset:
             item = Dish.objects.get(id=query['id'])
             query['total_comments'] = item.get_total_comments()
@@ -291,7 +292,6 @@ class AddCommentToDish(View):
 
 
 def like_unlike_post(request):
-    print(request.user.id)
     try:
         user = request.user.id
         if request.method == 'POST':

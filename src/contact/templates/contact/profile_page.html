@@ -6,6 +6,10 @@
 <meta name="robots" content="noindex">
 {% endblock robots %}
 
+{% block cdn %}
+<link rel="stylesheet" type="text/css" href="{% static 'datetimepicker-master/jquery.datetimepicker.css' %}">
+{% endblock cdn %}
+
 {% block breadcrumbs %}
 <div class="active section">Ваша страница</div>
 {% endblock breadcrumbs %}
@@ -432,6 +436,9 @@
 </div>
 
 <!--  custom js -->
+
 {% block jscdn %}
+    <!--datepicker js-->
+<script type="text/javascript" src="{% static 'datetimepicker-master/build/jquery.datetimepicker.full.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/profile_page.js' %}"></script>
 {% endblock jscdn %}
