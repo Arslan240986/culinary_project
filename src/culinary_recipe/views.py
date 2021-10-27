@@ -43,7 +43,7 @@ def watermark_photo(input_image_path,
 class CategoryViewList(ListView):
     """Вывод категорий"""
     model = Category
-    template_name = 'home.html'
+    template_name = 'home.min.html'
     context_object_name = 'categories'
 
     def get_context_data(self, **kwargs):

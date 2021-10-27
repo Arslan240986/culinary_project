@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="yandex-verification" content="a8c693b16a7975eb" />
     <link rel="icon" type="image/png" sizes="32x32" href="/static/image/icons_ushefa.png" />
+    <link rel="icon" type="image/png" sizes="120x120" href="/static/image/icons_ushefa.png" />
     <title>{% block title %}У-шефа - Лучшие кулинарные рецепты мира{% endblock title %}</title>
     <meta name="keywords" content="рецепты блюд, кулинарные рецепты, кулинария, рецепты, новые рецепты">
     {% block meta_description %}
@@ -17,7 +18,7 @@
     {% block robots %} {% endblock robots %}
 
     <!-- Yandex.Metrika counter -->
-    <script type="text/javascript" >
+    <script async type="text/javascript" >
        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
        m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
@@ -36,7 +37,7 @@
     <link media="all" href="https://fonts.googleapis.com/css2?family=Lobster&family=Oswald&display=swap" rel="stylesheet">
 
     <link media="all" rel="stylesheet" type="text/css" href="{% static 'Semantic_UI/semantic.min.css' %}">
-    <link media="all" rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <link media="all" rel="stylesheet" type="text/css" href="{% static 'css/base.min.css' %}">
     {% block cdn %}
 
     {% endblock cdn %}
@@ -145,13 +146,13 @@
 <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
 
 <!--    JQuery formset-->
-<script type="text/javascript" src="{% static 'js/django-formset.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/django-formset.min.js' %}"></script>
 <!--Semantik Ui Js-->
 <script async type="text/javascript" src="{% static 'Semantic_UI/semantic.min.js' %}"></script>
 <!--  custom js -->
 <script type="text/javascript" src="{% static 'js/masonry.pkgd.min.js' %}"></script>
 
-<script async type="text/javascript" src="{% static 'js/base.js' %}"></script>
+<script async type="text/javascript" src="{% static 'js/base.min.js' %}"></script>
 {% block jscdn %}
 
 {% endblock jscdn %}
