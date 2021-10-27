@@ -18,4 +18,9 @@ Disallow: /posts/post_add/
 Disallow: /posts/liked/
 Disallow: /posts/delete/*
 Disallow: /posts/update/*
+
+Sitemap: https://ushefa.ru/sitemap.xml
+
 Host: https://ushefa.ru
+
+
