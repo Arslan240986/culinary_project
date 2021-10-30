@@ -7,8 +7,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="yandex-verification" content="a8c693b16a7975eb" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/static/image/icons_ushefa.png" />
-    <link rel="icon" type="image/png" sizes="120x120" href="/static/image/icons_ushefa.png" />
+
+    <link rel="icon" type="image/png" sizes="32x32 120x120 | any" href="/static/image/icons_ushefa.png" />
+    <link rel="mask-icon" href="/static/image/icons_ushefa.svg" color="#00а0ff">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/image/icon_header60.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/image/icon_header76.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/image/icon_header120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/image/icon_header144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/image/icon_header152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/image/icon_header180.png">
     <title>{% block title %}У-шефа - Лучшие кулинарные рецепты мира{% endblock title %}</title>
     <meta name="keywords" content="рецепты блюд, кулинарные рецепты, кулинария, рецепты, новые рецепты">
     {% block meta_description %}
@@ -145,8 +152,6 @@
 
 <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
 
-<!--    JQuery formset-->
-<script type="text/javascript" src="{% static 'js/django-formset.min.js' %}"></script>
 <!--Semantik Ui Js-->
 <script async type="text/javascript" src="{% static 'Semantic_UI/semantic.min.js' %}"></script>
 <!--  custom js -->
@@ -156,7 +161,7 @@
 {% block jscdn %}
 
 {% endblock jscdn %}
-<script>
+<script async>
     {% block javascript %}
     {% endblock javascript %}
 
