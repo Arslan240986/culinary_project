@@ -72,7 +72,7 @@ $(document).ready(async function () {
                     };
                 },
                 error: function (rs, e) {
-                    console.log('second', rs.responseText);
+                    console.log('error_log', rs.responseText);
                 },
             });
         }
@@ -331,7 +331,6 @@ if (document.contains(document.querySelector('form[name=dish_filter_ajax]'))){
 
         $('.pagination_item').click((e)=>{
             e.preventDefault();
-            console.log($(e.target).attr('href'));
             let params = new URLSearchParams(new FormData(forms_filetr_send_ajax)).toString();
             let page_num= $(e.target).attr('href');
             sendAjaxToPagination(forms_filetr_send_ajax.action, page_num, params)
@@ -381,3 +380,4 @@ $(document).ready(()=>{
         
     };
 })
+
