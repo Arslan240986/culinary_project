@@ -1,11 +1,10 @@
 from django.urls import path
-from django.views.decorators.cache import cache_page
 from . import views
 
 
 app_name = 'culinary_recipe'
 urlpatterns = [
-    path('', cache_page(12000) (views.CategoryViewList.as_view()), name='home'),
+    path('', views.CategoryViewList.as_view(), name='home'),
     path('ajax/', views.get_ajax_response_category, name='get_ajax_response_category'),
     path('dishes/', views.GetItems.as_view(), name='dishes'),
     path('dishes/by_search/', views.Search.as_view(), name='search_dishes'),
