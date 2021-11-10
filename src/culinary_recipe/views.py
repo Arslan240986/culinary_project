@@ -113,7 +113,9 @@ class GetItems(GetAllItemForFilterDish, ListView):
             if 'slug' in self.kwargs:
                 sub_category = SubCategory.objects.get(slug=self.kwargs['slug'])
                 category = Category.objects.get(sub_category=sub_category)
-                context['category'] = f'{category} | {sub_category}'
+                context['category_for_title'] = f'{category} | {sub_category}'
+                context['category_name'] = category
+                context['sub_category_name'] = sub_category
                 form = SearchField()
                 context['search'] = form
                 return context

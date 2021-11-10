@@ -8,6 +8,7 @@
 
 <!-- Bread crumbs -->
 {% block breadcrumbs %}
+<i class="right chevron icon divider black"></i>
 <div class="active section">Добавить рецепт</div>
 {% endblock breadcrumbs %}
 
@@ -556,7 +557,5 @@
 
 {% block jscdn %}
 <!--    JQuery formset-->
-<script async type="text/javascript" src="{% static 'js/django-formset.min.js' %}"></script>
-
 <script async type="text/javascript" src="{% static 'js/add_recipe.min.js' %}"></script>
 {% endblock jscdn %}

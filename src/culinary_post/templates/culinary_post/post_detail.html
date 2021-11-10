@@ -10,10 +10,10 @@
     {% endblock meta_description %}
 
 {% block breadcrumbs %}
+<i class="right chevron icon divider black"></i>
 <a class="section navbar_links_yummy black" href="{% url 'culinary_post:culinary_post_view' %}">Кулинарные посты</a>
 <i class="right chevron icon divider black"></i>
-<a class="section navbar_links_yummy black"
-    href="#">{{post.title}}</a>
+<span class="active section">{{post.title}}</span>
 {% endblock breadcrumbs %}
 
 

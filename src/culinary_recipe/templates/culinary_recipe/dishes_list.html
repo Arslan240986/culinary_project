@@ -9,15 +9,20 @@
     </div>
 {% endblock filter %}
 
-{% block title %}{% if category %}{{ category }}{% else %} Все ретцепты {% endif %}{% endblock title %}
+{% block title %}{% if category_for_title %}{{ category_for_title }}{% else %} Все ретцепты {% endif %}{% endblock title %}
 {% block meta_description %}
 {% endblock meta_description %}
 {% block robots %}
     <meta name="robots" content="noindex">
 {% endblock robots %}
-{% if category %}
+
+{% if category_for_title %}
     {% block breadcrumbs %}
-        <span class="text-muted">{{ category.name }}</span>
+        <i class="right chevron icon divider black"></i>
+        <a class="section navbar_links_yummy black"
+                           href="{{ category_name.get_absolute_url }}">{{ category_name }}</a>
+        <i class="right chevron icon divider black"></i>
+        <span class="active section ">{{ sub_category_name }}</span>
     {% endblock breadcrumbs %}
 {% endif %}
 
