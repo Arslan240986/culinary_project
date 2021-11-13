@@ -799,6 +799,7 @@ textarea {
     background-repeat: no-repeat;
     background-size: contain;
 }
+
 .ui.button.add_post_icon, .ui.button.add_recipe_icon{
     padding: 10px !important;
 }

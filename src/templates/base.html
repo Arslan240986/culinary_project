@@ -3,6 +3,21 @@
 {% load static %}
 {% load meal_tags %}
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ER9QWWWZHD"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ER9QWWWZHD');
+    </script>
+
+    <!--    mail ru domane proof-->
+    <meta name="mailru-domain" content="VxoDTydYgGtp85xl" />
+    <!--    google search console domane proof pleas work-->
+    <meta name="google-site-verification" content="8P7W4EhJuTSXjQstz-APNRDoVJIyuhaekolpPdf_yF4" />s
+
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,26 +38,12 @@
     {% endblock meta_description %}
 
     {% block robots %} {% endblock robots %}
-
-
     <link media="all" rel="stylesheet" type="text/css" href="{% static 'Semantic_UI/semantic.min.css' %}">
     <link media="all" rel="stylesheet" type="text/css" href="{% static 'css/base.min.css' %}">
     {% block cdn %}
 
     {% endblock cdn %}
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ER9QWWWZHD"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-ER9QWWWZHD');
-</script>
-    <!--    mail ru domane proof-->
-    <meta name="mailru-domain" content="VxoDTydYgGtp85xl" />
-<!--    google search console domane proof pleas work-->
-    <meta name="google-site-verification" content="8P7W4EhJuTSXjQstz-APNRDoVJIyuhaekolpPdf_yF4" />
     <style>
 
 @font-face {

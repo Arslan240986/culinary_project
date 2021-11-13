@@ -1,7 +1,6 @@
 
 from PIL import Image
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q, Count
@@ -36,7 +35,7 @@ def watermark_photo(input_image_path,
         base_image.thumbnail((600, 600))
         width, height = base_image.size
     transparent = Image.new('RGB', (width, height), (0,0,0,0))
-    transparent.paste(base_image, (0,0))
+    transparent.paste(base_image, (0, 0))
     transparent.paste(watermark, position, mask=watermark)
     transparent.save(f'{settings.MEDIA_ROOT}/{output_image_path}')
 
