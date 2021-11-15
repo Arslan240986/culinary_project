@@ -32,6 +32,7 @@ class IngredientTitleForm(forms.ModelForm):
 
 
 class StepsForm(forms.ModelForm):
+
     class Meta:
         model = Step
         fields = ('description', 'image')

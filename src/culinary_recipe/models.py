@@ -5,7 +5,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 from ckeditor.fields import RichTextField
 from hitcount.models import HitCountMixin, HitCount
 from django.contrib.contenttypes.fields import GenericRelation
-from .utils import make_slug
+from .utils import make_slug, watermark_photo
 
 import uuid
 
@@ -214,6 +214,10 @@ class Dish(models.Model, HitCountMixin):
             else:
                 to_slug = str(self.user)
         self.slug = to_slug
+        if self.poster:
+            new_name = watermark_photo(self.poster, str(self.poster),
+                                       'static/image/logo_header.png', f'meal/{self.slug[0:30]}/poster', position=(10, 10))
+            self.poster = new_name
         super().save(*args, **kwargs)
 
     def get_total_likes(self):
@@ -316,6 +320,13 @@ class Step(models.Model):
 
     def __str__(self):
         return f'{self.pk} - {self.meal.title}'
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            new_steps_name = watermark_photo(self.image, str(self.image),
+                            'static/image/logo_header.png',f'meal/{self.meal.pk}/steps', position=(10, 10))
+            self.image = new_steps_name
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['id']

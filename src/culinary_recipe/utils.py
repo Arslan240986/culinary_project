@@ -1,9 +1,14 @@
 import uu
+import os
+from io import BytesIO
+from django.core.files import File
+from PIL import Image
+from django.conf import settings
 
 def make_slug(value):
     dictiner = {'д':'d', 'а': 'a', 'г': 'g', 'р': 'r', 'с': 's', 'л': 'l', 'ж': 'zh', 'н': 'n', 'б': 'b', 'и': 'i', 'э': 'e', 'х': 'h',
                 'з':'z', 'т': 't', 'м': 'm', 'у': 'u', 'ф': 'f', 'й': 'y', 'я': 'ya', 'к': 'k', 'п': 'p', 'о': 'o',
-                'е':'ye', 'ё':'yo', 'ч':'ch', 'ш':'sh', 'ы':'y', 'в':'v',  'ц':'s'}
+                'е':'ye', 'ё':'yo', 'ч':'ch', 'ш':'sh', 'ы':'y', 'в':'v',  'ц':'s', 'в':'w'}
     arr = list(value.lower())
     num = 0
     for i in arr:
@@ -18,6 +23,7 @@ def make_slug(value):
     return result
 
 
+
 def getMonth(num):
     month_array = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь',
                    'ноябрь', 'декабрь']
@@ -27,3 +33,24 @@ def getMonth(num):
         return month_array[int(arr[1])-1]
     else:
         return month_array[int(num)-1]
+
+
+def watermark_photo(input_image_path,
+                    output_image_path,
+                    watermark_image_path,
+                    name_path,
+                    position):
+    new_name = output_image_path.split('.')
+    base_image = Image.open(input_image_path)
+    im_io = BytesIO()
+    watermark = Image.open(watermark_image_path)
+    width, height = base_image.size
+    if width > 1200:
+        base_image.thumbnail((1200, 1200))
+        width, height = base_image.size
+    transparent = Image.new('RGB', (width, height), (0,0,0,0))
+    transparent.paste(base_image, (0, 0))
+    transparent.paste(watermark, position, mask=watermark)
+    transparent.save(im_io, 'WEBP', quality=100, lossless=True)
+    new_image = File(im_io, name=input_image_path.name)
+    return new_image

@@ -1,8 +1,8 @@
-
-from PIL import Image
+from io import BytesIO
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.files import File
 from django.db.models import Q, Count
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
@@ -20,24 +20,9 @@ from .models import (Dish, Country, Category,
                      Step, Technology, Occasion, Device, Complexity, Vegeterian)
 from culinary_post.models import CulinaryPost
 from .forms import DishCommentForm, DishForm, InstructionFormSet, IngredientNestedFormSet, SearchField
-from .utils import getMonth
+from .utils import getMonth, watermark_photo
 from contact.models import UserProfile
 
-
-def watermark_photo(input_image_path,
-                    output_image_path,
-                    watermark_image_path,
-                    position):
-    base_image = Image.open(input_image_path)
-    watermark = Image.open(watermark_image_path)
-    width, height = base_image.size
-    if width > 600:
-        base_image.thumbnail((600, 600))
-        width, height = base_image.size
-    transparent = Image.new('RGB', (width, height), (0,0,0,0))
-    transparent.paste(base_image, (0, 0))
-    transparent.paste(watermark, position, mask=watermark)
-    transparent.save(f'{settings.MEDIA_ROOT}/{output_image_path}')
 
 
 class CategoryViewList(ListView):
@@ -361,16 +346,12 @@ class DishCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     def form_valid(self, form, ingredient_title_form, instruction_form):
         user = get_object_or_404(User, id=self.request.user.id)
-        form.instance.author = user
         self.object = form.save()
         ingredient_title_form.instance = self.object
         ingredient_title_form.save()
         instruction_form.instance = self.object
         instruction_form.save()
-        watermark_photo(form.instance.poster, str(form.instance.poster), 'static/image/logo_header.png', position=(10, 10))
-        for steps_image in instruction_form:
-            if steps_image.instance.image:
-                watermark_photo(steps_image.instance.image, str(steps_image.instance.image), 'static/image/logo_header.png', position=(10, 10))
+        form.instance.author = user
         if form.instance.draft:
             return HttpResponseRedirect(user.profile.get_personal_absolute_url())
         messages.success(self.request, 'Спасибо за участие! Ваш рецепт будет добавлен на сайт после прохождения модерации.')
