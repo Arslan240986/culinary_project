@@ -51,6 +51,14 @@ def watermark_photo(input_image_path,
     transparent = Image.new('RGB', (width, height), (0,0,0,0))
     transparent.paste(base_image, (0, 0))
     transparent.paste(watermark, position, mask=watermark)
-    transparent.save(im_io, 'WEBP', quality=100, lossless=True)
-    new_image = File(im_io, name=input_image_path.name)
+    try:
+        os.makedirs(f'{settings.MEDIA_ROOT}/{name_path}')
+    except FileExistsError:
+        # directory already exists
+        pass
+    transparent.save(f'{settings.MEDIA_ROOT}/{name_path}/{new_name[0]}.webp', 'WEBP',)
+    transparent.close()
+    new_one = Image.open(f'{settings.MEDIA_ROOT}/{name_path}/{new_name[0]}.webp')
+    new_one.save(im_io, 'WEBP')
+    new_image = File(im_io, name=f'{new_name[0]}.webp')
     return new_image

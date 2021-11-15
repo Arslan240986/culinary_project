@@ -47,6 +47,13 @@ class Category(models.Model):
     def get_meals(self):
         return self.dish_set.all()[:3]
 
+    def save(self, *args, **kwargs):
+        if self.poster:
+            new_steps_name = watermark_photo(self.poster, str(self.poster),
+                            'static/image/logo_header.png', 'category', position=(10, 10))
+            self.poster = new_steps_name
+        super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
