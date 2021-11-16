@@ -16,8 +16,8 @@
                             <span class="font-s-20 badge badge-secondary pl-10 popup_category" data-content="Все блюда категории {{ category.name }}">{{ category.name }}</span>
                         </a>
                     </h2>
-                    <div class="page_image">
-                        <img loading="lazy" src="{{ category.poster.url }}" alt="{{ category.name }}">
+                    <div class="page_image loading_gif">
+                        <img src="/static/image/1x1.png" data-src="{{ category.poster.url }}" alt="{{ category.name }}">
                     </div>
                     {% if category.sub_category.all %}
                         {% for child in category.sub_category.all %}
@@ -69,8 +69,8 @@
         {% for post in posts %}
             <div class="grid-item_ushefa">
                 <a href="{{ post.get_absolute_url }}" class="ui fluid card">
-                          <div class="page_image">
-                            <img loading="lazy" src="{{ post.image.url }}" alt="{{ post.title }}">
+                          <div class="page_image loading_gif">
+                            <img src="/static/image/2.png" data-src="{{ post.image.url }}" alt="{{ post.title }}">
                           </div>
                           <div class="content">
                               <div class="header grey text_center">
@@ -102,8 +102,8 @@
             {% for popular_meal in popular_meals %}
                 <div class="grid-item_ushefa">
                     <a href="{{popular_meal.get_absolute_url}}" class="ui fluid card">
-                          <div class="page_image">
-                            <img loading="lazy" src="{{ popular_meal.poster.url }}" alt="{{popular_meal.title}}">
+                          <div class="page_image loading_gif">
+                            <img src="/static/image/2.png" data-src="{{ popular_meal.poster.url }}" alt="{{popular_meal.title}}">
                           </div>
                           <div class="content">
                               <div class="header grey">
