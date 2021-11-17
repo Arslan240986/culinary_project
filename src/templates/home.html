@@ -69,8 +69,8 @@
         {% for post in posts %}
             <div class="grid-item_ushefa">
                 <a href="{{ post.get_absolute_url }}" class="ui fluid card">
-                          <div class="page_image loading_gif">
-                            <img src="/static/image/2.png" data-src="{{ post.image.url }}" alt="{{ post.title }}">
+                          <div class="page_image">
+                            <img class="lazyload" data-src="{{ post.image.url }}" alt="{{ post.title }}">
                           </div>
                           <div class="content">
                               <div class="header grey text_center">

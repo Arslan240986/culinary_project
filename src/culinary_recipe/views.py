@@ -346,12 +346,12 @@ class DishCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     def form_valid(self, form, ingredient_title_form, instruction_form):
         user = get_object_or_404(User, id=self.request.user.id)
+        form.instance.author = user
         self.object = form.save()
         ingredient_title_form.instance = self.object
         ingredient_title_form.save()
         instruction_form.instance = self.object
         instruction_form.save()
-        form.instance.author = user
         if form.instance.draft:
             return HttpResponseRedirect(user.profile.get_personal_absolute_url())
         messages.success(self.request, 'Спасибо за участие! Ваш рецепт будет добавлен на сайт после прохождения модерации.')
@@ -407,17 +407,17 @@ class DishUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             base_form.save()
             ingredient_nested_form.save()
             instruction_form.save()
-            if self.request.FILES:
-                if 'poster' in self.request.FILES:
-                    watermark_photo(base_form.instance.poster, str(base_form.instance.poster), 'static/image/logo_header.png',
-                                    position=(10, 10))
-
-                for value, items in self.request.FILES.items():
-                    if 'step' in value:
-                        for steps_image in instruction_form:
-                            if steps_image.instance.image:
-                                watermark_photo(steps_image.instance.image, str(steps_image.instance.image), 'static/image/logo_header.png',
-                                        position=(10, 10))
+            # if self.request.FILES:
+            #     if 'poster' in self.request.FILES:
+            #         watermark_photo(base_form.instance.poster, str(base_form.instance.poster), 'static/image/logo_header.png',
+            #                         position=(10, 10))
+            #
+            #     for value, items in self.request.FILES.items():
+            #         if 'step' in value:
+            #             for steps_image in instruction_form:
+            #                 if steps_image.instance.image:
+            #                     watermark_photo(steps_image.instance.image, str(steps_image.instance.image), 'static/image/logo_header.png',
+            #                             position=(10, 10))
             if base_form.instance.draft:
                 return HttpResponseRedirect(user.profile.get_personal_absolute_url())
             messages.success(self.request, 'Спасибо за участие! Ваш рецепт будет добавлен на сайт после прохождения модерации.')

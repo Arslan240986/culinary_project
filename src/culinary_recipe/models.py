@@ -207,6 +207,7 @@ class Dish(models.Model, HitCountMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.__title = self.title
+        self.__poster = self.poster
 
     def save(self, *args, **kwargs):
         ex = False
@@ -221,7 +222,8 @@ class Dish(models.Model, HitCountMixin):
             else:
                 to_slug = str(self.user)
         self.slug = to_slug
-        if self.poster:
+        if self.poster != self.__poster or self.poster == '':
+            print('aasd', self.poster)
             new_name = watermark_photo(self.poster, str(self.poster),
                                        'static/image/logo_header.png', f'meal/{self.slug[0:30]}/poster', position=(10, 10))
             self.poster = new_name
@@ -328,8 +330,12 @@ class Step(models.Model):
     def __str__(self):
         return f'{self.pk} - {self.meal.title}'
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__image = self.image
+
     def save(self, *args, **kwargs):
-        if self.image:
+        if self.__image != self.image or self.image == '':
             new_steps_name = watermark_photo(self.image, str(self.image),
                             'static/image/logo_header.png',f'meal/{self.meal.pk}/steps', position=(10, 10))
             self.image = new_steps_name
