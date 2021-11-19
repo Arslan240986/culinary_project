@@ -164,6 +164,7 @@ function imageLazyLoad(){
             if(img.dataset.src){
                 lazyImagesPosition.push(img.getBoundingClientRect().top + pageYOffset)
                 lazyScrollCheck()
+                masonryGrid()
             }
         })
     }
