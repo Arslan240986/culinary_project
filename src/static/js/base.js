@@ -173,6 +173,7 @@ function imageLazyLoad(){
     function lazyScroll(){
         if(document.querySelectorAll('img[data-src]').length>0){
             lazyScrollCheck()
+            masonryGrid()
         }
     }
 
