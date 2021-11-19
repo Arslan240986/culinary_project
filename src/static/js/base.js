@@ -173,7 +173,6 @@ function imageLazyLoad(){
     function lazyScroll(){
         if(document.querySelectorAll('img[data-src]').length>0){
             lazyScrollCheck()
-            masonryGrid()
         }
     }
 
@@ -189,7 +188,6 @@ function imageLazyLoad(){
                 lazy_images[imgIndex].removeAttribute('data-src');
                 lazy_images[imgIndex].classList.remove('d_none');
                 lazy_images[imgIndex].parentElement.classList.remove('loading_gif');
-                masonryGrid()
             }
             delete lazyImagesPosition[imgIndex]
             
@@ -296,7 +294,6 @@ if (document.contains(document.querySelector('form[name=dish_filter_ajax]'))){
         div_output.masonry('reloadItems')
         imageLazyLoad()
         setTimeout(()=>{
-            masonryGrid()
             $('.custom_dimmer_loader').remove();
         },1000)
 

@@ -1001,7 +1001,10 @@ textarea {
     height: 10px !important;
 }
 .grid_ushefa{
-    margin: 0 auto !important;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 10px 10px;
 }
 .text_center{
     text-align: center !important;

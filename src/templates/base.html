@@ -20,7 +20,9 @@
     <title>{% block title %}У-шефа - Лучшие кулинарные рецепты мира{% endblock title %}</title>
     <meta name="keywords" content="рецепты блюд, кулинарные рецепты, кулинария, рецепты, новые рецепты">
     {% block meta_description %}
-        <meta name="description" content="Готовите ли вы к праздникам или просто нуждаетесь в отличных идеях на ужин, у нас есть для вас рецепты, советы по приготовлению и многое другое"  itemprop="description">
+    <meta name="description"
+        content="Готовите ли вы к праздникам или просто нуждаетесь в отличных идеях на ужин, у нас есть для вас рецепты, советы по приготовлению и многое другое"
+        itemprop="description">
     {% endblock meta_description %}
 
     {% block robots %} {% endblock robots %}
@@ -31,34 +33,33 @@
     {% endblock cdn %}
 
     <style>
+        @font-face {
+            font-family: 'Lobster';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url(https://fonts.gstatic.com/s/lobster/v23/neILzCirqoswsqX9zoamM4MwWJXNqA.woff2) format('woff2');
+            unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+        }
 
-@font-face {
-  font-family: 'Lobster';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/lobster/v23/neILzCirqoswsqX9zoamM4MwWJXNqA.woff2) format('woff2');
-  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-}
-
-@font-face {
-  font-family: 'Oswald';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/oswald/v40/TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUJiYySUhiCXABTV.woff) format('woff');
-  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
-}
+        @font-face {
+            font-family: 'Oswald';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url(https://fonts.gstatic.com/s/oswald/v40/TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUJiYySUhiCXABTV.woff) format('woff');
+            unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+        }
     </style>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ER9QWWWZHD"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-      gtag('config', 'G-ER9QWWWZHD');
+        gtag('config', 'G-ER9QWWWZHD');
     </script>
     <!--    mail ru domane proof-->
     <meta name="mailru-domain" content="VxoDTydYgGtp85xl" />
@@ -67,122 +68,128 @@
 </head>
 
 <body class="body_yummy">
-{% include 'includes/header.html' %}
-<div class="ui small center basic test modal ushefa_modal center aligned grid">
+    {% include 'includes/header.html' %}
+    <div class="ui small center basic test modal ushefa_modal center aligned grid">
 
-    <i class="big white close icon"></i>
-    <div class="ui header over-flow">
-        <hr>
-        <div class="item"><a class="p-2 navbar_links_yummy font-oswald"
-                             href="{% url 'culinary_post:culinary_post_view' %}">Кулинарные посты</a></div>
-        <hr>
-        {% get_categories as categories_modal %}
-        <div class="ui inverted accordion">
-            {% for category in categories_modal %}
-            {% if category.sub_category.all %}
-            <div class="title">
-                <i class="dropdown icon"></i>
-                <a href="{{ category.get_absolute_url }}"
-                   class="navbar_links_yummy font-oswald font-oswald">
+        <i class="big white close icon"></i>
+        <div class="ui header over-flow">
+            <hr>
+            <div class="item"><a class="p-2 navbar_links_yummy font-oswald"
+                    href="{% url 'culinary_post:culinary_post_view' %}">Кулинарные посты</a></div>
+            <hr>
+            {% get_categories as categories_modal %}
+            <div class="ui inverted accordion">
+                {% for category in categories_modal %}
+                {% if category.sub_category.all %}
+                <div class="title">
+                    <i class="dropdown icon"></i>
+                    <a href="{{ category.get_absolute_url }}" class="navbar_links_yummy font-oswald font-oswald">
+                        {{ category.name }}
+                    </a>
+                </div>
+
+                <div class="middle aligned content" id="{{ category.slug }}">
+                    {% for sub_category in category.sub_category.all %}
+                    <p class="accordion transition visible" style="display: block !important;">
+                        <a href="{{ sub_category.get_absolute_url }}" class="navbar_links_yummy font-oswald pl-20">
+                            {{sub_category.name}}
+                        </a>
+                    </p>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <a href="{{ category.get_absolute_url }}" class="navbar_links_yummy font-oswald pl-10">
                     {{ category.name }}
                 </a>
-            </div>
-
-            <div class="middle aligned content" id="{{ category.slug }}">
-                {% for sub_category in category.sub_category.all %}
-                <p class="accordion transition visible" style="display: block !important;">
-                    <a href="{{ sub_category.get_absolute_url }}"
-                       class="navbar_links_yummy font-oswald pl-20">
-                        {{sub_category.name}}
-                    </a>
-                </p>
+                {% endif %}
                 {% endfor %}
             </div>
-            {% else %}
-            <a href="{{ category.get_absolute_url }}"
-               class="navbar_links_yummy font-oswald pl-10">
-                {{ category.name }}
-            </a>
-            {% endif %}
-            {% endfor %}
         </div>
     </div>
-</div>
 
-<!-- Content side -->
-<div class=" ui bread " style="">
-    <div class="custom_container">
-        {% block steps_breadcrumbs %}
-                <div class="mt-2">
-                    <div class="ui breadcrumb font-oswald black p-10">
+    <!-- Content side -->
+    <div class=" ui bread " style="">
+        <div class="custom_container">
+            {% block steps_breadcrumbs %}
+            <div class="mt-2">
+                <div class="ui breadcrumb font-oswald black p-10">
 
-                        <a class="section navbar_links_yummy black"
-                           href="{% url 'culinary_recipe:home' %}">Главное</a>
-                        <i class="right chevron icon divider black"></i>
-                        <a class="section navbar_links_yummy black" href="{% url 'culinary_recipe:dishes' %}">Все
-                            категории</a>
+                    <a class="section navbar_links_yummy black" href="{% url 'culinary_recipe:home' %}">Главное</a>
+                    <i class="right chevron icon divider black"></i>
+                    <a class="section navbar_links_yummy black" href="{% url 'culinary_recipe:dishes' %}">Все
+                        категории</a>
 
-                        {% block breadcrumbs %}
-                        {% endblock breadcrumbs %}
-                    </div>
+                    {% block breadcrumbs %}
+                    {% endblock breadcrumbs %}
                 </div>
-                <hr class="mb-10">
+            </div>
+            <hr class="mb-10">
             {% endblock steps_breadcrumbs %}
 
-    {% block filter %}
+            {% block filter %}
 
-        {% endblock filter %}
-        <div class="ui stackable grid filter_element_container">
+            {% endblock filter %}
+            <div class="ui stackable grid filter_element_container">
 
-            <!-- /.blog-sidebar Каталог рецептов -->
-            {% block full %}
-            <div class="twelve wide fluid column content_side_yummy mx-20">
-            {% endblock full %}
-                <!-- Bread crumbs -->
+                <!-- /.blog-sidebar Каталог рецептов -->
+                {% block full %}
+                <div class="twelve wide fluid column content_side_yummy mx-20">
+                    {% endblock full %}
+                    <!-- Bread crumbs -->
 
-                {% block content %}
-                <hr>
-                {% endblock %}
+                    {% block content %}
+                    <hr>
+                    {% endblock %}
 
-            </div>
-            {% block sidbar %}
+                </div>
+                {% block sidbar %}
                 {% include 'includes/side_bar.html' %}
-            {% endblock sidbar %}
+                {% endblock sidbar %}
+            </div>
+            {% block paginator %}
+            {% endblock paginator %}
+
+            {% block popularity %}
+            {% endblock popularity %}
         </div>
-        {% block paginator %}
-        {% endblock paginator %}
-
-        {% block popularity %}
-        {% endblock popularity %}
     </div>
-</div>
 
-{% include 'includes/footer.html' %}
+    {% include 'includes/footer.html' %}
 
+    <script type="text/javascript" src="{% static 'js/lazysizes.min.js' %}"></script>
+    
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
 
-<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jqueryPassiveFix.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jqueryPassiveFix.min.js' %}"></script>
 
-<!--Semantik Ui Js-->
-<script async type="text/javascript" src="{% static 'Semantic_UI/semantic.min.js' %}"></script>
-<!--  custom js -->
-<script type="text/javascript" src="{% static 'js/masonry.pkgd.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/imagesLoaded.pkgd.min.js' %}"></script>
 
-<script async type="text/javascript" src="{% static 'js/base.min.js' %}"></script>
-{% block jscdn %}
+    
+    <!--Semantik Ui Js-->
+    <script async type="text/javascript" src="{% static 'Semantic_UI/semantic.min.js' %}"></script>
+    <!--  custom js -->
+    <script type="text/javascript" src="{% static 'js/masonry.pkgd.min.js' %}"></script>
 
-{% endblock jscdn %}
-<script async>
-    {% block javascript %}
-    {% endblock javascript %}
+    <script async type="text/javascript" src="{% static 'js/base.min.js' %}"></script>
 
-    $('.grid_ushefa').masonry({
-        fitWidth: true,
-        gutter: 10,
-        columnWidth: 250,
-        itemSelector: '.grid-item_ushefa',
-    });
-console.log(document.cookie)
-</script>
+    {% block jscdn %}
+
+    {% endblock jscdn %}
+    <script>
+        {% block javascript %}
+        {% endblock javascript %}
+        var $grid = $('.grid_ushefa').masonry({
+            fitHeight: true,
+            fitWidth: true,
+            gutter: 10,
+            columnWidth: 10,
+            itemSelector: '.grid-item_ushefa',
+        });
+        $grid.imagesLoaded().progress(function () {
+            $grid.masonry('layout');
+            console.log('masonry')
+        })
+    </script>
 </body>
+
 </html>
