@@ -185,9 +185,16 @@
             columnWidth: 10,
             itemSelector: '.grid-item_ushefa',
         });
-        $grid.imagesLoaded().progress(function () {
+        $grid.imagesLoaded()
+        .always(function () {
             $grid.masonry('layout');
         })
+        .done(function () {
+            $grid.masonry('layout');
+        })
+        .fail(function () {
+            $grid.masonry('layout');
+        });
     </script>
 </body>
 
