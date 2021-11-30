@@ -17,7 +17,7 @@
                         </a>
                     </h2>
                     <div class="page_image loading_gif">
-                        <img src="/static/image/1x1.png" data-src="{{ category.poster.url }}" alt="{{ category.name }}">
+                        <img src="/static/image/1x1.png" data-src="{{ category.poster.url }}" alt="{{ category.name }}" width="250px">
                     </div>
                     {% if category.sub_category.all %}
                         {% for child in category.sub_category.all %}
