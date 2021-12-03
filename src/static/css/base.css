@@ -1001,10 +1001,10 @@ textarea {
     height: 10px !important;
 }
 .grid_ushefa{
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    gap: 10px 10px;
+    display: flex !important;
+    flex-flow: row wrap !important;
+    justify-content: center !important;
+    gap: 10px 10px !important;
 }
 .text_center{
     text-align: center !important;
@@ -1017,7 +1017,7 @@ textarea {
 }
 .grid-item_ushefa, .grid-item_ushefa_filtered{
     width: 250px !important;
-    margin-bottom: 10px !important;
+    margin: 0 auto 10px auto !important;
 }
 .side_bar_search_content{
     margin-top: 25px !important;

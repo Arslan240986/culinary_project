@@ -146,10 +146,8 @@ function closeSearch(e) {
 // masonry grid layout
 function masonryGrid(){
     $('.grid_ushefa').masonry({
-        fitHeight:true,
         fitWidth: true,
         gutter: 10,
-        columnWidth: 250,
         itemSelector: '.grid-item_ushefa',
     });
 }
