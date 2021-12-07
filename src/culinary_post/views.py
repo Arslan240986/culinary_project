@@ -43,11 +43,8 @@ def posts_add(request):
 
 def post__list_view(request):
     qs = CulinaryPost.objects.all().filter(moderator=True)
-    profile = get_object_or_404(UserProfile, user=request.user)
-
     context = {
         'qs': qs,
-        'profile': profile,
     }
     return render(request, 'culinary_post/culinary_posts.html', context)
 
