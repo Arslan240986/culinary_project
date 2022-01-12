@@ -13,11 +13,11 @@ $(document).ready(function () {
     });
     //        Like button
     if ($(window).width() < 768) {
-        $('.ui.thumbs').popup({
+        $('.ui.heart').popup({
             on    : 'click'
         });
     } else {
-        $('.ui.thumbs').popup()
+        $('.ui.heart').popup()
     }
     $('#meal_like_button').on('click', function (event) {
         event.preventDefault();
@@ -34,14 +34,13 @@ $(document).ready(function () {
 
                 } else {
                     h = $('.meal_total_likes').html(response['form'])
+                    console.log(h);
+                    console.log(response['is_liked']);
                     if (response['is_liked'] == 'Like') {
-                        $('#meal_like_button').removeClass('up')
-                        $('#meal_like_button').addClass('down')
+                        $('#meal_like_button').removeClass('outline')
                         $('#meal_like_button').attr('data-content', 'Передумал')
-                        console.log()
                     } else if (response['is_liked'] == 'Unlike') {
-                        $('#meal_like_button').removeClass('down')
-                        $('#meal_like_button').addClass('up')
+                        $('#meal_like_button').addClass('outline')
                         $('#meal_like_button').attr('data-content', 'Нравится')
                     }
                 }

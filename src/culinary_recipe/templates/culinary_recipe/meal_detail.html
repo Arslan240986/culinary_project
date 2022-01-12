@@ -56,8 +56,8 @@
     <div class="ui equal stackable width grid p-10">
         <div class="equal width row">
             <div class="column p-0">
-                <div class="ui grid p-10">
-                    <div class="inline column row">
+                <div class="ui stackable two grid p-10">
+                    <div class="nine wide column">
                         {% get_hit_count for meal as count %}
                         <i class="ui eye big yellow icon main_point" aria-hidden="true"></i><small
                             class="mr-5 font-s-20 c-black">{{count}}</small>
@@ -67,7 +67,7 @@
                                 {{ meal.get_total_comments}}</small>
                         </a>
 
-                        <form action="{% url 'culinary_recipe:likes_meal' %}" method="post" id="like_form" name="like">
+                        <form style="display: inline" action="{% url 'culinary_recipe:likes_meal' %}" method="post" id="like_form" name="like">
                             {% csrf_token %}
                             <i id="meal_like_button" datatype="{{ meal.id }}"
                                {% if user.is_authenticated %}
@@ -79,10 +79,12 @@
                                {% else %}
                                     data-content="Вы не вошли"
                                {% endif %}
-                                class='ui thumbs{% if meal.is_liked %} down {% else %} up {% endif %}outline big yellow icon main_point icon'></i>
+                                class='ui heart{% if not meal.is_liked %} outline {% endif %} big yellow icon main_point icon'></i>
                             <span class="meal_total_likes mr-5 font-s-20 c-black">{{ meal.get_total_likes }}</span>
                         </form>
+
                     </div>
+<!--                    <div class="right aligned column"><i class="vk big icon"></i></div>-->
                 </div>
             </div>
             <!--    add to culinary book forms        -->
@@ -369,5 +371,5 @@
 
 {% block jscdn %}
     <!--Like and add dish to culinary book action Js cdn-->
-    <script type="text/javascript" src="{% static 'js/meal_detail.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/meal_detail.js' %}"></script>
 {% endblock jscdn %}
