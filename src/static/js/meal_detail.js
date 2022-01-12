@@ -1,3 +1,4 @@
+"use strict"
 $(document).ready(function () {
     // <!--Comments show and hide js-->
     let display = false
@@ -12,13 +13,13 @@ $(document).ready(function () {
         }
     });
     //        Like button
-    if ($(window).width() < 768) {
-        $('.ui.heart').popup({
-            on    : 'click'
-        });
-    } else {
-        $('.ui.heart').popup()
-    }
+    // if ($(window).width() < 768) {
+    //     $('.ui.heart').popup({
+    //         on    : 'click'
+    //     });
+    // } else {
+    //     $('.ui.heart').popup()
+    // }
     $('#meal_like_button').on('click', function (event) {
         event.preventDefault();
         var pk = $(this).attr('datatype')
@@ -33,9 +34,7 @@ $(document).ready(function () {
                 if(response['user_not_login']){
 
                 } else {
-                    h = $('.meal_total_likes').html(response['form'])
-                    console.log(h);
-                    console.log(response['is_liked']);
+                    $('.meal_total_likes').html(response['form'])
                     if (response['is_liked'] == 'Like') {
                         $('#meal_like_button').removeClass('outline')
                         $('#meal_like_button').attr('data-content', 'Передумал')

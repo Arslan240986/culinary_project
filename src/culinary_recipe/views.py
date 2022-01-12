@@ -240,15 +240,22 @@ class MealDetailView(DetailView):
                     first_num += 1
                     ne = list(reversed(comments))[:first_num]
                     new_comments = list(reversed(ne))
+        user_liked = False
         if request.user.is_authenticated:
             user = get_object_or_404(User, id=request.user.id)
             boolean = user.profile.dishes.filter(id=meal.id).exists()
+            if request.user in meal.likes.all():
+                user_liked = True
+            else:
+                user_liked = False
             if boolean:
                 meal.dish_added = True
                 meal.save()
             else:
                 meal.dish_added = False
+                meal.save()
         context = {'meal': meal,
+                   'user_liked': user_liked,
                    'form': form,
                    'pag_comments': new_comments,
                    'similar_meals': similar_meals,
@@ -279,7 +286,6 @@ class AddCommentToDish(View):
 
 
 def like_unlike_post(request):
-
     try:
         user = request.user.id
         if request.method == 'POST':
@@ -309,7 +315,6 @@ def like_unlike_post(request):
             }
             return JsonResponse(data, safe=False)
     except:
-        print('exept  ', request.user.id)
         data = {
             'user_not_login': True,
         }

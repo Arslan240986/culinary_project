@@ -267,8 +267,8 @@ LIKE_CHOICES = (
 
 
 class DishLike(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE,)
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE,)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, )
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, )
     value = models.CharField(max_length=12, choices=LIKE_CHOICES)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

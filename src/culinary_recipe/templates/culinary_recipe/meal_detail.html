@@ -75,11 +75,11 @@
                                         data-content="Передумал"
                                     {% else %}
                                         data-content="Нравится"
-                                    {% endif %}}
+                                    {% endif %}
                                {% else %}
                                     data-content="Вы не вошли"
                                {% endif %}
-                                class='ui heart{% if not meal.is_liked %} outline {% endif %} big yellow icon main_point icon'></i>
+                                class='ui heart{% if not user_liked %} outline {% endif %} big yellow icon main_point icon'></i>
                             <span class="meal_total_likes mr-5 font-s-20 c-black">{{ meal.get_total_likes }}</span>
                         </form>
 

@@ -129,7 +129,7 @@ $(document).ready(async function () {
     $('.big.white.bars.icon').click(() => {
         $('.ui.basic.modal.ushefa_modal').modal('show');
     })
-    // links to children achours on personal dropdown lists
+    // links to children anchours on personal dropdown lists
     $('.centered_custom').click((e)=>{
         $(e.target).children('.dropdown').click()
     })    

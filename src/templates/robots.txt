@@ -2,7 +2,6 @@ User-Agent: *
 Disallow: /ushefa_admin/
 Disallow: /*s?q=*
 Disallow: /accounts/*
-Disallow: /profile/
 Disallow: /private/chat/
 Disallow: /ajax/
 Disallow: /dishes/by_search/
