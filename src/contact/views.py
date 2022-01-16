@@ -103,26 +103,24 @@ def add_dishes(request):
     id = request.POST.get('id')
     meal = get_object_or_404(Dish, id=id)
     profile = get_object_or_404(UserProfile, user=request.user)
-    if id in [i.id for i in profile.dishes.all()]:
-        meal.dish_added = True
-        meal.save()
     if request.method == 'POST':
-        context = {
-            'dish_added': meal.dish_added,
-        }
-        if meal.dish_added :
-            meal.dish_added = False
-            profile.dishes.remove(id)
+        if meal not in profile.dishes.all():
+            print(id)
+            print(meal)
+            dish_added = False
+            profile.dishes.add(meal)
             profile.save()
-            meal.save()
-            context['count'] = request.user.profile.get_total_book()
+            count = request.user.profile.get_total_book()
         else:
-            meal.dish_added = True
-            profile.dishes.add(id)
+            dish_added = True
+            profile.dishes.remove(meal)
             profile.save()
-            meal.save()
-            context['count'] = request.user.profile.get_total_book()
+            count = request.user.profile.get_total_book()
         if request.is_ajax():
+            context = {
+                'dish_added': dish_added,
+                'count': count,
+            }
             return JsonResponse(context)
 
 
@@ -133,6 +131,7 @@ def user_dish_book(request, slug):
     if request.method == "GET":
         if request.user == profile.user:
             dishes = profile.dishes.all()
+
             return render(request, 'contact/dish_book.html', {'dishes': dishes})
         else:
             context = {

@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import post_save, pre_delete, pre_save
 from django.dispatch import receiver
 from .models import UserProfile, Relationship
 from django.contrib.auth.models import User
@@ -11,6 +11,9 @@ from .tasks import send_success_subscribe, notice_about_new_messages
 
 @receiver(post_save, sender=Dish)
 def send_email_that_pass_moderator_culinary_dish(sender, instance, **kwargs):
+    print('====>:  ', sender)
+    print('====>:  ')
+    print('moderator:  ', instance.moderator)
     if instance.moderator:
         author = instance.author.id
         title = instance.title

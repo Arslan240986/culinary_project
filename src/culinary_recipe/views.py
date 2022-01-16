@@ -202,7 +202,7 @@ class MealDetailView(DetailView):
     def get(self, request, *args, **kwargs):
         meal = get_object_or_404(Dish, slug=self.kwargs.get('slug'), id=self.kwargs.get('pk'))
         hit_count = HitCount.objects.get_for_object(meal)
-        hit_count_response = HitCountMixin.hit_count(request, hit_count)
+        HitCountMixin.hit_count(request, hit_count)
         meal_ings_list = []
         for ingredient in meal.ingredienttitle_set.all():
             meal_ings_list += set(ingredient.ingredientlist_set.all().values_list('name', flat=True))
@@ -241,21 +241,24 @@ class MealDetailView(DetailView):
                     ne = list(reversed(comments))[:first_num]
                     new_comments = list(reversed(ne))
         user_liked = False
+        dish_added = False
         if request.user.is_authenticated:
             user = get_object_or_404(User, id=request.user.id)
-            boolean = user.profile.dishes.filter(id=meal.id).exists()
-            if request.user in meal.likes.all():
-                user_liked = True
-            else:
+            try:
+                like_obj = get_object_or_404(DishLike, user=user, dish=meal)
+                if like_obj.value == "Like":
+                    user_liked = True
+                else:
+                    user_liked = False
+            except Exception:
                 user_liked = False
-            if boolean:
-                meal.dish_added = True
-                meal.save()
+            if user.profile.dishes.filter(id=meal.id).exists():
+                dish_added = True
             else:
-                meal.dish_added = False
-                meal.save()
+                dish_added = False
         context = {'meal': meal,
                    'user_liked': user_liked,
+                   'dish_added': dish_added,
                    'form': form,
                    'pag_comments': new_comments,
                    'similar_meals': similar_meals,
@@ -292,12 +295,6 @@ def like_unlike_post(request):
             dish_id = request.POST.get('dish_id')
             dish_obj = get_object_or_404(Dish, id=dish_id)
             user = get_object_or_404(User, id=user)
-            if user in dish_obj.likes.all():
-                dish_obj.likes.remove(user)
-                dish_obj.is_liked = False
-            else:
-                dish_obj.likes.add(user)
-                dish_obj.is_liked = True
             like, created = DishLike.objects.get_or_create(user=user, dish_id=dish_id)
             if not created:
                 if like.value == 'Unlike':
@@ -306,17 +303,16 @@ def like_unlike_post(request):
                     like.value = 'Unlike'
             else:
                 like.value = 'Like'
-            dish_obj.save()
             like.save()
             data = {
                 'is_liked': like.value,
-                'form': dish_obj.likes.all().count(),
-                'user_not_login': False,
+                'form': dish_obj.get_total_likes(),
+                'user_login': True,
             }
             return JsonResponse(data, safe=False)
     except:
         data = {
-            'user_not_login': True,
+            'user_login': False,
         }
         return JsonResponse(data, safe=False)
     return redirect('/')

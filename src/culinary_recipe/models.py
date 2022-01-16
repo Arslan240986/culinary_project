@@ -6,7 +6,7 @@ from ckeditor.fields import RichTextField
 from hitcount.models import HitCountMixin, HitCount
 from django.contrib.contenttypes.fields import GenericRelation
 from .utils import make_slug, watermark_photo
-
+# from contact.tasks import send_success_subscribe
 import uuid
 
 
@@ -158,6 +158,8 @@ def get_poster_image_filepath(self, fileName):
 def get_steps_image_filepath(self, fileName):
     return f'meal/{self.meal.pk}/steps/{fileName}'
 
+from django.dispatch import Signal
+
 
 class Dish(models.Model, HitCountMixin):
     """Блюдо"""
@@ -223,14 +225,13 @@ class Dish(models.Model, HitCountMixin):
                 to_slug = str(self.user)
         self.slug = to_slug
         if self.poster != self.__poster or self.poster == '':
-            print('aasd', self.poster)
             new_name = watermark_photo(self.poster, str(self.poster),
                                        'static/image/logo_header.png', f'meal/{self.slug[0:30]}/poster', position=(10, 10))
             self.poster = new_name
         super().save(*args, **kwargs)
 
     def get_total_likes(self):
-        return self.likes.count()
+        return self.dish_like.filter(value="Like").count()
 
     def get_absolute_url(self):
         return reverse('culinary_recipe:detail_view', args=[self.slug, self.pk])
@@ -238,16 +239,8 @@ class Dish(models.Model, HitCountMixin):
     def get_update_absolute_url(self):
         return reverse('culinary_recipe:update_meal', args=[self.slug])
 
-    # def get_update_try_absolute_url(self):
-    #     return reverse('culinary_recipe:update_try_meal', args=[self.slug])
-
     def get_delete_absolute_url(self):
         return reverse('culinary_recipe:delete_meal', args=[self.pk])
-
-    def get_ingredients(self, slug):
-        # ingredients = [x for x in self.ingredienttitle.ingredientlist_set.all()]
-        # if slug in ingredients:
-        return self
 
     def get_comments(self):
         return self.comments.all()
@@ -268,7 +261,7 @@ LIKE_CHOICES = (
 
 class DishLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, )
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, )
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name='dish_like')
     value = models.CharField(max_length=12, choices=LIKE_CHOICES)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

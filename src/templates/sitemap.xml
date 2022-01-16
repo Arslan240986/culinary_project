@@ -1545,4 +1545,22 @@
        <changefreq>daily</changefreq>
        <priority>0.8000</priority>
   </url>
+  <url>
+       <loc>https://ushefa.ru/detail/wyegyetarianskiy-pirog-w-skoworodye-fe43a529/236</loc>
+       <lastmod>2022-01-16T17:14:16+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://ushefa.ru/detail/sushi-s-tunsom-futomaki-e7818bb9/237</loc>
+       <lastmod>2022-01-16T17:14:16+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://ushefa.ru/detail/pasta-alla-norma-9f6d29d3/238</loc>
+       <lastmod>2022-01-16T17:14:16+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>0.8000</priority>
+  </url>
 </urlset>

@@ -31,9 +31,7 @@ $(document).ready(function () {
             data: { 'dish_id': pk, 'csrfmiddlewaretoken': csrf },
             dataType: 'json',
             success: function (response) {
-                if(response['user_not_login']){
-
-                } else {
+                if (response['user_login']) {
                     $('.meal_total_likes').html(response['form'])
                     if (response['is_liked'] == 'Like') {
                         $('#meal_like_button').removeClass('outline')
@@ -49,7 +47,7 @@ $(document).ready(function () {
             },
         });
     });
-    
+
     //        Add recipe to the culinary_book
     $(document).on('click', '.add_dishes', function (event) {
         event.preventDefault()
@@ -80,7 +78,7 @@ $(document).ready(function () {
     });
 
     // adding comment
-    $('.comment_button').click(function(e){
+    $('.comment_button').click(function (e) {
         e.preventDefault();
         const url = $('.formReview').attr('action');
         let csrf = $('input[name=csrfmiddlewaretoken]').val();
@@ -88,13 +86,13 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: url,
-            data: {text, 'csrfmiddlewaretoken': csrf },
+            data: { text, 'csrfmiddlewaretoken': csrf },
             dataType: 'json',
-            success: function(response){
-                if (document.contains(document.querySelector('.ui.positive.message'))){
+            success: function (response) {
+                if (document.contains(document.querySelector('.ui.positive.message'))) {
                     document.querySelector('.ui.positive.message').remove()
                 }
-                if (response.status){
+                if (response.status) {
                     $('.formReview').before(`<div class="ui positive message">
                         <i class="close icon"></i>
                         <div class="header">
@@ -103,14 +101,14 @@ $(document).ready(function () {
                         <p>Ваш комментарий принят после прохождения модерации будет добавлен на сайт</p>
                     </div>`)
                     // <!--message close-->
-                    $('.message .close').on('click', function() {
+                    $('.message .close').on('click', function () {
                         $(this).closest('.message').transition('fade');
                     });
                 }
-                    // <!-- this is clear textarea after saving comment-->
+                // <!-- this is clear textarea after saving comment-->
                 $('textarea[id=id_text]').val('');
             },
-            error: function(rs, e){
+            error: function (rs, e) {
                 console.log(rs.responseText);
             },
         });
@@ -164,14 +162,14 @@ function addComment(id) {
         });
     });
 }
-function removeCommentForm(){
+function removeCommentForm() {
     document.getElementById('replay_form').remove()
 }
 
 // Showing more comment from data when user clicks open more 
 var global_val_for_visibility_msg = $('.custom_comment').length
-$(document).ready( () => {
-    $('.get_another_number').click( (e) => {
+$(document).ready(() => {
+    $('.get_another_number').click((e) => {
         const url = $(e.target).attr('data-href-template')
         global_val_for_visibility_msg += 5
         $.ajax({
@@ -199,8 +197,8 @@ $(document).ready( () => {
                                                             <a class="ui inverted green mini button" onclick="addComment(${post.id})">Ответить</a>
                                                         </div>
                                                     </div> `
-                                                                            
-                        if (post.level == 2){
+
+                        if (post.level == 2) {
                             var content_div_element_last = `<div class="content">
                                                         <a class="author">${post.user_name}</a>
                                                         <div class="metadata">
@@ -215,30 +213,30 @@ $(document).ready( () => {
                             custom_comment_div.innerHTML = avatar_a_element
                             custom_comment_div.innerHTML += content_div_element_last
                             tempo_div_level_2[post.id] = custom_comment_div
-                        }else if(post.level == 1){
+                        } else if (post.level == 1) {
                             var custom_comment_div = document.createElement('div')
                             custom_comment_div.setAttribute('class', 'comment custom_comment')
                             custom_comment_div.innerHTML = avatar_a_element
                             custom_comment_div.innerHTML += content_div_element
-                            if (tempo_div_level_2){
+                            if (tempo_div_level_2) {
                                 var comments_div = document.createElement('div')
                                 comments_div.setAttribute('class', 'comments')
-                                for (var elem in tempo_div_level_2){
+                                for (var elem in tempo_div_level_2) {
                                     comments_div.append(tempo_div_level_2[elem])
                                 }
                                 custom_comment_div.append(comments_div)
                             }
                             tempo_div_level_1[post.id] = custom_comment_div
                             tempo_div_level_2 = {}
-                        }else if(post.level == 0){
+                        } else if (post.level == 0) {
                             var custom_comment_div = document.createElement('div')
                             custom_comment_div.setAttribute('class', 'comment custom_comment')
                             custom_comment_div.innerHTML = avatar_a_element
                             custom_comment_div.innerHTML += content_div_element
-                            if (tempo_div_level_1){
+                            if (tempo_div_level_1) {
                                 var comments_div = document.createElement('div')
                                 comments_div.setAttribute('class', 'comments')
-                                for (var elem in tempo_div_level_1){
+                                for (var elem in tempo_div_level_1) {
                                     comments_div.append(tempo_div_level_1[elem])
                                 }
                                 custom_comment_div.append(comments_div)
@@ -247,11 +245,11 @@ $(document).ready( () => {
                             $('.comment-box').scrollTop($('.custom_comment').first().prop('scrollHeight'))
                             $('.comment.custom_comment').first().before(custom_comment_div)
                         }
-                        
+
                     });
-                    
-                    
-                    
+
+
+
                     if (some.load_more['load_more']) {
                         $('.get_another_number').removeClass('d_none')
                     }

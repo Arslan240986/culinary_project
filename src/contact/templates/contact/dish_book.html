@@ -36,11 +36,10 @@
                 </td>
                 <td>
                     <form class="remove_dishes m-4" action="{% url 'contact:add_dishes_to_book' %}" method="post"
-                        name="add_dishes_to_book" id="add_dishes_to_book">
+                        name="add_dishes_to_book" id="add_dishes_to_book" data-content="{{ meal.id }}">
                         {% csrf_token %}
-                        <input type="hidden" class="meal_id" value="{{ meal.id }}">
                         <input type="submit" class="add_dishes subscribe_form_btn subscribe_link font-oswald result"
-                            value="{% if meal.dish_added %} удалить из кулинарной книги{% else %}в мою кулинарную книгу{% endif %}">
+                            value="удалить из кулинарной книги">
                     </form>
                 </td>
             </tr>
@@ -59,26 +58,26 @@
     {% endblock side %}
 </div>
 {% block javascript %}
-$(document).ready(function(){
-$(document).on('click', '.remove_dishes', function(event){
-event.preventDefault()
-var pk = $('.meal_id').val()
-const url = $('.remove_dishes').attr('action')
-let csrf = $('input[name=csrfmiddlewaretoken]').val()
-console.log(pk, url, csrf)
-$.ajax({
-type: 'POST',
-url: url,
-data: {'id': pk, 'csrfmiddlewaretoken': csrf },
-dataType: 'json',
-success: function(response){
-$('.dish_book_count').html(response['count'])
-},
-error: function(rs, e){
-console.log('second', rs.responseText);
-},
-});
-$(this).parents('tr').remove()
-});
+$(document).ready(function () {
+    $(document).on('click', '.remove_dishes', function (event) {
+        event.preventDefault()
+        var pk = $(this).attr('data-content')
+        const url = $('.remove_dishes').attr('action')
+        let csrf = $('input[name=csrfmiddlewaretoken]').val()
+        console.log(pk, url, csrf)
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { 'id': pk, 'csrfmiddlewaretoken': csrf },
+            dataType: 'json',
+            success: function (response) {
+                $('.dish_book_count').html(response['count'])
+            },
+            error: function (rs, e) {
+                console.log('second', rs.responseText);
+            },
+        });
+        $(this).parents('tr').remove()
+    });
 });
 {% endblock javascript %}
