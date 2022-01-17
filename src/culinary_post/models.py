@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.urls import reverse
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
-
+from culinary_recipe.utils import watermark_photo
 
 def validate_max_len(val):
     if len(val) < 10:
@@ -26,6 +26,20 @@ class CulinaryPost(models.Model):
 
     def __str__(self):
         return str(self.title)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__image = self.image
+
+    def save(self, *args, **kwargs):
+        if self.image != self.__image or self.image == '':
+            print('after', self.__image)
+            new_name = watermark_photo(self.image, str(self.image),
+                                       'static/image/logo_header.png', 'culinary_post_image', position=(10, 10))
+            self.image = new_name
+        super().save(*args, **kwargs)
+
+    #  watermark_photo(instance.image, str(instance.image), 'static/image/logo_header.png', 'posts', position=(10, 10))
 
     def get_absolute_url(self):
         return reverse('culinary_post:culinary_post_detail_view', args=[self.pk])

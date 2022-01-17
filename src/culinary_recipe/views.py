@@ -20,7 +20,7 @@ from .models import (Dish, Country, Category,
                      Step, Technology, Occasion, Device, Complexity, Vegeterian)
 from culinary_post.models import CulinaryPost
 from .forms import DishCommentForm, DishForm, InstructionFormSet, IngredientNestedFormSet, SearchField
-from .utils import getMonth, watermark_photo
+from .utils import getMonth
 from contact.models import UserProfile
 
 

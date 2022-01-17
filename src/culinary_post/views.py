@@ -14,8 +14,7 @@ from hitcount.views import HitCountDetailView, HitCountMixin
 
 from .models import CulinaryPost, PostLike
 from .forms import CulinaryPostModelForm, PostCommentModelForm
-from culinary_recipe.utils import getMonth
-from culinary_recipe.views import watermark_photo
+from culinary_recipe.utils import getMonth, watermark_photo
 
 
 @login_required
@@ -29,7 +28,6 @@ def posts_add(request):
             instance = p_form.save(commit=False)
             instance.author = profile
             instance.save()
-            watermark_photo(instance.image, str(instance.image), 'static/image/logo_header.png', position=(10, 10))
             messages.success(request, 'Спасибо за участие! Ваш пост будет добавлен на сайт после прохождения модерации.')
             return HttpResponseRedirect(instance.get_absolute_url())
         else:
@@ -183,15 +181,9 @@ class CulinaryPostUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         profile = get_object_or_404(UserProfile, user=self.request.user)
-        context = self.get_context_data()
-        print('form', form.instance.author)
         if form.instance.author == profile:
-            print('bool', form.instance.author == profile)
             instance = form.save(commit=False)
             instance.save()
-            print('image' in self.request.FILES)
-            if 'image' in self.request.FILES:
-                watermark_photo(instance.image, str(instance.image), 'static/image/logo_header.png', position=(10, 10))
             messages.success(self.request, 'Спасибо за участие! Ваш пост будет добавлен на сайт после прохождения модерации.')
             return HttpResponseRedirect(self.get_success_url())
         else:
