@@ -34,7 +34,7 @@
         <div class="left aligned middle aligned eight wide column">{{ meal.category }} / {{ meal.sub_category.name }}
         </div>
         <div class="right floated middle aligned eight wide column">
-            <small>{{ meal.created }}/{{ meal.author }}</small>
+            <small>{{ meal.created }}/{{ meal.author.profile.first_name }}</small>
             <img loading="lazy" class="ui avatar image"
                 src="{% if meal.author.profile.avatar %}{{ meal.author.profile.avatar.url }}{% else %}{% static '/image/avatar_man.png' %}{% endif %}">
         </div>

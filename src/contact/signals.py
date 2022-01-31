@@ -11,14 +11,10 @@ from .tasks import send_success_subscribe, notice_about_new_messages
 
 @receiver(post_save, sender=Dish)
 def send_email_that_pass_moderator_culinary_dish(sender, instance, **kwargs):
-    print('====>:  ', sender)
-    print('====>:  ')
-    print('moderator:  ', instance.moderator)
     if instance.moderator:
         author = instance.author.id
         title = instance.title
         send_success_subscribe.delay(author=author, title=title)
-
 
 
 @receiver(post_save, sender=User)
