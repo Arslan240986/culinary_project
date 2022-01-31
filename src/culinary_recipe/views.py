@@ -28,7 +28,7 @@ from contact.models import UserProfile
 class CategoryViewList(ListView):
     """Вывод категорий"""
     model = Category
-    template_name = 'home.min.html'
+    template_name = 'home.html'
     context_object_name = 'categories'
 
     def get_context_data(self, **kwargs):
