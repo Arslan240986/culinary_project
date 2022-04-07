@@ -7,7 +7,7 @@ SECRET_KEY = '80s84g@6^1t)lvtshvdjejckab663384bbcj8ba)fuhgudpa&0bt)j*ju8py1'
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', '5.101.5.119', 'ushefa.ru', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', '146.185.235.119', 'ushefa.ru', 'localhost']
 if not DEBUG:
     DATABASES = {
         'default': {
